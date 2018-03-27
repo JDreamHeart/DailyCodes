@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JimDreamHeart
 # @Date:   2018-03-26 23:25:12
-# @Last Modified by:   Administrator
-# @Last Modified time: 2018-03-27 00:10:58
+# @Last Modified by:   JinZhang
+# @Last Modified time: 2018-03-27 13:35:34
 
 import os;
 import xlrd;
@@ -17,9 +17,8 @@ class PyXlsObj(object):
 		self.initXlsFileDict();
 		pass;
 
-	def initXlsFileDicet(self):
-		for k in self.xlsFilePaths:
-			filePath = self.xlsFilePaths[k];
+	def initXlsFileDict(self):
+		for filePath in self.xlsFilePaths:
 			fileName = filePath.split("\\").pop().split(".").pop(0);
 			self.xlsFileDict[fileName] = xlrd.open_workbook(filePath);
 
@@ -27,7 +26,7 @@ class PyXlsObj(object):
 		if fileName:
 			if self.xlsFileDict.has_key(fileName):
 				if not sheetName:
-					sheet = book.sheet_by_index(0);
+					sheet = self.xlsFileDict[fileName].sheet_by_index(0);
 				else:
 					sheet = self.xlsFileDict[fileName].sheet_by_name(sheetName);
 				return sheet and sheet.col_values(colIdx);
@@ -35,7 +34,10 @@ class PyXlsObj(object):
 				print("The file named \"{0}\" is not exist in xlsFileDict!".format(fileName));
 		else:
 			for name,book in self.xlsFileDict.items():
-				sheet = self.xlsFileDict[fileName].sheet_by_name(sheetName);
+				if not sheetName:
+					sheet = book.sheet_by_index(0);
+				else:
+					sheet = book.sheet_by_name(sheetName);
 				return sheet.col_values(colIdx);
 
 	def sumColDataByNameAndColIdx(self, sheetName, colIdx, otherColIdx, isIncludeZero = True, fileName = None):
@@ -43,8 +45,9 @@ class PyXlsObj(object):
 		otherColData = self.getColDataByNameAndColIdx(sheetName, otherColIdx, fileName);
 		sumColData = {};
 		for k in colData:
-			if not isinstance(colData[k], str):
-				if sumColData.has_key(str(colData[k])):
+			if not isinstance(k, str):
+				print(k.decode('utf-8'))
+				if sumColData.has_key(str(colData[k].decode('utf-8'))):
 					sumColData[str(colData[k])] += otherColData[k];
 				else:
 					sumColData[str(colData[k])] = otherColData[k];
@@ -65,7 +68,8 @@ class PyXlsObj(object):
 		pass;
 
 if __name__ == "__main__":
-	xlsPaths = [];
+	xlsPaths = [os.getcwd()+"\\test.xlsx"];
+	print(xlsPaths)
 	PyXls = PyXlsObj(xlsPaths);
-	sumColData = PyXls.sumColDataByNameAndColIdx(sheetName = None, 7, 8, isIncludeZero = False);
+	sumColData = PyXls.sumColDataByNameAndColIdx(None, 3, 4, isIncludeZero = False);
 	self.setColDataToXlsByName(sumColData, "pjId", "sumResult", "sumResult");
