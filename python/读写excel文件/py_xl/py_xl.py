@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JimDreamHeart
 # @Date:   2018-03-26 23:25:12
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2018-03-27 13:35:34
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2018-03-27 22:48:06
 
 import os;
 import xlrd;
@@ -10,26 +10,27 @@ import xlwt;
 
 class PyXlsObj(object):
 	"""docstring for PyXlsObj"""
-	def __init__(self, xlsFilePaths):
+	def __init__(self, basePath, xlsFileNames):
 		super(PyXlsObj, self).__init__()
-		self.xlsFilePaths = xlsFilePaths;
+		self.basePath = basePath;
+		self.xlsFileNames = xlsFileNames;
 		self.xlsFileDict = {};
 		self.initXlsFileDict();
 		pass;
 
 	def initXlsFileDict(self):
-		for filePath in self.xlsFilePaths:
-			fileName = filePath.split("\\").pop().split(".").pop(0);
-			self.xlsFileDict[fileName] = xlrd.open_workbook(filePath);
+		for fullFileName in self.xlsFileNames:
+			fileName = fullFileName.split(".").pop(0);
+			self.xlsFileDict[fileName] = xlrd.open_workbook(self.basePath + fullFileName);
 
 	def getColDataByNameAndColIdx(self, sheetName = None, colIdx = 0, fileName = None):
 		if fileName:
-			if self.xlsFileDict.has_key(fileName):
+			if fileName in self.xlsFileDict: # self.xlsFileDict.has_key(fileName)
 				if not sheetName:
 					sheet = self.xlsFileDict[fileName].sheet_by_index(0);
 				else:
 					sheet = self.xlsFileDict[fileName].sheet_by_name(sheetName);
-				return sheet and sheet.col_values(colIdx);
+				return sheet.col_values(colIdx);
 			else:
 				print("The file named \"{0}\" is not exist in xlsFileDict!".format(fileName));
 		else:
@@ -40,14 +41,13 @@ class PyXlsObj(object):
 					sheet = book.sheet_by_name(sheetName);
 				return sheet.col_values(colIdx);
 
-	def sumColDataByNameAndColIdx(self, sheetName, colIdx, otherColIdx, isIncludeZero = True, fileName = None):
+	def sumColDataByNameAndColIdx(self, sheetName, colIdx, otherColIdx, isIncludeZero = True, theSumColData = None, fileName = None):
 		colData = self.getColDataByNameAndColIdx(sheetName, colIdx, fileName);
 		otherColData = self.getColDataByNameAndColIdx(sheetName, otherColIdx, fileName);
-		sumColData = {};
-		for k in colData:
-			if not isinstance(k, str):
-				print(k.decode('utf-8'))
-				if sumColData.has_key(str(colData[k].decode('utf-8'))):
+		sumColData = theSumColData or {};
+		for k in range(len(colData)):
+			if not isinstance(otherColData[k], str):
+				if str(colData[k]) in sumColData:
 					sumColData[str(colData[k])] += otherColData[k];
 				else:
 					sumColData[str(colData[k])] = otherColData[k];
@@ -55,21 +55,27 @@ class PyXlsObj(object):
 					del sumColData[str(colData[k])];
 		return sumColData;
 
-	def setColDataToXlsByName(self, sumColData, titleName, sheetName, fileName):
+	def setColDataToXlsByName(self, sumColData, titleName, sheetName, fullFileName):
 		book = xlwt.Workbook(encoding='utf-8', style_compression=0);
-		sheet = book.add_sheet(sheetName.decode('utf-8'), cell_overwrite_ok=True);
-		sheet.write(0, 0, titleName.decode('utf-8'));
+		sheet = book.add_sheet(sheetName, cell_overwrite_ok=True);
+		sheet.write(0, 0, titleName);
 		sheet.write(0, 1, "sum");
 		idx = 1;
-		for k in sumColData:
+		for k,v in sumColData.items():
 			sheet.write(idx, 0, k);
-			sheet.write(idx, 1, sumColData[k]);
-		book.save(os.getcwd()+fileName);
+			sheet.write(idx, 1, v);
+			idx += 1;
+		book.save(self.basePath + fullFileName);
 		pass;
 
 if __name__ == "__main__":
-	xlsPaths = [os.getcwd()+"\\test.xlsx"];
-	print(xlsPaths)
-	PyXls = PyXlsObj(xlsPaths);
-	sumColData = PyXls.sumColDataByNameAndColIdx(None, 3, 4, isIncludeZero = False);
-	self.setColDataToXlsByName(sumColData, "pjId", "sumResult", "sumResult");
+	basePath = os.getcwd()+"\\xls\\";
+	xlsPaths = ["test.xlsx"];
+	PyXls = PyXlsObj(basePath, xlsPaths);
+	sumColData = PyXls.sumColDataByNameAndColIdx("testSheet", 3, 4, isIncludeZero = False, theSumColData = None, fileName = "test");
+	# print(sumColData);
+	# sumColData1 = PyXls.sumColDataByNameAndColIdx("testSheet1", 3, 4, isIncludeZero = False);
+	# print(sumColData1);
+	allSumColData = PyXls.sumColDataByNameAndColIdx("testSheet1", 3, 4, isIncludeZero = False, theSumColData = sumColData);
+	# print(allSumColData);
+	PyXls.setColDataToXlsByName(allSumColData, "PJId", "sumResult", "sumResult.xlsx");
