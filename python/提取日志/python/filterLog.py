@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-03-21 11:23:44
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-03-21 20:02:21
+# @Last Modified time: 2018-03-29 19:44:26
 
 # 默认配置
 defaultIsRemoveFile = False; # 是否需要删除正在过滤的log文件【注意删除的不是gz文件】
@@ -12,6 +12,7 @@ defaultFilterContent = "g_BYF.globals.totalMoneyInfo"; # 需要过滤出来的�
 import sys
 import os
 import re
+import linecache
 
 class FilterLogFile:
 	def __init__(self, filePath, isRemoveFile):
@@ -36,13 +37,20 @@ class FilterLogFile:
 	def filter(self, filterContent = defaultFilterContent):
 		# print("\nFile path is: " + self.filePath);
 		# print("\nFilter content is: " + filterContent)
+
 		data = '';
-		with open(self.filePath, 'r') as f:
-			for line in f.readlines():
-				line = line.strip();
-				line = line.lstrip();
-				if re.search(r''+filterContent, line):
-					data += line + "\n";
+		# with open(self.filePath, 'r') as f:
+		# 	for line in f.readlines():
+		# 		line = line.strip();
+		# 		line = line.lstrip();
+		# 		if re.search(r''+filterContent, line):
+		# 			data += line + "\n";
+
+		for line in linecache.getlines(self.filePath):
+			line = line.strip();
+			line = line.lstrip();
+			if re.search(r''+filterContent, line):
+				data += line + "\n";
 
 		if self.isRemoveFile:
 			# print("\nRemove file: " + self.filePath);
