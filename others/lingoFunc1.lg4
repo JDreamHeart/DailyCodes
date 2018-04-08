@@ -1,0 +1,37 @@
+/*
+* @Author: JimZhang
+* @Date:   2018-04-08 21:25:32
+* @Last Modified by:   JimZhang
+* @Last Modified time: 2018-04-08 23:38:15
+*/
+
+MODEL:
+sets: 
+ persion0/1/:tp;
+ persion/1..2/:ap;
+ position/1..4/;
+ score/1..4/;
+ link(persion,position):a,x;
+ link2(persion,position,score):s,p;
+endsets
+data:
+ s= 8.4,9.5,9.2,9.4,
+  8.4,8.8,9.0,10,
+  9.1,9.3,9.5,9.8,
+  8.7,8.9,9.1,9.9,
+
+  9.3,9.5,9.6,9.8,
+  8.4,9.0,9.2,9.4,
+  8.4,8.8,9.0,10,
+  8.9,9.1,9.3,9.6
+  ;
+ tp=0;
+enddata
+@for(persion(i):@for(position(j):x(i,j)=s(i,j,1)));
+!@for(persion(i):@for(position(j):x(i,j)=@sum(score(k):s(i,j,k))));
+max=@sum(link:a*x);
+@for(position(j):@sum(persion(i):a(i,j))<=6);
+@for(persion(i):@if(a(i,1)*a(i,2)*a(i,3)*a(i,4)#le#0,@sum(position(j):a(i,j))<=3,tp(1)=tp(1)+1));
+tp(1)=4
+@for(link:@bin(a));
+END
