@@ -11,4 +11,4 @@ require("LuaKit._load");
 
 require("behavior.BehaviorMap");
 
-require("core.function");
+mat = require("core.mat");
