@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-07 17:39:54
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-07 17:44:03
+# @Last Modified time: 2018-11-07 18:12:28
 
 import wx;
 
@@ -31,18 +31,23 @@ class TransparentText(wx.StaticText):
 	# 	self.Refresh() 
 	# 	event.Skip() 
 
+def on_down(event):
+	print("000000000000000")
+
 if __name__ == '__main__':
 	app = wx.App();
 	frame = wx.Frame(None, -1, size = (300,300))
+	frame.SetTransparent(100) # 设置窗口的透明度
 
 	# 显示内容
 	panel = wx.Panel(frame, size = (200,200))
 	panel.SetBackgroundColour("red")
-	p1 = wx.Panel(panel, size = (50,40))
-	p1.SetBackgroundColour("green")
+	# p1 = wx.Panel(panel, size = (50,40))
+	# p1.SetBackgroundColour("green")
 	# 文本测试
 	# text = wx.StaticText(panel, label = "测试文本")
 	text = TransparentText(panel, label = "测试文本")
+	text.Bind(wx.EVT_LEFT_DOWN, on_down)
 
 	# 运行窗口
 	frame.Show()
