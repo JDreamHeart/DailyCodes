@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-13 10:10:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-13 18:29:50
+# @Last Modified time: 2018-11-13 18:38:33
 
 import wx;
 import math;
@@ -35,15 +35,6 @@ class HuarongRoad(wx.Panel):
 		};
 		for k,v in params.items():
 			self.params_[k] = v;
-		self.initMatrix();
-
-	def initMatrix(self):
-		self.itemMatrix = [
-			[None, None, None, None],
-			[None, None, None, None],
-			[None, None, None, None],
-			[None, None, None, None],
-		];
 
 	def createControls(self):
 		self.createCaoCao();
@@ -55,27 +46,13 @@ class HuarongRoad(wx.Panel):
 	def initViewLayout(self):
 		bagSizer = wx.GridBagSizer(0,0);
 		bagSizer.Add(self.ZhangFei, pos = (1,1), span = (2,1));
-		self.itemMatrix[0][0] = self.ZhangFei;
-		self.itemMatrix[1][0] = self.ZhangFei;
 		bagSizer.Add(self.CaoCao, pos = (1,2), span = (2,2));
-		self.itemMatrix[0][1] = self.CaoCao;
-		self.itemMatrix[0][2] = self.CaoCao;
-		self.itemMatrix[1][1] = self.CaoCao;
-		self.itemMatrix[1][2] = self.CaoCao;
 		bagSizer.Add(self.ZhaoYun, pos = (1,4), span = (2,1));
-		self.itemMatrix[0][3] = self.ZhaoYun;
-		self.itemMatrix[1][3] = self.ZhaoYun;
 		bagSizer.Add(self.GuanYu, pos = (3,2), span = (1,2));
-		self.itemMatrix[2][1] = self.GuanYu;
-		self.itemMatrix[2][2] = self.GuanYu;
 		bagSizer.Add(self.Soldiers[0], pos = (3,1), span = (1,1));
-		self.itemMatrix[2][0] = self.Soldiers[0];
 		bagSizer.Add(self.Soldiers[1], pos = (3,4), span = (1,1));
-		self.itemMatrix[2][3] = self.Soldiers[1];
 		bagSizer.Add(self.Soldiers[2], pos = (4,1), span = (1,1));
-		self.itemMatrix[3][0] = self.Soldiers[2];
 		bagSizer.Add(self.Soldiers[3], pos = (4,4), span = (1,1));
-		self.itemMatrix[3][3] = self.Soldiers[3];
 		self.SetSizerAndFit(bagSizer);
 		pass;
 
@@ -112,7 +89,6 @@ class HuarongRoad(wx.Panel):
 		item.Bind(wx.EVT_MOTION, self.onMotion);
 
 	def onClick(self, event):
-		self.curItem = event.GetEventObject();
 		self.curPos = event.GetPosition();
 		event.Skip();
 
@@ -126,7 +102,7 @@ class HuarongRoad(wx.Panel):
 					direction = Direction.LEFT;
 				else:
 					direction = Direction.RIGHT;
-				if self.moveItem(self.curItem, direction):
+				if self.moveItem(event.GetEventObject(), direction):
 					return True;
 			if math.fabs(pos.y) > 8:
 				self.curPos = None;
@@ -134,7 +110,7 @@ class HuarongRoad(wx.Panel):
 					direction = Direction.TOP;
 				else:
 					direction = Direction.BOTTOM;
-				if self.moveItem(self.curItem, direction):
+				if self.moveItem(event.GetEventObject(), direction):
 					return True;
 
 	def moveItem(self, item, direction):
@@ -149,9 +125,14 @@ class HuarongRoad(wx.Panel):
 			elif direction == Direction.BOTTOM:
 				self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] + 1, pos[1]));
 			self.GetSizer().Layout();
+			self.checkGameOver();
 		except Exception:
 			pass;
 
+	def checkGameOver(self):
+		pos = self.GetSizer().GetItemPosition(self.CaoCao);
+		if pos[0] == 3 and pos[1] == 3:
+			print("========== Game Over ==========")
 
 	def onBtn(self, event):
 		pos = self.GetSizer().GetItemPosition(self.GuanYu)
