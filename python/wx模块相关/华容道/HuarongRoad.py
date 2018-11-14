@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-13 10:10:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-14 14:43:03
+# @Last Modified time: 2018-11-14 18:03:15
 
 import wx;
 import math;
@@ -143,7 +143,7 @@ class HuarongRoad(wx.Panel):
 	def checkGameOver(self):
 		pos = self.GetSizer().GetItemPosition(self.CaoCao);
 		if pos[0] == 3 and pos[1] == 3:
-			print("========== Game Over ==========")
+			print("========== Game Over ==========");
 
 	def restart(self, event):
 		self.GetSizer().Clear(True);
@@ -155,12 +155,12 @@ if __name__ == '__main__':
 	frame = wx.Frame(None, size = (300,300));
 
 	panel = wx.Panel(frame, size = (-1,-1));
-	panel.SetBackgroundColour("black")
+	panel.SetBackgroundColour("black");
 	hr = HuarongRoad(panel, params = {"size" : (200,200)})
 	btn = wx.Button(panel, label = "重新开始");
 	btn.Bind(wx.EVT_BUTTON, hr.restart);
-	boxSizer = wx.BoxSizer(wx.HORIZONTAL)
-	boxSizer.Add(hr, flag = wx.EXPAND);
+	boxSizer = wx.BoxSizer(wx.HORIZONTAL);
+	boxSizer.Add(hr);
 	boxSizer.Add(btn);
 	panel.SetSizer(boxSizer);
 
