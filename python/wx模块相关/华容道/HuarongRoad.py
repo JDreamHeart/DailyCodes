@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-13 10:10:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-13 18:38:33
+# @Last Modified time: 2018-11-14 14:43:03
 
 import wx;
 import math;
@@ -20,11 +20,8 @@ class HuarongRoad(wx.Panel):
 	def __init__(self, parent, id = -1, params = {}):
 		self.initParams(params);
 		super(HuarongRoad, self).__init__(parent, id, size = self.params_["size"], style = self.params_["style"]);
-		self.createControls();
-		self.initViewLayout();
-		# self.bindEvents();
-		# self.createTimers();
-		self.SetBackgroundColour("black");
+		self.SetBackgroundColour("grey");
+		self.initView();
 		self.curItem = None;
 
 	def initParams(self, params):
@@ -35,6 +32,10 @@ class HuarongRoad(wx.Panel):
 		};
 		for k,v in params.items():
 			self.params_[k] = v;
+
+	def initView(self):
+		self.createControls();
+		self.initViewLayout();
 
 	def createControls(self):
 		self.createCaoCao();
@@ -80,7 +81,7 @@ class HuarongRoad(wx.Panel):
 		self.Soldiers = [];
 		for i in range(0,4):
 			soldier = wx.Panel(self, size = (self.GetSize().x/4, self.GetSize().y/4), style = wx.BORDER_THEME);
-			soldier.SetBackgroundColour("grey");
+			soldier.SetBackgroundColour("blue");
 			self.bindEventToItem(soldier);
 			self.Soldiers.append(soldier);
 
@@ -116,16 +117,26 @@ class HuarongRoad(wx.Panel):
 	def moveItem(self, item, direction):
 		try:
 			pos = self.GetSizer().GetItemPosition(item);
+			isLayout = False;
 			if direction == Direction.LEFT:
-				self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] - 1));
+				if pos[1] - 1 > 0 :
+					isLayout = True;
+					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] - 1));
 			elif direction == Direction.TOP:
-				self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] - 1, pos[1]));
+				if pos[0] - 1 > 0 :
+					isLayout = True;
+					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] - 1, pos[1]));
 			elif direction == Direction.RIGHT:
-				self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] + 1));
+				if pos[1] + 1 <= self.params_["matrix"][1] :
+					isLayout = True;
+					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] + 1));
 			elif direction == Direction.BOTTOM:
-				self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] + 1, pos[1]));
-			self.GetSizer().Layout();
-			self.checkGameOver();
+				if pos[0] + 1 <= self.params_["matrix"][0] :
+					isLayout = True;
+					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] + 1, pos[1]));
+			if isLayout:
+				self.GetSizer().Layout();
+				self.checkGameOver();
 		except Exception:
 			pass;
 
@@ -134,22 +145,22 @@ class HuarongRoad(wx.Panel):
 		if pos[0] == 3 and pos[1] == 3:
 			print("========== Game Over ==========")
 
-	def onBtn(self, event):
-		pos = self.GetSizer().GetItemPosition(self.GuanYu)
-		print(pos)
-		self.GetSizer().SetItemPosition(self.GuanYu, wx.GBPosition(pos[0]+1, pos[1]));
-		self.GetSizer().Layout();
+	def restart(self, event):
+		self.GetSizer().Clear(True);
+		self.SetSize(self.params_["size"]);
+		self.initView();
 
 if __name__ == '__main__':
 	app = wx.App();
 	frame = wx.Frame(None, size = (300,300));
 
-	panel = wx.Panel(frame, size = (200,200));
+	panel = wx.Panel(frame, size = (-1,-1));
+	panel.SetBackgroundColour("black")
 	hr = HuarongRoad(panel, params = {"size" : (200,200)})
-	btn = wx.Button(panel, label = "测试");
-	btn.Bind(wx.EVT_BUTTON, hr.onBtn);
+	btn = wx.Button(panel, label = "重新开始");
+	btn.Bind(wx.EVT_BUTTON, hr.restart);
 	boxSizer = wx.BoxSizer(wx.HORIZONTAL)
-	boxSizer.Add(hr);
+	boxSizer.Add(hr, flag = wx.EXPAND);
 	boxSizer.Add(btn);
 	panel.SetSizer(boxSizer);
 
