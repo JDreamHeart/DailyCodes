@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-11-08 17:00:50
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-08 18:26:30
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2018-11-08 23:56:59
 
 import wx
 
-class ScrollView(wx.ScrolledWindow):
-	"""docstring for ScrollView"""
+class ScrolledWindow(wx.ScrolledWindow):
+	"""docstring for ScrolledWindow"""
 	def __init__(self, parent, id = -1, params = {}, contentView = None):
 		self.initParams(params);
-		super(ScrollView, self).__init__(parent, id, size = self.params_["size"]);
+		super(ScrolledWindow, self).__init__(parent, id, size = self.params_["size"]);
 		self.setContentView(contentView);
 		
 	def initParams(self, params):
@@ -38,7 +38,6 @@ class ScrollView(wx.ScrolledWindow):
 
 	def adjustScrollbars(self, event = None):
 		contentSize = self.contentView.GetSize();
-		print(contentSize[0], contentSize[1])
 		self.SetScrollbars(1, 1, contentSize[0], contentSize[1]);
 
 	def initContentViewEvents(self):
@@ -58,7 +57,7 @@ class MyFrame(wx.Frame):
 		pnl.Bind(wx.EVT_LEFT_DOWN, self.onLeftDown)
 		self.pnl = pnl
 
-		self.scroller = ScrollView(panel, params = {"size" : (300,300)}, contentView = pnl)
+		self.scroller = ScrolledWindow(panel, params = {"size" : (300,300)}, contentView = pnl)
 
 
 		self.SetMinSize((500,640))
