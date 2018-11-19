@@ -22,19 +22,20 @@ class ScrolledWindow(wx.ScrolledWindow):
 			self.params_[k] = v;
 
 	def setContentView(self, contentView):
-		if contentView:
-			# 销毁原有内容节点
-			if hasattr(self, "contentView"):
-				self.contentView.Destroy();
-			# 重置父节点
-			if contentView.Parent != self:
-				contentView.Reparent(self);
-			# 重置self.contentView
-			self.contentView = contentView;
-			# 调整滚动条
-			self.adjustScrollbars();
-			# 初始化事件
-			self.initContentViewEvents();
+		if not contentView:
+			contentView = wx.Panel(self);
+		# 销毁原有内容节点
+		if hasattr(self, "contentView"):
+			self.contentView.Destroy();
+		# 重置父节点
+		if contentView.Parent != self:
+			contentView.Reparent(self);
+		# 重置self.contentView
+		self.contentView = contentView;
+		# 调整滚动条
+		self.adjustScrollbars();
+		# 初始化事件
+		self.initContentViewEvents();
 
 	def adjustScrollbars(self, event = None):
 		contentSize = self.contentView.GetSize();
