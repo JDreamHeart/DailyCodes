@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-13 10:10:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-14 18:03:15
+# @Last Modified time: 2018-11-14 18:05:48
 
 import wx;
 import math;
@@ -154,7 +154,7 @@ if __name__ == '__main__':
 	app = wx.App();
 	frame = wx.Frame(None, size = (300,300));
 
-	panel = wx.Panel(frame, size = (-1,-1));
+	panel = wx.Panel(frame);
 	panel.SetBackgroundColour("black");
 	hr = HuarongRoad(panel, params = {"size" : (200,200)})
 	btn = wx.Button(panel, label = "重新开始");
