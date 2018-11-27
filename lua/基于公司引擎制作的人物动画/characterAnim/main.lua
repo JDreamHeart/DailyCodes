@@ -46,7 +46,4 @@ local mt1 = mat.create(data, 4, 4);
 print(mt1:D())
 print("_______________")
 local d2 = mt1:I()
-for i,v in ipairs(d2.data_) do
-	d2.data_[i] = v * 24;
-end
 print(tostring(d2))
