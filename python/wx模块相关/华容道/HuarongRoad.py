@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-11-13 10:10:06
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-14 18:05:48
+# @Last Modified by:   JimZhang
+# @Last Modified time: 2018-12-02 20:10:29
 
 import wx;
 import math;
@@ -19,13 +19,14 @@ class HuarongRoad(wx.Panel):
 	"""docstring for HuarongRoad"""
 	def __init__(self, parent, id = -1, params = {}):
 		self.initParams(params);
-		super(HuarongRoad, self).__init__(parent, id, size = self.params_["size"], style = self.params_["style"]);
+		super(HuarongRoad, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
 		self.SetBackgroundColour("grey");
 		self.initView();
 		self.curItem = None;
 
 	def initParams(self, params):
 		self.params_ = {
+			"pos" : (0,0),
 			"size" : (0,0),
 			"style" : wx.BORDER_THEME,
 			"matrix" : (4,4),
@@ -46,14 +47,14 @@ class HuarongRoad(wx.Panel):
 
 	def initViewLayout(self):
 		bagSizer = wx.GridBagSizer(0,0);
-		bagSizer.Add(self.ZhangFei, pos = (1,1), span = (2,1));
-		bagSizer.Add(self.CaoCao, pos = (1,2), span = (2,2));
-		bagSizer.Add(self.ZhaoYun, pos = (1,4), span = (2,1));
-		bagSizer.Add(self.GuanYu, pos = (3,2), span = (1,2));
-		bagSizer.Add(self.Soldiers[0], pos = (3,1), span = (1,1));
-		bagSizer.Add(self.Soldiers[1], pos = (3,4), span = (1,1));
-		bagSizer.Add(self.Soldiers[2], pos = (4,1), span = (1,1));
-		bagSizer.Add(self.Soldiers[3], pos = (4,4), span = (1,1));
+		bagSizer.Add(self.ZhangFei, pos = (0,0), span = (2,1));
+		bagSizer.Add(self.CaoCao, pos = (0,1), span = (2,2));
+		bagSizer.Add(self.ZhaoYun, pos = (0,3), span = (2,1));
+		bagSizer.Add(self.GuanYu, pos = (2,1), span = (1,2));
+		bagSizer.Add(self.Soldiers[0], pos = (2,0), span = (1,1));
+		bagSizer.Add(self.Soldiers[1], pos = (2,3), span = (1,1));
+		bagSizer.Add(self.Soldiers[2], pos = (3,0), span = (1,1));
+		bagSizer.Add(self.Soldiers[3], pos = (3,3), span = (1,1));
 		self.SetSizerAndFit(bagSizer);
 		pass;
 
@@ -119,19 +120,19 @@ class HuarongRoad(wx.Panel):
 			pos = self.GetSizer().GetItemPosition(item);
 			isLayout = False;
 			if direction == Direction.LEFT:
-				if pos[1] - 1 > 0 :
+				if pos[1] > 0 :
 					isLayout = True;
 					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] - 1));
 			elif direction == Direction.TOP:
-				if pos[0] - 1 > 0 :
+				if pos[0] > 0 :
 					isLayout = True;
 					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] - 1, pos[1]));
 			elif direction == Direction.RIGHT:
-				if pos[1] + 1 <= self.params_["matrix"][1] :
+				if pos[1] + 1 < self.params_["matrix"][1] :
 					isLayout = True;
 					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0], pos[1] + 1));
 			elif direction == Direction.BOTTOM:
-				if pos[0] + 1 <= self.params_["matrix"][0] :
+				if pos[0] + 1 < self.params_["matrix"][0] :
 					isLayout = True;
 					self.GetSizer().SetItemPosition(item, wx.GBPosition(pos[0] + 1, pos[1]));
 			if isLayout:
@@ -142,7 +143,7 @@ class HuarongRoad(wx.Panel):
 
 	def checkGameOver(self):
 		pos = self.GetSizer().GetItemPosition(self.CaoCao);
-		if pos[0] == 3 and pos[1] == 3:
+		if pos[0] == 2 and pos[1] == 2:
 			print("========== Game Over ==========");
 
 	def restart(self, event):
@@ -152,16 +153,16 @@ class HuarongRoad(wx.Panel):
 
 if __name__ == '__main__':
 	app = wx.App();
-	frame = wx.Frame(None, size = (300,300));
+	frame = wx.Frame(None, size = (500,500));
 
-	panel = wx.Panel(frame);
+	panel = wx.Panel(frame, size = (400,400));
 	panel.SetBackgroundColour("black");
-	hr = HuarongRoad(panel, params = {"size" : (200,200)})
+	hr = HuarongRoad(panel, params = {"pos" : (40,40), "size" : (200,200)})
 	btn = wx.Button(panel, label = "重新开始");
 	btn.Bind(wx.EVT_BUTTON, hr.restart);
 	boxSizer = wx.BoxSizer(wx.HORIZONTAL);
-	boxSizer.Add(hr);
 	boxSizer.Add(btn);
+	boxSizer.Add(hr);
 	panel.SetSizer(boxSizer);
 
 	frame.Show(True);
