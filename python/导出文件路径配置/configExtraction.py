@@ -2,16 +2,25 @@
 # @Author: JinZhang
 # @Date:   2018-11-27 13:07:09
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-11-27 18:51:03
+# @Last Modified time: 2018-12-06 18:18:29
 
 import os;
 import re;
 
 class ConfigExtraction(object):
 	"""docstring for ConfigExtraction"""
-	def __init__(self, suffixNames = None):
-		super(ConfigExtraction, self).__init__()
-		self.m_suffixNames = suffixNames;
+	def __init__(self, params = {}):
+		super(ConfigExtraction, self).__init__();
+		self.initParams(params);
+
+	def initParams(self, params):
+		self.m_params_ = {
+			"suffixNames" : None, # [] 查找文件的后缀名列表
+			"joinKeysStr" : "_", # 生成配置键值的连接字符
+			"isMergeSameToTable" : False, # 是否合并相同的语音到table中
+		};
+		for k,v in params.items():
+			self.m_params_[k] = v;
 		
 	def getFileList(self, path, fileList = [], pathList = [], func = None):
 		files = os.listdir(path);
@@ -20,7 +29,8 @@ class ConfigExtraction(object):
 			if os.path.isdir(filePath):
 				pathList.append(file);
 				self.getFileList(filePath, fileList = fileList, pathList = pathList, func  =func);
-			elif not self.m_suffixNames or self.getFileSuffixName(file) in self.m_suffixNames:
+				pathList.pop();
+			elif not self.m_params_["suffixNames"] or self.getFileSuffixName(file) in self.m_params_["suffixNames"]:
 				fileList.append(filePath);
 				if callable(func):
 					func(filePath, pathList);
@@ -47,27 +57,45 @@ class ConfigExtraction(object):
 		def checkFilePath(filePath, pathList):
 			# 获取对应keyList的配置数据
 			tmpConfig = config;
-			for v in pathList:
-				if v not in tmpConfig:
-					tmpConfig[v] = {};
-				tmpConfig = tmpConfig[v];
+			if not self.m_params_["joinKeysStr"]:
+				for v in pathList:
+					if v not in tmpConfig:
+						tmpConfig[v] = {};
+					tmpConfig = tmpConfig[v];
 			# 保存配置
 			fileName = self.getFileName(filePath);
-			res = re.match("^(\w+)_(\d+)$", fileName);
-			if res:
-				name = self.filterFileName(res.group(1));
-				self.addConfig(tmpConfig, name, "/".join(pathList) + "/" + fileName);
+			# 添加配置
+			value = "/".join(pathList) + "/" + fileName; # 保存到配置文件中的value值
+			if self.m_params_["isMergeSameToTable"]:
+				res = re.match("^(\w+)_(\d+)$", fileName);
+				if res:
+					name = self.filterFileName(res.group(1));
+					key = self.getConfigKey(pathList, name);
+					self.addConfig(tmpConfig, key, value);
+				else:
+					key = self.getConfigKey(pathList, fileName);
+					self.addConfig(tmpConfig, key, value);
 			else:
-				self.addConfig(tmpConfig, fileName, "/".join(pathList) + "/" + fileName);
+				key = self.getConfigKey(pathList, fileName);
+				tmpConfig[key] = value;
 		self.getFileList(path, func = checkFilePath);
 		return config;
+
+	def getConfigKey(self, pathList, fileName):
+		if self.m_params_["joinKeysStr"]:
+			return self.m_params_["joinKeysStr"].join(pathList) + self.m_params_["joinKeysStr"] + fileName;
+		return fileName
 
 	def dumpConfigToFile(self, targetPath, config = {}):
 		content = """-- 音效配置
 local AudioConfig = {0};
 
 return AudioConfig;""";
-		content = content.format(self.getDumpContent(config));
+		configContent = self.getDumpContent(config);
+		# 去掉最后一个","
+		if configContent[-1] == ",":
+			configContent = configContent[:-1]
+		content = content.format(configContent);
 		with open(targetPath + "/AudioConfig.lua", "w") as f:
 			f.write(content);
 			f.close();
@@ -91,7 +119,7 @@ return AudioConfig;""";
 		if isinstance(value, dict):
 			for k in sorted(value.keys()):
 				valStr = self.getDumpContent(value[k], index + 1);
-				strList.append("{0}[\"{1}\"] = {2}".format(contentIndentation, k, valStr));
+				strList.append("{0}{1} = {2}".format(contentIndentation, k, valStr));
 		elif isinstance(value, (list, tuple)):
 			for v in value:
 				strList.append(self.getDumpContent(v, index + 1));
@@ -121,9 +149,9 @@ if __name__ == '__main__':
 
 	# 查找及导出路径
 	path = os.getcwd().replace("\\", "/");
-	path += "/audio/res/lndalianmj";
+	path += "/audio/res/lndalianmj/mp3/effects";
 
-	ConfigExt = ConfigExtraction(["mp3", "ogg"]); # 只获取MP3或OGG格式的文件
+	ConfigExt = ConfigExtraction(params = {"suffixNames" : ["mp3", "ogg"]}); # 只获取MP3或OGG格式的文件
 	config = ConfigExt.extract(path, path); # 导出配置
 	# print(ConfigExt.getDumpContent(config))
 
