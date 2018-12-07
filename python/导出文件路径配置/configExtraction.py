@@ -2,10 +2,11 @@
 # @Author: JinZhang
 # @Date:   2018-11-27 13:07:09
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-06 18:18:29
+# @Last Modified time: 2018-12-07 15:20:42
 
 import os;
 import re;
+import copy;
 
 class ConfigExtraction(object):
 	"""docstring for ConfigExtraction"""
@@ -15,9 +16,14 @@ class ConfigExtraction(object):
 
 	def initParams(self, params):
 		self.m_params_ = {
+			"ExportFileName" : "AudioConfig", # 导出的文件名
 			"suffixNames" : None, # [] 查找文件的后缀名列表
-			"joinKeysStr" : "_", # 生成配置键值的连接字符
+			"keyDepth" : 0, # 生成配置key值的连接字符
+			"joinKeysStr" : "_", # 生成配置key值的连接字符
 			"isMergeSameToTable" : False, # 是否合并相同的语音到table中
+			"isSaveFilePath" : False, # 是否保存文件路径【包括文件后缀名】
+			"joinValuesStr" : "/", # 生成配置value值的连接字符
+
 		};
 		for k,v in params.items():
 			self.m_params_[k] = v;
@@ -36,13 +42,29 @@ class ConfigExtraction(object):
 					func(filePath, pathList);
 		return fileList;
 
-	def getFileName(self, path):
+	def getFileName(self, path, isIncludesuffix = False):
 		PathList = path.split("/");
-		return PathList[-1].split(".")[0];
+		if not isIncludesuffix:
+			return PathList[-1].split(".")[0];
+		return PathList[-1];
 
 	def getFileSuffixName(self, path):
 		PathList = path.split(".");
 		return PathList[-1];
+
+	def getTmpConfigByPathList(self, config, pathList):
+		tmpConfig = config;
+		keyDepth = self.m_params_["keyDepth"];
+		curDepth = 0;
+		for v in pathList:
+			curDepth += 1;
+			if keyDepth < 0 or keyDepth >= curDepth:
+				if v not in tmpConfig:
+					tmpConfig[v] = {};
+				tmpConfig = tmpConfig[v];
+			else:
+				break;
+		return tmpConfig;
 
 	def addConfig(self, config, key, val):
 		# 配置的key值
@@ -56,16 +78,15 @@ class ConfigExtraction(object):
 		config = {};
 		def checkFilePath(filePath, pathList):
 			# 获取对应keyList的配置数据
-			tmpConfig = config;
-			if not self.m_params_["joinKeysStr"]:
-				for v in pathList:
-					if v not in tmpConfig:
-						tmpConfig[v] = {};
-					tmpConfig = tmpConfig[v];
+			tmpConfig = self.getTmpConfigByPathList(config, pathList);
 			# 保存配置
 			fileName = self.getFileName(filePath);
 			# 添加配置
-			value = "/".join(pathList) + "/" + fileName; # 保存到配置文件中的value值
+			value = self.m_params_["joinValuesStr"].join(pathList) + self.m_params_["joinValuesStr"]; # 保存到配置文件中的value值
+			if self.m_params_["isSaveFilePath"]:
+				value += self.getFileName(filePath, True);
+			else:
+				value += fileName;
 			if self.m_params_["isMergeSameToTable"]:
 				res = re.match("^(\w+)_(\d+)$", fileName);
 				if res:
@@ -83,20 +104,25 @@ class ConfigExtraction(object):
 
 	def getConfigKey(self, pathList, fileName):
 		if self.m_params_["joinKeysStr"]:
-			return self.m_params_["joinKeysStr"].join(pathList) + self.m_params_["joinKeysStr"] + fileName;
+			newPathList = copy.deepcopy(pathList);
+			if self.m_params_["keyDepth"] > 0:
+				for i in range(self.m_params_["keyDepth"]):
+					if len(newPathList) == 0:
+						break;
+					newPathList.pop(0);
+			if len(newPathList) == 0:
+				return fileName;
+			return self.m_params_["joinKeysStr"].join(newPathList) + self.m_params_["joinKeysStr"] + fileName;
 		return fileName
 
 	def dumpConfigToFile(self, targetPath, config = {}):
-		content = """-- 音效配置
-local AudioConfig = {0};
-
-return AudioConfig;""";
+		content = "-- 音效配置\nlocal " + self.m_params_["ExportFileName"] + " = {0};\n\nreturn " + self.m_params_["ExportFileName"] + ";";
 		configContent = self.getDumpContent(config);
 		# 去掉最后一个","
 		if configContent[-1] == ",":
 			configContent = configContent[:-1]
 		content = content.format(configContent);
-		with open(targetPath + "/AudioConfig.lua", "w") as f:
+		with open(targetPath + "/" + self.m_params_["ExportFileName"] + ".lua", "w") as f:
 			f.write(content);
 			f.close();
 
@@ -144,16 +170,71 @@ return AudioConfig;""";
 		self.dumpConfigToFile(targetPath, config);
 		return config;
 
-if __name__ == '__main__':
+
+# 导出配置
+def ExportConfig(cwd = os.getcwd()):
 	print("=== Extract start ===");
 
+	ExtMode = -1; # 导出模式：0->加载audio的配置；1->播放audio的配置
+
 	# 查找及导出路径
-	path = os.getcwd().replace("\\", "/");
+	path = cwd.replace("\\", "/");
 	path += "/audio/res/lndalianmj/mp3/effects";
 
-	ConfigExt = ConfigExtraction(params = {"suffixNames" : ["mp3", "ogg"]}); # 只获取MP3或OGG格式的文件
-	config = ConfigExt.extract(path, path); # 导出配置
-	# print(ConfigExt.getDumpContent(config))
-
+	# 导出配置类实例化
+	ConfigExt1 = ConfigExtraction(params = {
+		"ExportFileName": "loadEffectsConfig",
+		"suffixNames" : ["mp3", "ogg"],
+		"isMergeSameToTable": False,
+		"isSaveFilePath": True,
+		# "keyDepth" : 1,
+	});
+	ConfigExt2 = ConfigExtraction(params = {
+		"ExportFileName": "playEffectsConfig",
+		"suffixNames" : ["mp3", "ogg"],
+		"isMergeSameToTable": True,
+		"isSaveFilePath": False,
+		"joinValuesStr" : "_",
+		"keyDepth" : 1,
+	});
+	# 根据导出模式导出配置
+	if ExtMode == 0:
+		ConfigExt1.extract(path, path);
+	elif ExtMode == 1:
+		ConfigExt2.extract(path, path);
+	else:
+		ConfigExt1.extract(path, path);
+		ConfigExt2.extract(path, path);
 	print("Extract success!");
 	print("The path of extraction is:", path);
+
+
+# 重命名文件
+def RenameFile(callback, relativePath, cwd = os.getcwd()):
+	print("=== Rename start ===")
+	checkPath = cwd.replace("\\", "/");
+	print(cwd)
+	checkPath += relativePath;
+	files = os.listdir(checkPath);
+	for file in files:
+		if callable(callback):
+			callback(checkPath + "/", file);
+	print("=== Rename end ===");
+
+
+if __name__ == '__main__':
+
+	# # 重命名麻将配音文件
+	# # 重命名麻将子文件
+	# def callback(dirPath, fileName):
+	# 	keyList = fileName.split("_");
+	# 	keyList.pop(0);
+	# 	newFileName = "_".join(keyList);
+	# 	os.rename(dirPath + fileName, dirPath + newFileName);
+	# RenameFile(callback, "/audio/res/lndalianmj/mp3/effects/man/majiangzi");
+	# 重命名effects/mahjong为effects/common
+	os.rename(os.getcwd() + "/audio/res/lndalianmj/mp3/effects/mahjong", os.getcwd() + "/audio/res/lndalianmj/mp3/effects/common");
+
+
+	# # 导出配置
+	# ExportConfig();
