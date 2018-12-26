@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-26 10:55:28
+# @Last Modified time: 2018-12-26 11:26:53
 import wx;
 
 class FiveInARow(wx.Panel):
@@ -95,7 +95,6 @@ class FiveInARow(wx.Panel):
 		maxX = min(pos.x + 4, rows-1);
 		minY = max(pos.y - 4, 0);
 		maxY = min(pos.y + 4, cols-1);
-		print("checkCount", rows, cols, minX, maxX, minY, maxY, pos)
 		# 校验横向
 		count = 0;
 		for i in range(minX, maxX+1):
@@ -106,7 +105,6 @@ class FiveInARow(wx.Panel):
 					return True;
 			else:
 				count = 0;
-		print("row", count)
 		# 校验竖向
 		count = 0;
 		for j in range(minY, maxY+1):
@@ -117,15 +115,12 @@ class FiveInARow(wx.Panel):
 					return True;
 			else:
 				count = 0;
-		print("col", count)
 		# 校验斜向
 		startIdx, endIdx = max(minX - pos.x, minY - pos.y), min(maxX - pos.x, maxY - pos.y);
-		print("startIdx, endIdx", startIdx, endIdx)
 		idxList = range(startIdx, endIdx+1);
 		countList = [0,0];
 		for k in range(0, len(idxList)):
 			# 右斜向
-			print("right", idxList[k], pos.x + idxList[k], ";", pos.y + idxList[k])
 			gridView = self.m_gridViews[(pos.x + idxList[k])*cols + pos.y + idxList[k]];
 			if gridView.m_flag == flag:
 				countList[0] += 1;
@@ -135,7 +130,6 @@ class FiveInARow(wx.Panel):
 				countList[0] = 0;
 			# 左斜向
 			if pos.y - idxList[k] >= 0 and pos.y - idxList[k] < cols:
-				print("left", idxList[k], pos.x + idxList[k], ";", idxList[-k-1], pos.y - idxList[k])
 				gridView = self.m_gridViews[(pos.x + idxList[k])*cols + pos.y - idxList[k]];
 				if gridView.m_flag == flag:
 					countList[1] += 1;
@@ -143,7 +137,6 @@ class FiveInARow(wx.Panel):
 						return True;
 				else:
 					countList[1] = 0;
-		print("countList", countList)
 		return False;
 
 
