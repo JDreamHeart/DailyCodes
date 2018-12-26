@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-26 11:26:53
+# @Last Modified time: 2018-12-26 11:43:20
 import wx;
 
 class FiveInARow(wx.Panel):
@@ -88,7 +88,7 @@ class FiveInARow(wx.Panel):
 			msgDialog = wx.MessageDialog(self, "游戏结束！", "游戏结束", style = wx.OK|wx.ICON_INFORMATION);
 			msgDialog.ShowModal();
 
-	def checkCount(self, pos, flag, count = 5):
+	def checkCount(self, pos, flag, maxCount = 5):
 		rows = self.params_["matrix"][0];
 		cols = self.params_["matrix"][1];
 		minX = max(pos.x - 4, 0);
@@ -101,42 +101,42 @@ class FiveInARow(wx.Panel):
 			gridView = self.m_gridViews[i*cols + pos.y];
 			if gridView.m_flag == flag:
 				count += 1;
-				if count == 5:
+				if count == maxCount:
 					return True;
 			else:
 				count = 0;
 		# 校验竖向
 		count = 0;
-		for j in range(minY, maxY+1):
-			gridView = self.m_gridViews[pos.x*cols + j];
+		for i in range(minY, maxY+1):
+			gridView = self.m_gridViews[pos.x*cols + i];
 			if gridView.m_flag == flag:
 				count += 1;
-				if count == 5:
+				if count == maxCount:
 					return True;
 			else:
 				count = 0;
-		# 校验斜向
-		startIdx, endIdx = max(minX - pos.x, minY - pos.y), min(maxX - pos.x, maxY - pos.y);
-		idxList = range(startIdx, endIdx+1);
-		countList = [0,0];
-		for k in range(0, len(idxList)):
-			# 右斜向
-			gridView = self.m_gridViews[(pos.x + idxList[k])*cols + pos.y + idxList[k]];
+		# 校验右斜向
+		idxList = range(max(minX - pos.x, minY - pos.y), min(maxX - pos.x, maxY - pos.y)+1);
+		count = 0;
+		for i in range(0, len(idxList)):
+			gridView = self.m_gridViews[(pos.x + idxList[i])*cols + pos.y + idxList[i]];
 			if gridView.m_flag == flag:
-				countList[0] += 1;
-				if countList[0] == 5:
+				count += 1;
+				if count == maxCount:
 					return True;
 			else:
-				countList[0] = 0;
-			# 左斜向
-			if pos.y - idxList[k] >= 0 and pos.y - idxList[k] < cols:
-				gridView = self.m_gridViews[(pos.x + idxList[k])*cols + pos.y - idxList[k]];
-				if gridView.m_flag == flag:
-					countList[1] += 1;
-					if countList[1] == 5:
-						return True;
-				else:
-					countList[1] = 0;
+				count = 0;
+		# 校验左斜向
+		idxList = range(max(minX - pos.x, pos.y - maxY), min(maxX - pos.x, pos.y - minX)+1);
+		count = 0;
+		for i in range(0, len(idxList)):
+			gridView = self.m_gridViews[(pos.x + idxList[i])*cols + pos.y - idxList[i]];
+			if gridView.m_flag == flag:
+				count += 1;
+				if count == maxCount:
+					return True;
+			else:
+				count = 0;
 		return False;
 
 
