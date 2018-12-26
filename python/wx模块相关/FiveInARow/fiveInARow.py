@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-26 11:43:20
+# @Last Modified time: 2018-12-26 14:27:07
 import wx;
 
 class FiveInARow(wx.Panel):
@@ -43,7 +43,7 @@ class FiveInARow(wx.Panel):
 
 	def createGridViews(self):
 		self.m_gridViews = [];
-		gridViewSide = min(self.params_["size"][0]/self.params_["matrix"][0], self.params_["size"][1]/self.params_["matrix"][1]);
+		gridViewSide = min(self.params_["size"][0]/self.params_["matrix"][1], self.params_["size"][1]/self.params_["matrix"][0]);
 		for i in range(self.params_["matrix"][0]):
 			for j in range(self.params_["matrix"][1]):
 				gridView = wx.Panel(self, size = (gridViewSide, gridViewSide), style = wx.BORDER_THEME);
