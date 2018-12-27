@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-26 11:59:06
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-27 18:54:44
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2018-12-27 23:03:42
 import wx;
 import copy;
+import math;
+from enum import Enum, unique;
 
 ChessImgConfig = {
 	"R_General" : "res/R_General.png",
@@ -58,13 +60,20 @@ ChessConfigList = [
 	{"value" : 7, "key" : "B_Soldier", "name" : "卒"},
 ];
 
+@unique
+class Direction(Enum):
+	LEFT = 0;
+	TOP = 1;
+	RIGHT = 2;
+	BOTTOM = 3;
+
 class Banqi(wx.Panel):
 	"""docstring for Banqi"""
 	def __init__(self, parent, id = -1, params = {}):
 		self.initParams(params);
 		super(Banqi, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
 		self.m_gridViews = [];
-		self.m_curItem = None;
+		self.m_playing, self.m_curPos, self.m_curItem = False, None, None;
 		self.SetBackgroundColour(self.params_["bgColour"]);
 		self.initView();
 
@@ -76,12 +85,14 @@ class Banqi(wx.Panel):
 			"bgColour" : wx.Colour(238,168,37),
 			"focusColour" : wx.Colour(240,200,37),
 			"emptyColour" : wx.Colour(255,255,255),
+			"respDist" : 10, # 移动元素的响应距离
 		};
 		for k,v in params.items():
 			self.params_[k] = v;
 		self.params_["matrix"] = (4,8); # 固定维度
 
 	def initView(self):
+		self.m_playing = True; # 游戏状态标记
 		self.createControls();
 		self.initViewLayout();
 
@@ -107,9 +118,9 @@ class Banqi(wx.Panel):
 	def createItem(self, mtPos, config):
 		p = wx.Panel(self, style = wx.BORDER_THEME);
 		p.m_matrixPos = mtPos;
-		p.m_value = config["value"];
 		img = wx.Image(ChessImgConfig[config["key"]], wx.BITMAP_TYPE_ANY);
 		bm = wx.StaticBitmap(p, bitmap = wx.BitmapFromImage(img));
+		bm.m_value = config["value"];
 		bx = wx.BoxSizer(wx.VERTICAL);
 		bx.Add(bm);
 		p.SetSizerAndFit(bx);
@@ -120,44 +131,111 @@ class Banqi(wx.Panel):
 
 	def bindEventToItem(self, item, bitmap):
 		item.Bind(wx.EVT_LEFT_DOWN, self.onItemClick);
+		item.Bind(wx.EVT_MOTION, self.onItemMotion);
 		item.Bind(wx.EVT_LEFT_DCLICK, self.onItemDClick);
-		def onClickText(event):
+		def onBitmapClick(event):
 			self.onItemClick(event, item);
-		bitmap.Bind(wx.EVT_LEFT_DOWN, onClickText);
+		def onBitmapMotion(event):
+			self.onItemMotion(event, item);
+		bitmap.Bind(wx.EVT_LEFT_DOWN, onBitmapClick);
+		bitmap.Bind(wx.EVT_MOTION, onBitmapMotion);
 
 	def onItemClick(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
 		if item:
-			item.SetBackgroundColour(self.params_["focusColour"]);
-			item.Refresh();
-			# 重置self.m_curItem
-			if self.m_curItem:
-				if self.m_curItem.m_bitmap:
-					self.m_curItem.SetBackgroundColour(self.params_["bgColour"]);
-				else:
-					self.m_curItem.SetBackgroundColour(self.params_["emptyColour"]);
-				self.m_curItem.Refresh();
-			self.m_curItem = item;
-		pass;
+			if self.m_playing:
+				if self.m_curItem != item:
+					item.SetBackgroundColour(self.params_["focusColour"]);
+					item.Refresh();
+					# 重置self.m_curItem
+					if self.m_curItem:
+						if not self.m_curItem.m_bitmap.IsShown():
+							self.m_curItem.SetBackgroundColour(self.params_["bgColour"]);
+						else:
+							self.m_curItem.SetBackgroundColour(self.params_["emptyColour"]);
+						self.m_curItem.Refresh();
+					self.m_curItem = item;
+				# 重置self.m_curPos
+				if event:
+					self.m_curPos = event.GetPosition();
+					event.Skip();
+			else:
+				# 显示游戏结束信息弹窗
+				self.showMessageDialog("请重新开始游戏！", "游戏已结束");
 
 	def onItemDClick(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
-		if item and (item.m_bitmap and not item.m_bitmap.IsShown()):
+		if item and not item.m_bitmap.IsShown():
 			item.m_bitmap.Show();
+			item.SetBackgroundColour(self.params_["focusColour"]);
+			item.Refresh();
 			# 判断游戏是否结束
 			self.checkGameOver(item);
+
+	def onItemMotion(self, event = None, item = None):
+		if not item and event:
+			item = event.GetEventObject();
+		if item and item.m_bitmap.IsShown() and item.m_bitmap.m_value > 0:
+			if event.Dragging() and event.LeftIsDown() and self.m_playing and self.m_curPos:
+				pos = event.GetPosition() - self.m_curPos;
+				direction = None;
+				respDist = self.params_["respDist"];
+				fabsX, fabsY = math.fabs(pos.x), math.fabs(pos.y);
+				if fabsX > respDist or fabsY > respDist:
+					self.m_curPos = None;
+					if fabsX < fabsY:
+						direction = pos.y < 0 and Direction.TOP or Direction.BOTTOM;
+					else:
+						direction = pos.x < 0 and Direction.LEFT or Direction.RIGHT;
+					# 移动Item
+					self.moveItem(item, direction);
+
+	def moveItem(self, item, direction):
+		bm = item.m_bitmap;
+		mtPos = item.m_matrixPos;
+		tgPos = [mtPos.x, mtPos.y];
+		if direction == Direction.TOP:
+			if mtPos.x > 0:
+				tgPos[0] -= 1;
+		elif direction == Direction.BOTTOM:
+			if mtPos.x < self.params_["matrix"][0]-1:
+				tgPos[0] += 1;
+		elif direction == Direction.LEFT:
+			if mtPos.y > 0:
+				tgPos[1] -= 1;
+		elif direction == Direction.RIGHT:
+			if mtPos.y < self.params_["matrix"][1]-1:
+				tgPos[1] += 1;
+		if tgPos[0] != mtPos.x or tgPos[1] != mtPos.y:
+			isMove = False;
+			tgItem = self.m_gridViews[tgPos[0]*self.params_["matrix"][1] + tgPos[1]];
+			bitmap = tgItem.m_bitmap;
+			if bitmap.IsShown() and (bitmap.m_value < 0 or bitmap.m_value >= bm.m_value):
+				bitmap.m_value = bm.m_value;
+				bitmap.SetBitmap(bm.GetBitmap());
+				bm.m_value = -1;
+				bm.SetBitmap(wx.Bitmap(bm.GetSize(), depth=255));
+				self.onItemClick(item = tgItem);
 
 	def checkGameOver(self, item):
 		pos = item.m_matrixPos;
 		if self.checkCount(pos):
-			msgDialog = wx.MessageDialog(self, "游戏结束！", "游戏结束", style = wx.OK|wx.ICON_INFORMATION);
-			msgDialog.ShowModal();
+			# 回调游戏结束方法
+			if hasattr(self, "onGameOver"):
+				self.onGameOver();
+			# 显示游戏结束信息弹窗
+			self.showMessageDialog("游戏结束！", "游戏结束");
+			# 重置游戏状态
+			self.m_playing = False;
 
 	def checkCount(self, pos):
 		return False;
 
+	def showMessageDialog(self, message, caption):
+		msgDialog = wx.MessageDialog(self, message, caption, style = wx.OK|wx.ICON_INFORMATION);
+		msgDialog.ShowModal();
 
 if __name__ == '__main__':
 	app = wx.App();
