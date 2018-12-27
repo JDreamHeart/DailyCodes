@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-26 14:27:07
+# @Last Modified time: 2018-12-27 17:32:42
 import wx;
 
 class FiveInARow(wx.Panel):
@@ -56,7 +56,7 @@ class FiveInARow(wx.Panel):
 	def onItemClick(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
-		if item:
+		if item and item.m_flag == -1:
 			item.SetBackgroundColour(self.params_["focusColour"]);
 			item.Refresh();
 			# 重置self.m_curItem
@@ -69,7 +69,7 @@ class FiveInARow(wx.Panel):
 	def onItemDClick(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
-		if item:
+		if item and item.m_flag == -1:
 			self.m_toggle = (self.m_toggle + 1) % 2;
 			colour = self.m_toggle == 0 and "white" or "black";
 			item.SetBackgroundColour(colour);
