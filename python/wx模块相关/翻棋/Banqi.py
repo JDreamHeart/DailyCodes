@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-26 11:59:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-28 14:24:04
+# @Last Modified time: 2018-12-28 15:41:32
 import wx;
 import copy;
 import math;
@@ -81,6 +81,7 @@ class Banqi(wx.Panel):
 		self.m_gridViews = [];
 		self.m_playing, self.m_curPos, self.m_curItem, self.m_emptyBitmap = False, None, None, None;
 		self.m_turn = 0;
+		# self.initDragView();
 		self.SetBackgroundColour(self.params_["bgColour"]);
 		self.initView();
 
@@ -98,11 +99,20 @@ class Banqi(wx.Panel):
 			self.params_[k] = v;
 		self.params_["matrix"] = (4,8); # 固定维度
 
+	def initDragView(self):
+		if hasattr(self, "m_dragView"):
+			self.m_dragView.Destroy();
+		self.m_dragView = wx.Panel(self, size = (40,40));
+		wx.StaticBitmap(self.m_dragView, bitmap = wx.Bitmap((40,40), depth=0));
+		# self.m_dragView.SetBackgroundColour("gray");
+		wx.CallAfter(self.m_dragView.Hide);
+
 	def initView(self):
 		self.m_playing = True; # 游戏状态标记
 		self.resetTurn();
 		self.createControls();
 		self.initViewLayout();
+		self.initDragView();
 
 	def createControls(self):
 		self.createGridViews();
@@ -139,6 +149,7 @@ class Banqi(wx.Panel):
 
 	def bindEventToItem(self, item, bitmap):
 		item.Bind(wx.EVT_LEFT_DOWN, self.onItemClick);
+		item.Bind(wx.EVT_LEFT_UP, self.onItemLeftUp);
 		item.Bind(wx.EVT_MOTION, self.onItemMotion);
 		item.Bind(wx.EVT_LEFT_DCLICK, self.onItemDClick);
 		def onBitmapClick(event):
@@ -172,6 +183,12 @@ class Banqi(wx.Panel):
 				# 显示游戏结束信息弹窗
 				self.showMessageDialog("请重新开始游戏！", "游戏已结束");
 
+	def onItemLeftUp(self, event = None, item = None):
+		if not item and event:
+			item = event.GetEventObject();
+		if item and self.m_playing:
+			self.m_curPos = None;
+
 	def onItemDClick(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
@@ -186,10 +203,15 @@ class Banqi(wx.Panel):
 	def onItemMotion(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
-		if item and item.m_bitmap.IsShown() and item.m_bitmap.m_value != 0:
-			if not self.checkItemTurn(item):
-				self.m_curPos = None;
-			if event.Dragging() and event.LeftIsDown() and self.m_playing and self.m_curPos:
+		if event.Dragging() and event.LeftIsDown() and self.m_playing and self.m_curPos:
+			if self.m_curItem and self.m_curItem.m_bitmap.IsShown() and self.m_curItem.m_bitmap.m_value != 0 and self.checkItemTurn(self.m_curItem):
+				# if item:
+				# 	item.SetBackgroundColour("gray");
+				if not self.m_dragView.IsShown():
+					self.m_dragView.Show();
+				newPos = self.ScreenToClient(event.GetEventObject().ClientToScreen(event.GetPosition()));
+				self.m_dragView.Move(newPos.x-20, newPos.y-20);
+				# 处理校验逻辑
 				pos = event.GetPosition() - self.m_curPos;
 				direction = None;
 				respDist = self.params_["respDist"];
@@ -201,7 +223,7 @@ class Banqi(wx.Panel):
 					else:
 						direction = pos.x < 0 and Direction.LEFT or Direction.RIGHT;
 					# 移动Item
-					self.moveItem(item, direction);
+					self.moveItem(self.m_curItem, direction);
 
 	def moveItem(self, item, direction):
 		bm = item.m_bitmap;
