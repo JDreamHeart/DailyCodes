@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-26 11:59:06
-# @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2018-12-27 23:03:42
+# @Last Modified by:   JinZhang
+# @Last Modified time: 2018-12-28 12:02:28
 import wx;
 import copy;
 import math;
@@ -26,33 +26,33 @@ ChessImgConfig = {
 };
 
 ChessConfigList = [
-	{"value" : 0, "key" : "R_General", "name" : "帥"},
-	{"value" : 0, "key" : "B_General", "name" : "將"},
-	{"value" : 1, "key" : "R_Advisor", "name" : "仕"},
-	{"value" : 1, "key" : "R_Advisor", "name" : "仕"},
-	{"value" : 1, "key" : "B_Advisor", "name" : "士"},
-	{"value" : 1, "key" : "B_Advisor", "name" : "士"},
-	{"value" : 2, "key" : "R_Elephant", "name" : "相"},
-	{"value" : 3, "key" : "R_Elephant", "name" : "相"},
+	{"value" : -1, "key" : "R_General", "name" : "帥"},
+	{"value" : 1, "key" : "B_General", "name" : "將"},
+	{"value" : -2, "key" : "R_Advisor", "name" : "仕"},
+	{"value" : -2, "key" : "R_Advisor", "name" : "仕"},
+	{"value" : 2, "key" : "B_Advisor", "name" : "士"},
+	{"value" : 2, "key" : "B_Advisor", "name" : "士"},
+	{"value" : -3, "key" : "R_Elephant", "name" : "相"},
+	{"value" : -3, "key" : "R_Elephant", "name" : "相"},
 	{"value" : 3, "key" : "B_Elephant", "name" : "象"},
 	{"value" : 3, "key" : "B_Elephant", "name" : "象"},
-	{"value" : 4, "key" : "R_Horse", "name" : "傌"},
-	{"value" : 4, "key" : "R_Horse", "name" : "傌"},
+	{"value" : -4, "key" : "R_Horse", "name" : "傌"},
+	{"value" : -4, "key" : "R_Horse", "name" : "傌"},
 	{"value" : 4, "key" : "B_Horse", "name" : "馬"},
 	{"value" : 4, "key" : "B_Horse", "name" : "馬"},
-	{"value" : 5, "key" : "R_Chariot", "name" : "俥"},
-	{"value" : 5, "key" : "R_Chariot", "name" : "俥"},
+	{"value" : -5, "key" : "R_Chariot", "name" : "俥"},
+	{"value" : -5, "key" : "R_Chariot", "name" : "俥"},
 	{"value" : 5, "key" : "B_Chariot", "name" : "車"},
 	{"value" : 5, "key" : "B_Chariot", "name" : "車"},
-	{"value" : 6, "key" : "R_Cannon", "name" : "炮"},
-	{"value" : 6, "key" : "R_Cannon", "name" : "炮"},
+	{"value" : -6, "key" : "R_Cannon", "name" : "炮"},
+	{"value" : -6, "key" : "R_Cannon", "name" : "炮"},
 	{"value" : 6, "key" : "B_Cannon", "name" : "砲"},
 	{"value" : 6, "key" : "B_Cannon", "name" : "砲"},
-	{"value" : 7, "key" : "R_Soldier", "name" : "兵"},
-	{"value" : 7, "key" : "R_Soldier", "name" : "兵"},
-	{"value" : 7, "key" : "R_Soldier", "name" : "兵"},
-	{"value" : 7, "key" : "R_Soldier", "name" : "兵"},
-	{"value" : 7, "key" : "R_Soldier", "name" : "兵"},
+	{"value" : -7, "key" : "R_Soldier", "name" : "兵"},
+	{"value" : -7, "key" : "R_Soldier", "name" : "兵"},
+	{"value" : -7, "key" : "R_Soldier", "name" : "兵"},
+	{"value" : -7, "key" : "R_Soldier", "name" : "兵"},
+	{"value" : -7, "key" : "R_Soldier", "name" : "兵"},
 	{"value" : 7, "key" : "B_Soldier", "name" : "卒"},
 	{"value" : 7, "key" : "B_Soldier", "name" : "卒"},
 	{"value" : 7, "key" : "B_Soldier", "name" : "卒"},
@@ -73,7 +73,8 @@ class Banqi(wx.Panel):
 		self.initParams(params);
 		super(Banqi, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
 		self.m_gridViews = [];
-		self.m_playing, self.m_curPos, self.m_curItem = False, None, None;
+		self.m_playing, self.m_curPos, self.m_curItem, self.m_emptyBitmap = False, None, None, None;
+		self.m_turn = 0;
 		self.SetBackgroundColour(self.params_["bgColour"]);
 		self.initView();
 
@@ -93,6 +94,8 @@ class Banqi(wx.Panel):
 
 	def initView(self):
 		self.m_playing = True; # 游戏状态标记
+		self.m_turn = 0;
+		self.changeTurn();
 		self.createControls();
 		self.initViewLayout();
 
@@ -145,6 +148,8 @@ class Banqi(wx.Panel):
 			item = event.GetEventObject();
 		if item:
 			if self.m_playing:
+				if not self.checkItemTurn(item):
+					return;
 				if self.m_curItem != item:
 					item.SetBackgroundColour(self.params_["focusColour"]);
 					item.Refresh();
@@ -173,11 +178,12 @@ class Banqi(wx.Panel):
 			item.Refresh();
 			# 判断游戏是否结束
 			self.checkGameOver(item);
+			self.changeTurn();
 
 	def onItemMotion(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
-		if item and item.m_bitmap.IsShown() and item.m_bitmap.m_value > 0:
+		if item and item.m_bitmap.IsShown() and item.m_bitmap.m_value != 0:
 			if event.Dragging() and event.LeftIsDown() and self.m_playing and self.m_curPos:
 				pos = event.GetPosition() - self.m_curPos;
 				direction = None;
@@ -212,16 +218,52 @@ class Banqi(wx.Panel):
 			isMove = False;
 			tgItem = self.m_gridViews[tgPos[0]*self.params_["matrix"][1] + tgPos[1]];
 			bitmap = tgItem.m_bitmap;
-			if bitmap.IsShown() and (bitmap.m_value < 0 or bitmap.m_value >= bm.m_value):
-				bitmap.m_value = bm.m_value;
-				bitmap.SetBitmap(bm.GetBitmap());
-				bm.m_value = -1;
-				bm.SetBitmap(wx.Bitmap(bm.GetSize(), depth=255));
+			if bitmap.IsShown() and self.checkBitmapValue(bm, bitmap):
+				self.changeBitmap(bm, bitmap);
 				self.onItemClick(item = tgItem);
+				# 判断游戏是否结束
+				self.checkGameOver(tgItem);
+				self.changeTurn();
+
+	def checkBitmapValue(self, srcBitmap, tgBitmap):
+		if tgBitmap.m_value == 0:
+			return True;
+		srcAbsValue = math.fabs(srcBitmap.m_value);
+		tgAbsValue = math.fabs(tgBitmap.m_value);
+		if srcBitmap.m_value/srcAbsValue == tgBitmap.m_value/tgAbsValue:
+			return False;
+		return srcAbsValue <= tgAbsValue;
+
+	def changeBitmap(self, srcBitmap, tgBitmap):
+		tgBitmap.m_value = srcBitmap.m_value;
+		tgBitmap.SetBitmap(srcBitmap.GetBitmap());
+		srcBitmap.m_value = 0;
+		srcBitmap.SetBitmap(self.getEmptyBitmap(srcBitmap.GetSize()));
+
+	def getEmptyBitmap(self, size):
+		if not self.m_emptyBitmap:
+			self.m_emptyBitmap = wx.Bitmap(size, depth=255);
+		return self.m_emptyBitmap;
+
+	def changeTurn(self):
+		self.m_turn = (self.m_turn + 1) % 2;
+		if hasattr(self, "onChangeTurn"):
+			self.onChangeTurn(self.m_turn);
+
+	def checkItemTurn(self, item):
+		bitmap = item.m_bitmap;
+		if not bitmap.IsShown():
+			return True;
+		if bitmap.m_value == 0:
+			return False;
+		if (bitmap.m_value > 0 and 1 or 0) == self.m_turn:
+			return True;
+		# # 弹窗提示
+		# self.showMessageDialog("您不能操作对方的棋子！", "提示");
+		return False;
 
 	def checkGameOver(self, item):
-		pos = item.m_matrixPos;
-		if self.checkCount(pos):
+		if self.checkCount(item):
 			# 回调游戏结束方法
 			if hasattr(self, "onGameOver"):
 				self.onGameOver();
@@ -230,12 +272,30 @@ class Banqi(wx.Panel):
 			# 重置游戏状态
 			self.m_playing = False;
 
-	def checkCount(self, pos):
-		return False;
+	def checkCount(self, item):
+		sign = item.m_bitmap.m_value > 0 and 1 or -1;
+		for gridView in self.m_gridViews:
+			value = gridView.m_bitmap.m_value;
+			if value * sign < 0:
+				return False;
+		return True;
 
 	def showMessageDialog(self, message, caption):
 		msgDialog = wx.MessageDialog(self, message, caption, style = wx.OK|wx.ICON_INFORMATION);
 		msgDialog.ShowModal();
+
+def createCtrPanel(parent):
+	ctrP = wx.Panel(parent);
+	ctrP.SetBackgroundColour("white");
+	ctrP.btn = wx.Button(ctrP, label = "重新开始");
+	t = wx.StaticText(ctrP, label = "当前操作方：");
+	ctrP.text = wx.StaticText(ctrP, label = "黑方");
+	boxSizer = wx.BoxSizer(wx.VERTICAL);
+	boxSizer.Add(ctrP.btn);
+	boxSizer.Add(t);
+	boxSizer.Add(ctrP.text);
+	ctrP.SetSizer(boxSizer);
+	return ctrP;
 
 if __name__ == '__main__':
 	app = wx.App();
@@ -243,12 +303,17 @@ if __name__ == '__main__':
 
 	panel = wx.Panel(frame);
 	panel.SetBackgroundColour("black");
-	hr = Banqi(panel, params = {"pos" : (40,40), "size" : (560,280)})
-	btn = wx.Button(panel, label = "重新开始");
-	# btn.Bind(wx.EVT_BUTTON, hr.restart);
+	bq = Banqi(panel, params = {"pos" : (40,40), "size" : (560,280)})
+	ctrP = createCtrPanel(panel)
+	def onChangeTurn(turn):
+		if turn == 0:
+			ctrP.text.SetLabel("红方");
+		else:
+			ctrP.text.SetLabel("黑方");
+	bq.onChangeTurn = onChangeTurn;
 	boxSizer = wx.BoxSizer(wx.HORIZONTAL);
-	boxSizer.Add(btn);
-	boxSizer.Add(hr);
+	boxSizer.Add(ctrP);
+	boxSizer.Add(bq);
 	panel.SetSizer(boxSizer);
 
 	frame.Show(True);
