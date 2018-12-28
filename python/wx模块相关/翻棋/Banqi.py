@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-26 11:59:06
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2018-12-28 12:02:28
+# @Last Modified time: 2018-12-28 14:24:04
 import wx;
 import copy;
 import math;
@@ -67,6 +67,12 @@ class Direction(Enum):
 	RIGHT = 2;
 	BOTTOM = 3;
 
+@unique
+class Comparison(Enum):
+	LESS = 0;
+	EQUAL = 1;
+	LARGE = 2;
+
 class Banqi(wx.Panel):
 	"""docstring for Banqi"""
 	def __init__(self, parent, id = -1, params = {}):
@@ -94,8 +100,7 @@ class Banqi(wx.Panel):
 
 	def initView(self):
 		self.m_playing = True; # 游戏状态标记
-		self.m_turn = 0;
-		self.changeTurn();
+		self.resetTurn();
 		self.createControls();
 		self.initViewLayout();
 
@@ -148,8 +153,6 @@ class Banqi(wx.Panel):
 			item = event.GetEventObject();
 		if item:
 			if self.m_playing:
-				if not self.checkItemTurn(item):
-					return;
 				if self.m_curItem != item:
 					item.SetBackgroundColour(self.params_["focusColour"]);
 					item.Refresh();
@@ -178,12 +181,14 @@ class Banqi(wx.Panel):
 			item.Refresh();
 			# 判断游戏是否结束
 			self.checkGameOver(item);
-			self.changeTurn();
+			self.changeTurn(item);
 
 	def onItemMotion(self, event = None, item = None):
 		if not item and event:
 			item = event.GetEventObject();
 		if item and item.m_bitmap.IsShown() and item.m_bitmap.m_value != 0:
+			if not self.checkItemTurn(item):
+				self.m_curPos = None;
 			if event.Dragging() and event.LeftIsDown() and self.m_playing and self.m_curPos:
 				pos = event.GetPosition() - self.m_curPos;
 				direction = None;
@@ -218,25 +223,34 @@ class Banqi(wx.Panel):
 			isMove = False;
 			tgItem = self.m_gridViews[tgPos[0]*self.params_["matrix"][1] + tgPos[1]];
 			bitmap = tgItem.m_bitmap;
-			if bitmap.IsShown() and self.checkBitmapValue(bm, bitmap):
-				self.changeBitmap(bm, bitmap);
-				self.onItemClick(item = tgItem);
-				# 判断游戏是否结束
-				self.checkGameOver(tgItem);
-				self.changeTurn();
+			if bitmap.IsShown():
+				ret = self.checkBitmapValue(bm, bitmap);
+				if ret != Comparison.LARGE:
+					self.changeBitmap(bm, bitmap, ret);
+					self.onItemClick(item = tgItem);
+					# 判断游戏是否结束
+					self.checkGameOver(tgItem);
+					self.changeTurn(tgItem);
 
 	def checkBitmapValue(self, srcBitmap, tgBitmap):
 		if tgBitmap.m_value == 0:
-			return True;
+			return Comparison.LESS;
 		srcAbsValue = math.fabs(srcBitmap.m_value);
 		tgAbsValue = math.fabs(tgBitmap.m_value);
-		if srcBitmap.m_value/srcAbsValue == tgBitmap.m_value/tgAbsValue:
-			return False;
-		return srcAbsValue <= tgAbsValue;
+		if srcBitmap.m_value/srcAbsValue != tgBitmap.m_value/tgAbsValue:	
+			if srcAbsValue == tgAbsValue:
+				return Comparison.EQUAL;
+			elif srcAbsValue < tgAbsValue:
+				return Comparison.LESS;
+		return Comparison.LARGE;
 
-	def changeBitmap(self, srcBitmap, tgBitmap):
-		tgBitmap.m_value = srcBitmap.m_value;
-		tgBitmap.SetBitmap(srcBitmap.GetBitmap());
+	def changeBitmap(self, srcBitmap, tgBitmap, result):
+		if result == Comparison.EQUAL:
+			tgBitmap.m_value = 0;
+			tgBitmap.SetBitmap(self.getEmptyBitmap(tgBitmap.GetSize()));
+		else:
+			tgBitmap.m_value = srcBitmap.m_value;
+			tgBitmap.SetBitmap(srcBitmap.GetBitmap());
 		srcBitmap.m_value = 0;
 		srcBitmap.SetBitmap(self.getEmptyBitmap(srcBitmap.GetSize()));
 
@@ -245,7 +259,14 @@ class Banqi(wx.Panel):
 			self.m_emptyBitmap = wx.Bitmap(size, depth=255);
 		return self.m_emptyBitmap;
 
-	def changeTurn(self):
+	def resetTurn(self):
+		self.m_turn = -1;
+		if hasattr(self, "onChangeTurn"):
+			self.onChangeTurn(self.m_turn);
+
+	def changeTurn(self, item = None):
+		if self.m_turn == -1 and (item and item.m_bitmap.m_value != 0):
+			self.m_turn = item.m_bitmap.m_value > 0 and 1 or 0;
 		self.m_turn = (self.m_turn + 1) % 2;
 		if hasattr(self, "onChangeTurn"):
 			self.onChangeTurn(self.m_turn);
@@ -289,7 +310,7 @@ def createCtrPanel(parent):
 	ctrP.SetBackgroundColour("white");
 	ctrP.btn = wx.Button(ctrP, label = "重新开始");
 	t = wx.StaticText(ctrP, label = "当前操作方：");
-	ctrP.text = wx.StaticText(ctrP, label = "黑方");
+	ctrP.text = wx.StaticText(ctrP, label = "--");
 	boxSizer = wx.BoxSizer(wx.VERTICAL);
 	boxSizer.Add(ctrP.btn);
 	boxSizer.Add(t);
@@ -306,7 +327,9 @@ if __name__ == '__main__':
 	bq = Banqi(panel, params = {"pos" : (40,40), "size" : (560,280)})
 	ctrP = createCtrPanel(panel)
 	def onChangeTurn(turn):
-		if turn == 0:
+		if turn == -1:
+			ctrP.text.SetLabel("--");
+		elif turn == 0:
 			ctrP.text.SetLabel("红方");
 		else:
 			ctrP.text.SetLabel("黑方");
