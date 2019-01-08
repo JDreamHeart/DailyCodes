@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2019-01-08 18:40:52
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2019-01-08 23:45:11
 import wx;
 import random, math;
 from enum import Enum, unique;
+
+from Snake import Direction, Snake;
 
 @unique
 class Mark(Enum):
@@ -13,25 +15,14 @@ class Mark(Enum):
 	SNAKE = 1;
 	FOOD = 2;
 
-@unique
-class Direction(Enum):
-	LEFT = 0;
-	TOP = 1;
-	RIGHT = 2;
-	BOTTOM = 3;
-
-class Snake(wx.Panel):
-	"""docstring for Snake"""
+class SnakeView(wx.Panel):
+	"""docstring for SnakeView"""
 	def __init__(self, parent, id = -1, params = {}):
 		self.initParams(params);
-		super(Snake, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
-		self.m_gridViews = []; # 像素点网格
-		self.m_snakeBody = []; # 蛇体
-		self.m_blankList = []; # 空格列表
+		super(SnakeView, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
 		self.m_playing = False; # 游戏进行中的标记
-		self.m_direction = Direction.LEFT; # 蛇移动方向
 		self.SetBackgroundColour(self.params_["bgColour"]);
-		self.initView();
+		self.createSnake();
 		self.createTimer();
 
 	def __del__(self):
@@ -50,6 +41,15 @@ class Snake(wx.Panel):
 		for k,v in params.items():
 			self.params_[k] = v;
 
+	# 创建蛇体
+	def createSnake(self):
+		params = {
+			"size" : self.getItemSize(),
+			"bgColour" : self.params_["snakeColour"],
+			"matrix" : (36,36),
+		};
+		self.m_snake = Snake(params = params);
+
 	def createTimer(self):
 		self.m_timer = wx.Timer(self);
 		self.Bind(wx.EVT_TIMER, self.onTimer, self.m_timer);
@@ -65,26 +65,17 @@ class Snake(wx.Panel):
 		self.initViewLayout();
 
 	def createControls(self):
-		# self.createGridViews();
-
-	def initViewLayout(self):
-		# gridSizer = wx.GridSizer(self.params_["matrix"][0], self.params_["matrix"][1], 0,0);
-		# for gridView in self.m_gridViews:
-		# 	gridSizer.Add(gridView);
-		# self.SetSizerAndFit(gridSizer);
 		pass;
 
-	def createGridViews(self):
-		self.m_gridViews = [];
+	def initViewLayout(self):
+		pass;
+
+	def getItemSize(self):
 		rows, cols = self.params_["matrix"][0], self.params_["matrix"][1];
-		gridViewSide = min(self.params_["size"][0]/cols, self.params_["size"][1]/rows);
-		for i in range(rows):
-			for j in range(cols):
-				gridView = wx.Panel(self, size = (gridViewSide, gridViewSide), style = wx.BORDER_NONE);
-				gridView.m_pos = wx.Point(i,j);
-				gridView.m_mark = Mark.BLANK;
-				self.m_gridViews.append(gridView);
-				self.m_blankList.append(gridView);
+		return wx.Size(self.params_["size"][0]/cols, self.params_["size"][1]/rows);
+
+	def createItem(self):
+		return wx.Panel(self, size = self.getItemSize(), style = wx.BORDER_NONE);
 
 	def moveSnake(self, direction):
 		pass;
@@ -101,20 +92,30 @@ class Snake(wx.Panel):
 	def onTimer(self, event = None):
 		self.moveSnake(self.m_direction);
 
+	def initGame(self):
+		idx = math.floor(self.params_["matrix"][0]*self.params_["matrix"][1]/2);
+		itemPos = self.m_snake.getPos(idx = idx);
+		item = self.createItem();
+		item.Move(itemPos.x, itemPos.y);
+		item.SetBackgroundColour(self.params_["foodColour"]);
+		item.Refresh();
+		direction = random.choice([Direction.LEFT, Direction.TOP, Direction.RIGHT, Direction.BOTTOM]);
+		self.m_snake.setDirection(direction);
+		self.m_snake.eat(item);
+
 	def startGame(self, event = None):
 		if not self.m_playing:
-			idx = int(len(self.m_blankList)/2);
-			item = self.m_blankList.pop(idx);
-			item.SetBackgroundColour(self.params_["snakeColour"]);
-			item.Refresh();
-			self.m_direction = random.choice([Direction.LEFT, Direction.TOP, Direction.RIGHT, Direction.BOTTOM]);
+			self.initGame();
 			self.setFoodItem();
 			self.startTimer();
 			self.m_playing = True;
 
 	def setFoodItem(self):
-		idx = random.randint(0, len(self.m_blankList)-1);
-		item = self.m_blankList.pop(idx);
+		blankIdxs = self.m_snake.getBlankIdxs();
+		idx = random.randint(0, len(blankIdxs)-1);
+		itemPos = self.m_snake.getPos(idx = idx);
+		item = self.createItem();
+		item.Move(itemPos.x, itemPos.y);
 		item.SetBackgroundColour(self.params_["foodColour"]);
 		item.Refresh();
 
@@ -125,7 +126,7 @@ if __name__ == '__main__':
 
 	panel = wx.Panel(frame);
 	panel.SetBackgroundColour("black");
-	sn = Snake(panel, params = {"pos" : (40,40), "size" : (540,540)})
+	sn = SnakeView(panel, params = {"pos" : (40,40), "size" : (540,540)})
 	btn = wx.Button(panel, label = "开始游戏");
 	btn.Bind(wx.EVT_BUTTON, sn.startGame);
 	boxSizer = wx.BoxSizer(wx.HORIZONTAL);
