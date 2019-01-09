@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2019-01-09 21:31:34
+# @Last Modified time: 2019-01-09 23:40:48
 import wx;
 import random;
 from enum import Enum, unique;
@@ -15,19 +15,24 @@ class Mark(Enum):
 	SNAKE = 1;
 	FOOD = 2;
 
+DirectionConfig = {
+	Direction.LEFT : "HORIZONTAL",
+	Direction.RIGHT : "HORIZONTAL",
+	Direction.TOP : "VERTICAL",
+	Direction.BOTTOM : "VERTICAL",
+};
+
 class SnakeView(wx.Panel):
 	"""docstring for SnakeView"""
 	def __init__(self, parent, id = -1, params = {}):
 		self.initParams(params);
 		super(SnakeView, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
-		self.m_playing = False; # 游戏进行中的标记
-		self.m_foodInfo = { # 食物信息
-			"idx" : -1,
-			"item" : None,
-		};
 		self.SetBackgroundColour(self.params_["bgColour"]);
 		self.createSnake();
 		self.createTimer();
+		self.m_playing = False; # 游戏进行中的标记
+		self.m_foodInfoMap = {}; # 食物信息表【key = idx, value = item】
+		self.m_direction = self.m_snake.m_direction; # 初始化方向
 
 	def __del__(self):
 		self.stopTimer();
@@ -36,7 +41,7 @@ class SnakeView(wx.Panel):
 		self.params_ = {
 			"pos" : (0,0),
 			"size" : (360,360),
-			"style" : wx.BORDER_THEME,
+			"style" : wx.BORDER_NONE,
 			"bgColour" : wx.Colour(255,255,255),
 			"matrix" : (36,36),
 			"snakeColour" : wx.Colour(0,0,0),
@@ -85,9 +90,10 @@ class SnakeView(wx.Panel):
 	def moveSnake(self):
 		ret,idx = self.m_snake.check();
 		if ret:
-			if idx == self.m_foodInfo["idx"]:
-				self.m_snake.eat(self.m_foodInfo["item"]);
+			if idx in self.m_foodInfoMap:
+				self.m_snake.eat(self.m_foodInfoMap[idx]);
 				self.createFoodItem();
+				del self.m_foodInfoMap[idx];
 			else:
 				self.m_snake.move(idx);
 		else:
@@ -101,6 +107,7 @@ class SnakeView(wx.Panel):
 
 	def onTimer(self, event = None):
 		self.moveSnake();
+		self.m_direction = self.m_snake.m_direction;
 
 	def initGame(self):
 		row = int(self.params_["matrix"][0]/2);
@@ -117,27 +124,28 @@ class SnakeView(wx.Panel):
 	def startGame(self, event = None):
 		if not self.m_playing:
 			self.initGame();
-			self.createFoodItem();
+			for i in range(3):
+				self.createFoodItem();
 			self.startTimer();
 			self.m_playing = True;
 
 	def createFoodItem(self):
-		blankIdxs = self.m_snake.getBlankIdxs();
-		idx = random.randint(0, len(blankIdxs)-1);
+		idx = random.randint(0, len(self.m_snake.getBlankIdxs())-1);
 		itemPos = self.m_snake.getPos(idx = idx);
 		item = self.createItem();
 		item.Move(itemPos.x, itemPos.y);
 		item.SetBackgroundColour(self.params_["foodColour"]);
 		item.Refresh();
-		self.m_foodInfo = {
-			"idx" : idx,
-			"item" : item,
-		};
+		self.m_foodInfoMap[idx] = item;
+
+	def updateDirection(self, direction):
+		if direction in DirectionConfig and DirectionConfig[self.m_direction] != DirectionConfig[direction]:
+			self.m_snake.setDirection(direction);
 
 
 if __name__ == '__main__':
 	app = wx.App();
-	frame = wx.Frame(None, size = (700,600));
+	frame = wx.Frame(None, size = (800,700));
 
 	panel = wx.Panel(frame);
 	panel.SetBackgroundColour("black");
@@ -154,13 +162,13 @@ if __name__ == '__main__':
 			event.DoAllowNextEvent();
 			if event.GetUnicodeKey() == 0:
 				if event.GetKeyCode() == 314:
-					sn.m_snake.setDirection(Direction.LEFT);
+					sn.updateDirection(Direction.LEFT);
 				if event.GetKeyCode() == 315:
-					sn.m_snake.setDirection(Direction.TOP);
+					sn.updateDirection(Direction.TOP);
 				if event.GetKeyCode() == 316:
-					sn.m_snake.setDirection(Direction.RIGHT);
+					sn.updateDirection(Direction.RIGHT);
 				if event.GetKeyCode() == 317:
-					sn.m_snake.setDirection(Direction.BOTTOM);
+					sn.updateDirection(Direction.BOTTOM);
 	app.Bind(wx.EVT_CHAR_HOOK, onCharHook)
 
 	frame.Show(True);

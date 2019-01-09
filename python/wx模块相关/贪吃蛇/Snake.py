@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2019-01-09 21:42:09
+# @Last Modified time: 2019-01-09 23:34:11
 import wx;
 from enum import Enum, unique;
 
@@ -38,7 +38,11 @@ class Snake(object):
 		item.SetBackgroundColour(self.params_["bgColour"]);
 		item.Refresh();
 		self.m_bodyList.insert(0, item);
-		self.m_blankIdxs.remove(self.getIdx(item.GetPosition()));
+		idx = self.getIdx(item.GetPosition());
+		if idx in self.m_blankIdxs:
+			self.m_blankIdxs.remove(idx);
+		else:
+			raise Exception("idx[{}] not in self.m_blankIdxs".format(idx))
 
 	def move(self, idx):
 		pos = self.getPos(idx = idx);
@@ -48,7 +52,11 @@ class Snake(object):
 			prePos, lastPos = lastPos, self.m_bodyList[i].GetPosition();
 			self.m_bodyList[i].Move(prePos.x, prePos.y);
 		self.m_blankIdxs.remove(idx);
-		self.m_blankIdxs.append(self.getIdx(lastPos));
+		addIdx = self.getIdx(lastPos);
+		if addIdx not in self.m_blankIdxs:
+			self.m_blankIdxs.append(addIdx);
+		else:
+			raise Exception("idx[{}] in self.m_blankIdxs".format(addIdx))
 	
 	def check(self):
 		if len(self.m_bodyList) > 0 and self.checkDirection(self.m_direction):
