@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2019-01-08 23:45:50
+# @Last Modified by:   JinZhang
+# @Last Modified time: 2019-01-09 19:55:47
 import wx;
 import math;
 from enum import Enum, unique;
@@ -53,7 +53,7 @@ class Snake(object):
 		self.m_blankIdxs.append(self.getIdx(lastPos));
 	
 	def check(self):
-		if len(self.m_bodyList) > 0 and self.checkDirection():
+		if len(self.m_bodyList) > 0 and self.checkDirection(self.m_direction):
 			itemPos = self.m_bodyList[0].GetPosition();
 			itemRow, itemCol = itemPos.x/10, itemPos.y/10;
 			if self.m_direction == Direction.LEFT:
@@ -72,7 +72,7 @@ class Snake(object):
 		return False, -1;
 
 	def checkDirection(self, direction):
-		if self.m_direction in [Direction.LEFT, Direction.TOP, Direction.RIGHT, Direction.BOTTOM]:
+		if direction in [Direction.LEFT, Direction.TOP, Direction.RIGHT, Direction.BOTTOM]:
 			return True;
 		return False;
 
@@ -88,7 +88,7 @@ class Snake(object):
 		return wx.Point(row*self.params_["size"][0], col*self.params_["size"][1]);
 
 	def getIdx(self, pos):
-		return pos.x/self.params_["size"][0], pos.y/self.params_["matrix"][1]
+		return pos.x/self.params_["size"][0] * self.params_["matrix"][1] + pos.y/self.params_["size"][1];
 
 	def getBlankIdxs(self):
 		return self.m_blankIdxs;

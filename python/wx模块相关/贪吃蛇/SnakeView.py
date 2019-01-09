@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2019-01-08 23:45:11
+# @Last Modified by:   JinZhang
+# @Last Modified time: 2019-01-09 19:53:35
 import wx;
 import random, math;
 from enum import Enum, unique;
@@ -21,6 +21,10 @@ class SnakeView(wx.Panel):
 		self.initParams(params);
 		super(SnakeView, self).__init__(parent, id, pos = self.params_["pos"], size = self.params_["size"], style = self.params_["style"]);
 		self.m_playing = False; # 游戏进行中的标记
+		self.m_foodInfo = { # 食物信息
+			"idx" : -1,
+			"item" : None,
+		};
 		self.SetBackgroundColour(self.params_["bgColour"]);
 		self.createSnake();
 		self.createTimer();
@@ -77,7 +81,14 @@ class SnakeView(wx.Panel):
 	def createItem(self):
 		return wx.Panel(self, size = self.getItemSize(), style = wx.BORDER_NONE);
 
-	def moveSnake(self, direction):
+	def moveSnake(self):
+		ret,idx = self.m_snake.check();
+		if ret:
+			if idx == self.m_foodInfo["idx"]:
+				self.m_snake.eat(self.m_foodInfo["item"]);
+				self.createFoodItem();
+			else:
+				self.m_snake.move(idx);
 		pass;
 
 	def checkGameOver(self, item):
@@ -90,11 +101,12 @@ class SnakeView(wx.Panel):
 		return False;
 
 	def onTimer(self, event = None):
-		self.moveSnake(self.m_direction);
+		self.moveSnake();
 
 	def initGame(self):
-		idx = math.floor(self.params_["matrix"][0]*self.params_["matrix"][1]/2);
-		itemPos = self.m_snake.getPos(idx = idx);
+		row = int(math.floor(self.params_["matrix"][0]/2));
+		col = int(math.floor(self.params_["matrix"][1]/2));
+		itemPos = self.m_snake.getPos(row = row, col = col);
 		item = self.createItem();
 		item.Move(itemPos.x, itemPos.y);
 		item.SetBackgroundColour(self.params_["foodColour"]);
@@ -106,11 +118,11 @@ class SnakeView(wx.Panel):
 	def startGame(self, event = None):
 		if not self.m_playing:
 			self.initGame();
-			self.setFoodItem();
+			self.createFoodItem();
 			self.startTimer();
 			self.m_playing = True;
 
-	def setFoodItem(self):
+	def createFoodItem(self):
 		blankIdxs = self.m_snake.getBlankIdxs();
 		idx = random.randint(0, len(blankIdxs)-1);
 		itemPos = self.m_snake.getPos(idx = idx);
@@ -118,6 +130,10 @@ class SnakeView(wx.Panel):
 		item.Move(itemPos.x, itemPos.y);
 		item.SetBackgroundColour(self.params_["foodColour"]);
 		item.Refresh();
+		self.m_foodInfo = {
+			"idx" : idx,
+			"item" : item,
+		};
 
 
 if __name__ == '__main__':
