@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2019-01-09 19:55:47
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2019-01-09 21:42:09
 import wx;
-import math;
 from enum import Enum, unique;
 
 @unique
@@ -33,7 +32,7 @@ class Snake(object):
 			self.params_[k] = v;
 
 	def init(self):
-		self.m_blankIdxs = range(0, self.params_["matrix"][0]*self.params_["matrix"][1]); # 空白位置列表
+		self.m_blankIdxs = list(range(0, self.params_["matrix"][0]*self.params_["matrix"][1])); # 空白位置列表
 
 	def eat(self, item):
 		item.SetBackgroundColour(self.params_["bgColour"]);
@@ -46,8 +45,7 @@ class Snake(object):
 		lastPos = self.m_bodyList[0].GetPosition();
 		self.m_bodyList[0].Move(pos.x, pos.y);
 		for i in range(1, len(self.m_bodyList)):
-			prePos = self.m_bodyList[i-1].GetPosition();
-			lastPos = self.m_bodyList[i-1].GetPosition();
+			prePos, lastPos = lastPos, self.m_bodyList[i].GetPosition();
 			self.m_bodyList[i].Move(prePos.x, prePos.y);
 		self.m_blankIdxs.remove(idx);
 		self.m_blankIdxs.append(self.getIdx(lastPos));
@@ -55,7 +53,7 @@ class Snake(object):
 	def check(self):
 		if len(self.m_bodyList) > 0 and self.checkDirection(self.m_direction):
 			itemPos = self.m_bodyList[0].GetPosition();
-			itemRow, itemCol = itemPos.x/10, itemPos.y/10;
+			itemRow, itemCol = self.getRow(itemPos), self.getCol(itemPos);
 			if self.m_direction == Direction.LEFT:
 				itemCol-=1;
 			elif self.m_direction == Direction.TOP:
@@ -65,7 +63,7 @@ class Snake(object):
 			elif self.m_direction == Direction.BOTTOM:
 				itemRow+=1;
 			rows, cols = self.params_["matrix"][0], self.params_["matrix"][1];
-			if itemRow >= 0 and itemRow < rows and itemCol >= 0 or itemCol < cols:
+			if itemRow >= 0 and itemRow < rows and itemCol >= 0 and itemCol < cols:
 				targetIdx = itemRow*cols+itemCol;
 				if targetIdx in self.m_blankIdxs:
 					return True, targetIdx;
@@ -78,17 +76,23 @@ class Snake(object):
 
 	def setDirection(self, direction):
 		if self.checkDirection(direction):
-			self.m_direction == direction;
+			self.m_direction = direction;
 
 	def getPos(self, row = 0, col = 0, idx = -1):
 		if idx >= 0:
 			cols = self.params_["matrix"][1];
-			row = math.floor(idx/cols);
+			row = int(idx/cols);
 			col = idx % cols;
-		return wx.Point(row*self.params_["size"][0], col*self.params_["size"][1]);
+		return wx.Point(col*self.params_["size"][0], row*self.params_["size"][1]);
 
 	def getIdx(self, pos):
-		return pos.x/self.params_["size"][0] * self.params_["matrix"][1] + pos.y/self.params_["size"][1];
+		return self.getRow(pos) * self.params_["matrix"][1] + self.getCol(pos);
+
+	def getRow(self, pos):
+		return int(pos.y/self.params_["size"][1]);
+
+	def getCol(self, pos):
+		return int(pos.x/self.params_["size"][0]);
 
 	def getBlankIdxs(self):
 		return self.m_blankIdxs;

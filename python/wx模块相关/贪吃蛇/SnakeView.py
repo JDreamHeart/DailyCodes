@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JinZhang
-# @Last Modified time: 2019-01-09 19:53:35
+# @Last Modified by:   JimDreamHeart
+# @Last Modified time: 2019-01-09 21:31:34
 import wx;
-import random, math;
+import random;
 from enum import Enum, unique;
 
 from Snake import Direction, Snake;
@@ -50,7 +50,7 @@ class SnakeView(wx.Panel):
 		params = {
 			"size" : self.getItemSize(),
 			"bgColour" : self.params_["snakeColour"],
-			"matrix" : (36,36),
+			"matrix" : self.params_["matrix"],
 		};
 		self.m_snake = Snake(params = params);
 
@@ -62,7 +62,8 @@ class SnakeView(wx.Panel):
 		self.m_timer.Start(100);
 
 	def stopTimer(self):
-		self.m_timer.Stop();
+		if self.m_timer.IsRunning():
+			self.m_timer.Stop();
 
 	def initView(self):
 		self.createControls();
@@ -89,23 +90,21 @@ class SnakeView(wx.Panel):
 				self.createFoodItem();
 			else:
 				self.m_snake.move(idx);
-		pass;
+		else:
+			self.gameOver();
 
-	def checkGameOver(self, item):
-		if self.checkItemNextPos(item.m_pos, direction):
-			msgDialog = wx.MessageDialog(self, "游戏结束！", "游戏结束", style = wx.OK|wx.ICON_INFORMATION);
-			msgDialog.ShowModal();
-
-	def checkCount(self, pos, direction):
-		# if direction == Direction.
-		return False;
+	def gameOver(self):
+		self.stopTimer();
+		self.m_playing = False;
+		msgDialog = wx.MessageDialog(self, "游戏结束！", "游戏结束", style = wx.OK|wx.ICON_INFORMATION);
+		msgDialog.ShowModal();
 
 	def onTimer(self, event = None):
 		self.moveSnake();
 
 	def initGame(self):
-		row = int(math.floor(self.params_["matrix"][0]/2));
-		col = int(math.floor(self.params_["matrix"][1]/2));
+		row = int(self.params_["matrix"][0]/2);
+		col = int(self.params_["matrix"][1]/2);
 		itemPos = self.m_snake.getPos(row = row, col = col);
 		item = self.createItem();
 		item.Move(itemPos.x, itemPos.y);
@@ -142,13 +141,27 @@ if __name__ == '__main__':
 
 	panel = wx.Panel(frame);
 	panel.SetBackgroundColour("black");
-	sn = SnakeView(panel, params = {"pos" : (40,40), "size" : (540,540)})
+	sn = SnakeView(panel, params = {"pos" : (40,40), "size" : (600,600), "matrix" : (60,60)})
 	btn = wx.Button(panel, label = "开始游戏");
 	btn.Bind(wx.EVT_BUTTON, sn.startGame);
 	boxSizer = wx.BoxSizer(wx.HORIZONTAL);
 	boxSizer.Add(btn);
 	boxSizer.Add(sn);
 	panel.SetSizer(boxSizer);
+
+	def onCharHook(event = None):
+		if event:
+			event.DoAllowNextEvent();
+			if event.GetUnicodeKey() == 0:
+				if event.GetKeyCode() == 314:
+					sn.m_snake.setDirection(Direction.LEFT);
+				if event.GetKeyCode() == 315:
+					sn.m_snake.setDirection(Direction.TOP);
+				if event.GetKeyCode() == 316:
+					sn.m_snake.setDirection(Direction.RIGHT);
+				if event.GetKeyCode() == 317:
+					sn.m_snake.setDirection(Direction.BOTTOM);
+	app.Bind(wx.EVT_CHAR_HOOK, onCharHook)
 
 	frame.Show(True);
 	app.MainLoop();
