@@ -2,9 +2,9 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-01-11 12:02:09
+# @Last Modified time: 2019-01-11 14:08:50
 import wx;
-import random;
+import random, math;
 from enum import Enum, unique;
 
 @unique
@@ -13,12 +13,6 @@ class Direction(Enum):
 	TOP = 1;
 	RIGHT = 2;
 	BOTTOM = 3;
-
-@unique
-class RowSquareState(Enum):
-	EMPTY = 0;
-	LACK = 1;
-	FULL = 2;
 
 def getMovingItemMtList(startPos, key = "I"):
 	if key == "I":
@@ -159,8 +153,7 @@ class TetrisView(wx.Panel):
 
 	def moveItemList(self, direction = Direction.BOTTOM):
 		if self.checkDirection(direction):
-			for i in range(len(self.m_movingItemInfo["list"])):
-				item = self.m_movingItemInfo["list"][i];
+			for item in self.m_movingItemInfo["list"]:
 				row, col = item.m_mt;
 				if direction == Direction.BOTTOM:
 					row+=1;
@@ -182,12 +175,12 @@ class TetrisView(wx.Panel):
 		if not self.m_playing:
 			self.m_playing = True;
 			self.createMovingItemList();
-			self.startTimer();
+			# self.startTimer();
 
 	def createMovingItemList(self):
 		self.m_movingItemInfo["list"] = [];
 		col = int(self.params_["matrix"][1]/2);
-		itemMtList = getMovingItemMtList((0, col));
+		itemMtList = getMovingItemMtList((6, col));
 		for itemMt in itemMtList:
 			item = self.createItem();
 			item.SetBackgroundColour(self.params_["squareColour"]);
@@ -227,8 +220,7 @@ class TetrisView(wx.Panel):
 		msgDialog.ShowModal();
 
 	def checkGameOver(self):
-		for i in range(len(self.m_movingItemInfo["list"])):
-			item = self.m_movingItemInfo["list"][i];
+		for item in self.m_movingItemInfo["list"]:
 			if item.m_mt[0] <= 0:
 				self.gameOver();
 				return True;
@@ -257,7 +249,26 @@ class TetrisView(wx.Panel):
 			else:
 				break;
 
-
+	def rotateItemList(self):
+		if len(self.m_movingItemInfo["list"]) > 0:
+			# 获取Item的移动数据
+			rotation = (self.m_movingItemInfo["rotation"] + 90) % 360;
+			newItemMtList = [];
+			centerRow, centerCol = self.m_movingItemInfo["list"][1].m_mt;
+			sinVal, cosVal = math.sin(rotation/360), math.cos(rotation/360);
+			for item in self.m_movingItemInfo["list"]:
+				row, col = item.m_mt;
+				hypotenuse = math.sqrt(math.pow(row - centerRow, 2)+math.pow(col - centerCol, 2));
+				newRow = centerRow + int(hypotenuse * sinVal);
+				newCol = centerCol + int(hypotenuse * cosVal);
+				print((row, col), (newRow, newCol))
+				if newCol < 0 or newCol >= self.params_["matrix"][1]:
+					return
+				newItemMtList.append((item, newRow, newCol));
+			# 移动Item
+			for itemMt in newItemMtList:
+				self.moveItem(*itemMt);
+			self.m_movingItemInfo["rotation"] = rotation;
 
 
 if __name__ == '__main__':
@@ -286,6 +297,8 @@ if __name__ == '__main__':
 					tv.moveItemList(direction = Direction.RIGHT);
 				# if event.GetKeyCode() == 317:
 				# 	tv.updateDirection(Direction.BOTTOM);
+			elif event.GetUnicodeKey() == 32:
+				tv.rotateItemList();
 	app.Bind(wx.EVT_CHAR_HOOK, onCharHook)
 
 	frame.Show(True);
