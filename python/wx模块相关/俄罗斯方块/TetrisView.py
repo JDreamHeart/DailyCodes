@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-01-11 15:00:18
+# @Last Modified time: 2019-01-11 15:07:57
 import wx;
 import random, math;
 from enum import Enum, unique;
@@ -14,7 +14,9 @@ class Direction(Enum):
 	RIGHT = 2;
 	BOTTOM = 3;
 
-def getMovingItemMtList(startPos, key = "I"):
+def getMovingItemMtList(startPos, key = None):
+	if not key:
+		key = random.choice(["I", "J", "L", "O", "S", "Z", "T"]);
 	if key == "I":
 		return [
 			(startPos[0]-3, startPos[1]),
@@ -100,7 +102,7 @@ class TetrisView(wx.Panel):
 		self.Bind(wx.EVT_TIMER, self.onTimer, self.m_timer);
 
 	def startTimer(self):
-		self.m_timer.Start(100);
+		self.m_timer.Start(300);
 
 	def stopTimer(self):
 		if self.m_timer.IsRunning():
