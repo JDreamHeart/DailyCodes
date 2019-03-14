@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author: JinZhang
 # @Date:   2018-12-25 10:31:47
-# @Last Modified by:   JimDreamHeart
-# @Last Modified time: 2019-01-09 23:40:48
+# @Last Modified by:   JinZhang
+# @Last Modified time: 2019-01-23 15:29:27
 import wx;
 import random;
-from enum import Enum, unique;
 
 from Snake import Direction, Snake;
-
-@unique
-class Mark(Enum):
-	BLANK = 0;
-	SNAKE = 1;
-	FOOD = 2;
 
 DirectionConfig = {
 	Direction.LEFT : "HORIZONTAL",
@@ -85,7 +78,37 @@ class SnakeView(wx.Panel):
 		return wx.Size(self.params_["size"][0]/cols, self.params_["size"][1]/rows);
 
 	def createItem(self):
-		return wx.Panel(self, size = self.getItemSize(), style = wx.BORDER_NONE);
+		p = wx.Panel(self, size = self.getItemSize(), style = wx.BORDER_NONE);
+		p.m_text = wx.StaticText(p, label = "9");
+		p.m_text.SetFont(wx.Font(6, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL));
+		box = wx.BoxSizer(wx.HORIZONTAL);
+		box.Add(p.m_text, flag = wx.ALIGN_CENTER);
+		p.SetSizer(box)
+		p.m_timer = wx.Timer(p);
+		p.m_isFlash = False;
+		def onItemTimer(event = None):
+			remainTime = int(p.m_text.GetLabel()) - 1;
+			if remainTime >= 0:
+				p.m_text.SetLabel(str(remainTime));
+				if p.m_isFlash:
+					if p.IsShown():
+						p.Hide();
+					else:
+						p.Show();
+				if remainTime <= 3 and not p.m_isFlash:
+					p.m_text.SetLabel(str(remainTime * 10));
+					p.m_isFlash = True;
+					p.m_timer.Stop();
+					p.m_timer.Start(100);
+			else:
+				idx = self.m_snake.getIdx(p.GetPosition());
+				if idx in self.m_foodInfoMap:
+					self.createFoodItem();
+					foodItem = self.m_foodInfoMap.pop(idx);
+					foodItem.Destroy();
+		p.Bind(wx.EVT_TIMER, onItemTimer, p.m_timer);
+		p.m_timer.Start(1000);
+		return p;
 
 	def moveSnake(self):
 		ret,idx = self.m_snake.check();
