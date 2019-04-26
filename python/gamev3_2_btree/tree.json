@@ -1,0 +1,631 @@
+{
+  "version": "0.3.0",
+  "scope": "tree",
+  "selectedTree": "c7064100-fa33-4b71-8c75-fefee8dcfb36",
+  "trees": [
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "a25533b8-9b0d-4df3-9fa0-4dadaa92ca60",
+      "title": "LingJiaFan",
+      "description": "另加番",
+      "root": "59736bd2-78c7-4310-825c-d6caf8d5a375",
+      "properties": {},
+      "nodes": {
+        "59736bd2-78c7-4310-825c-d6caf8d5a375": {
+          "id": "59736bd2-78c7-4310-825c-d6caf8d5a375",
+          "name": "Sequence",
+          "title": "Sequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -324,
+            "y": 24
+          },
+          "children": [
+            "277eede2-ba9c-4f68-80ac-e9bc62d9d6f5",
+            "e265a908-d14f-4a9b-b36d-2063948e3d70",
+            "4b4a1f6e-31bd-4923-964d-c7616609f969",
+            "8c9f2d09-59e8-499d-8c28-f7505f34a50c",
+            "b125e9b4-014b-428a-8c0c-abaed75b941a",
+            "7af8d1bd-9e89-488f-8a05-03ebc9af9dc3",
+            "267feeb1-d0ce-41c9-aee3-8426ef8e760d",
+            "c0afd9dc-8d68-4b61-a4cf-19a8728a4e8a",
+            "db801386-9f82-4f76-9ac4-a3dec6c49844",
+            "0d3b4e9d-47b5-4785-b9b6-631e4ed4e8b7",
+            "e51784be-c2b7-45ce-8f23-e6c0b5d76660",
+            "e754ed70-ed3f-474f-87f9-4e537a2edc75",
+            "26377715-57f0-490c-9dc3-da2b1bb013a8",
+            "8df887a4-8f18-4193-805f-d92f87104e91",
+            "df9c3d89-64b0-42d8-8c62-d7644bb76b80",
+            "9aff2276-8838-44bc-9fb6-1338bdba3c67"
+          ]
+        },
+        "277eede2-ba9c-4f68-80ac-e9bc62d9d6f5": {
+          "id": "277eede2-ba9c-4f68-80ac-e9bc62d9d6f5",
+          "name": "paixing102201",
+          "title": "paixing102201",
+          "description": "手中的牌有1、2胡3凑成顺子，或8、9胡7凑成顺子",
+          "properties": {
+            "score": 2,
+            "name": "边张",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": -300
+          }
+        },
+        "e265a908-d14f-4a9b-b36d-2063948e3d70": {
+          "id": "e265a908-d14f-4a9b-b36d-2063948e3d70",
+          "name": "paixing102301",
+          "title": "paixing102301",
+          "description": "胡的那张牌与手中的牌凑成顺子，且为顺子中间那张牌",
+          "properties": {
+            "score": 2,
+            "name": "夹胡",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": -252
+          }
+        },
+        "4b4a1f6e-31bd-4923-964d-c7616609f969": {
+          "id": "4b4a1f6e-31bd-4923-964d-c7616609f969",
+          "name": "paixing500201",
+          "title": "paixing500201",
+          "description": "点炮胡时，点炮玩家额外付番",
+          "properties": {
+            "score": 2,
+            "name": "点炮"
+          },
+          "display": {
+            "x": 12,
+            "y": -204
+          }
+        },
+        "8c9f2d09-59e8-499d-8c28-f7505f34a50c": {
+          "id": "8c9f2d09-59e8-499d-8c28-f7505f34a50c",
+          "name": "paixing500301",
+          "title": "paixing500301",
+          "description": "玩家自摸胡，额外加番",
+          "properties": {
+            "score": 2,
+            "name": "自摸"
+          },
+          "display": {
+            "x": 12,
+            "y": -156
+          }
+        },
+        "b125e9b4-014b-428a-8c0c-abaed75b941a": {
+          "id": "b125e9b4-014b-428a-8c0c-abaed75b941a",
+          "name": "paixing500401",
+          "title": "paixing500401",
+          "description": "玩家抢杠胡，额外加番",
+          "properties": {
+            "score": 2,
+            "name": "抢杠"
+          },
+          "display": {
+            "x": 12,
+            "y": -108
+          }
+        },
+        "7af8d1bd-9e89-488f-8a05-03ebc9af9dc3": {
+          "id": "7af8d1bd-9e89-488f-8a05-03ebc9af9dc3",
+          "name": "paixing500501",
+          "title": "paixing500501",
+          "description": "玩家报听且胡牌，额外加番",
+          "properties": {
+            "score": 2,
+            "name": "报听",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": -60
+          }
+        },
+        "267feeb1-d0ce-41c9-aee3-8426ef8e760d": {
+          "id": "267feeb1-d0ce-41c9-aee3-8426ef8e760d",
+          "name": "paixing500604",
+          "title": "paixing500604",
+          "description": "胡牌玩家吃、碰、杠（暗杠除外）过，其他玩家均没有吃、碰、杠（暗杠除外）过。",
+          "properties": {
+            "score": 2,
+            "name": "三家闭门"
+          },
+          "display": {
+            "x": 12,
+            "y": -12
+          }
+        },
+        "c0afd9dc-8d68-4b61-a4cf-19a8728a4e8a": {
+          "id": "c0afd9dc-8d68-4b61-a4cf-19a8728a4e8a",
+          "name": "paixing501001",
+          "title": "paixing501001",
+          "description": "开杠后补牌直接胡牌",
+          "properties": {
+            "score": 4,
+            "name": "杠上开花"
+          },
+          "display": {
+            "x": 12,
+            "y": 36
+          }
+        },
+        "db801386-9f82-4f76-9ac4-a3dec6c49844": {
+          "id": "db801386-9f82-4f76-9ac4-a3dec6c49844",
+          "name": "paixing502502",
+          "title": "paixing502502",
+          "description": "分张流程后胡牌",
+          "properties": {
+            "score": 2,
+            "name": "海底捞月"
+          },
+          "display": {
+            "x": 12,
+            "y": 84
+          }
+        },
+        "0d3b4e9d-47b5-4785-b9b6-631e4ed4e8b7": {
+          "id": "0d3b4e9d-47b5-4785-b9b6-631e4ed4e8b7",
+          "name": "paixing503401",
+          "title": "paixing503401",
+          "description": "玩家摸到宝牌且胡牌",
+          "properties": {
+            "score": 4,
+            "name": "摸宝"
+          },
+          "display": {
+            "x": 12,
+            "y": 132
+          }
+        },
+        "e51784be-c2b7-45ce-8f23-e6c0b5d76660": {
+          "id": "e51784be-c2b7-45ce-8f23-e6c0b5d76660",
+          "name": "paixing503501",
+          "title": "paixing503501",
+          "description": "玩家自己看宝时，宝牌刚好是自己要胡的牌，可直接拿这张宝牌胡牌",
+          "properties": {
+            "score": 4,
+            "name": "冲宝"
+          },
+          "display": {
+            "x": 12,
+            "y": 180
+          }
+        },
+        "e754ed70-ed3f-474f-87f9-4e537a2edc75": {
+          "id": "e754ed70-ed3f-474f-87f9-4e537a2edc75",
+          "name": "paixing500609",
+          "title": "paixing500609",
+          "description": "玩家没有吃、碰、直杠、补杠过任何牌为闭门。闭门的玩家额外付番",
+          "properties": {
+            "score": 2,
+            "name": "闭门"
+          },
+          "display": {
+            "x": 12,
+            "y": 228
+          }
+        },
+        "26377715-57f0-490c-9dc3-da2b1bb013a8": {
+          "id": "26377715-57f0-490c-9dc3-da2b1bb013a8",
+          "name": "paixing500831",
+          "title": "paixing500831",
+          "description": "每有1个中、发、白的直杠或补杠加1次番。必须是杠下去的，在手中的不算",
+          "properties": {
+            "score": 1,
+            "name": "中发白明杠",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": 276
+          }
+        },
+        "8df887a4-8f18-4193-805f-d92f87104e91": {
+          "id": "8df887a4-8f18-4193-805f-d92f87104e91",
+          "name": "paixing500832",
+          "title": "paixing500832",
+          "description": "每有1个中、发、白的暗杠加1次番。必须是杠下去的，在手中的不算。",
+          "properties": {
+            "score": 2,
+            "name": "中发白暗杠",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": 324
+          }
+        },
+        "df9c3d89-64b0-42d8-8c62-d7644bb76b80": {
+          "id": "df9c3d89-64b0-42d8-8c62-d7644bb76b80",
+          "name": "paixing500102",
+          "title": "paixing500102",
+          "description": "庄家胡牌时，庄家额外加番。庄家是被胡牌玩家时，庄家额外付番。",
+          "properties": {
+            "score": 2,
+            "name": "庄家"
+          },
+          "display": {
+            "x": 12,
+            "y": 372
+          }
+        },
+        "9aff2276-8838-44bc-9fb6-1338bdba3c67": {
+          "id": "9aff2276-8838-44bc-9fb6-1338bdba3c67",
+          "name": "paixing500531",
+          "title": "paixing500531",
+          "description": "玩家报夹听且胡牌，额外加番。",
+          "properties": {
+            "score": 4,
+            "name": "报夹",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 12,
+            "y": 420
+          }
+        }
+      },
+      "display": {
+        "camera_x": 767.3550000003306,
+        "camera_y": 375.2750000001397,
+        "camera_z": 1,
+        "x": -432,
+        "y": 24
+      }
+    },
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "e6492baf-b191-405c-bab6-ea4a57aa9189",
+      "title": "JiBenFan",
+      "description": "基本番型处理",
+      "root": "32c95737-2723-48f4-817c-449b4d1f9a70",
+      "properties": {},
+      "nodes": {
+        "e086ff1f-f190-44a0-9267-c1eb4c631c64": {
+          "id": "e086ff1f-f190-44a0-9267-c1eb4c631c64",
+          "name": "paixing100101",
+          "title": "paixing100101",
+          "description": "手牌除刻子、杠和1对将外，至少有1个顺子",
+          "properties": {
+            "score": 1,
+            "name": "平胡",
+            "isChaJiao": "true"
+          },
+          "display": {
+            "x": 60,
+            "y": 24
+          }
+        },
+        "32c95737-2723-48f4-817c-449b4d1f9a70": {
+          "id": "32c95737-2723-48f4-817c-449b4d1f9a70",
+          "name": "Sequence",
+          "title": "Sequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -168,
+            "y": 24
+          },
+          "children": [
+            "e086ff1f-f190-44a0-9267-c1eb4c631c64"
+          ]
+        }
+      },
+      "display": {
+        "camera_x": 840,
+        "camera_y": 472,
+        "camera_z": 1,
+        "x": -276,
+        "y": 24
+      }
+    },
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "77e0d1ac-a02b-4812-8776-b39010e17978",
+      "title": "SuanFan",
+      "description": "另加番算番原则",
+      "root": "127a608c-af4e-4b88-8736-57dd85adbac8",
+      "properties": {},
+      "nodes": {
+        "127a608c-af4e-4b88-8736-57dd85adbac8": {
+          "id": "127a608c-af4e-4b88-8736-57dd85adbac8",
+          "name": "Sequence",
+          "title": "Sequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": 120,
+            "y": 0
+          },
+          "children": [
+            "955eb86a-e336-42b0-86ae-431f0e0f7563",
+            "07176866-ed07-438d-95d8-405f555dcb9f"
+          ]
+        },
+        "955eb86a-e336-42b0-86ae-431f0e0f7563": {
+          "id": "955eb86a-e336-42b0-86ae-431f0e0f7563",
+          "name": "suanfanyuanze200002",
+          "title": "suanfanyuanze200002",
+          "description": "另加番若无特定说明，均可共存。另加番之间做乘法计算。",
+          "properties": {},
+          "display": {
+            "x": 324,
+            "y": -36
+          }
+        },
+        "07176866-ed07-438d-95d8-405f555dcb9f": {
+          "id": "07176866-ed07-438d-95d8-405f555dcb9f",
+          "name": "suanzongfan100001",
+          "title": "suanzongfan100001",
+          "description": "总番计算原则，总番=基本番*另加番",
+          "properties": {},
+          "display": {
+            "x": 324,
+            "y": 12
+          }
+        }
+      },
+      "display": {
+        "camera_x": 638.0249999910593,
+        "camera_y": 472,
+        "camera_z": 1,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "8d48aae8-06f2-4135-8ce3-ad74c0adbbe3",
+      "title": "SettleFan",
+      "description": "结算番钱",
+      "root": "d9bf0e3a-f557-4e87-8117-9f033c25ffd1",
+      "properties": {},
+      "nodes": {
+        "d9bf0e3a-f557-4e87-8117-9f033c25ffd1": {
+          "id": "d9bf0e3a-f557-4e87-8117-9f033c25ffd1",
+          "name": "Sequence",
+          "title": "Sequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -372,
+            "y": -108
+          },
+          "children": [
+            "c747a3d2-ada3-4e02-82b4-285ad7c329df",
+            "0fdfe019-638d-4df1-8ef3-a6f8d48b706d",
+            "dc1fb31e-061c-43a8-823c-135be8eaacba",
+            "8af3f463-d1c7-4081-8b30-0979b3ee20a8",
+            "5af2d333-1e13-46d8-825d-8e4aa064f964",
+            "1fc8e8fc-b6ea-4467-9464-63659a95bb13"
+          ]
+        },
+        "c747a3d2-ada3-4e02-82b4-285ad7c329df": {
+          "id": "c747a3d2-ada3-4e02-82b4-285ad7c329df",
+          "name": "fan_condition_100001",
+          "title": "fan_condition_100001",
+          "description": "非流局时，需要结算牌型番钱",
+          "properties": {},
+          "display": {
+            "x": -156,
+            "y": -216
+          }
+        },
+        "0fdfe019-638d-4df1-8ef3-a6f8d48b706d": {
+          "id": "0fdfe019-638d-4df1-8ef3-a6f8d48b706d",
+          "name": "fan_relation_100001",
+          "title": "fan_relation_100001",
+          "description": "点炮胡：其他三家向胡牌玩家付钱",
+          "properties": {},
+          "display": {
+            "x": -168,
+            "y": -144
+          }
+        },
+        "dc1fb31e-061c-43a8-823c-135be8eaacba": {
+          "id": "dc1fb31e-061c-43a8-823c-135be8eaacba",
+          "name": "fan_relation_100002",
+          "title": "fan_relation_100002",
+          "description": "自摸胡：其他三家向胡牌玩家付钱",
+          "properties": {},
+          "display": {
+            "x": -168,
+            "y": -72
+          }
+        },
+        "8af3f463-d1c7-4081-8b30-0979b3ee20a8": {
+          "id": "8af3f463-d1c7-4081-8b30-0979b3ee20a8",
+          "name": "fan_relation_100003",
+          "title": "fan_relation_100003",
+          "description": "抢杠胡：被抢杠玩家向胡牌玩家付钱",
+          "properties": {},
+          "display": {
+            "x": -168,
+            "y": 12
+          }
+        },
+        "5af2d333-1e13-46d8-825d-8e4aa064f964": {
+          "id": "5af2d333-1e13-46d8-825d-8e4aa064f964",
+          "name": "fan_calc_100001",
+          "title": "fan_calc_100001",
+          "description": "玩家应付的牌型总番数=MIN[基本牌型番数*另加番，当前封顶番数]",
+          "properties": {},
+          "display": {
+            "x": -180,
+            "y": 84
+          }
+        },
+        "1fc8e8fc-b6ea-4467-9464-63659a95bb13": {
+          "id": "1fc8e8fc-b6ea-4467-9464-63659a95bb13",
+          "name": "fan_calc_100003",
+          "title": "fan_calc_100003",
+          "description": "玩家应付的牌型番钱=底注*N。N为应付牌型总番数",
+          "properties": {},
+          "display": {
+            "x": -180,
+            "y": 156
+          }
+        }
+      },
+      "display": {
+        "camera_x": 960,
+        "camera_y": 478.5,
+        "camera_z": 1,
+        "x": -468,
+        "y": -108
+      }
+    },
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "35e8968a-4681-4db9-ac8f-48dc1927102d",
+      "title": "SettleGang",
+      "description": "结算杠钱",
+      "root": "8cf10b67-9c8c-43c0-b901-e475f73dd80f",
+      "properties": {},
+      "nodes": {
+        "8cf10b67-9c8c-43c0-b901-e475f73dd80f": {
+          "id": "8cf10b67-9c8c-43c0-b901-e475f73dd80f",
+          "name": "Sequence",
+          "title": "Sequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -468,
+            "y": -24
+          },
+          "children": [
+            "b84036e8-8c78-4e27-84a2-a2908f9f8978",
+            "400d2818-785d-4574-a81c-93980307da0f",
+            "d4c7edc2-2789-4ef9-9958-d6a4454e3999",
+            "7aa18219-8d44-4b91-ad76-8d2ebc9da053",
+            "c0ee911a-576e-4312-9724-09b51598c3aa",
+            "ae32c652-21fe-4032-8891-73e9b17de7b8",
+            "0cde9154-9c7b-4d16-8c50-a19780bfaf82",
+            "373db16d-ee94-452d-8090-e2fdee3974b5"
+          ]
+        },
+        "b84036e8-8c78-4e27-84a2-a2908f9f8978": {
+          "id": "b84036e8-8c78-4e27-84a2-a2908f9f8978",
+          "name": "gang_condition_100001",
+          "title": "gang_condition_100001",
+          "description": "流局时不计算杠钱",
+          "properties": {},
+          "display": {
+            "x": -216,
+            "y": -300
+          }
+        },
+        "400d2818-785d-4574-a81c-93980307da0f": {
+          "id": "400d2818-785d-4574-a81c-93980307da0f",
+          "name": "gang_condition_100002",
+          "title": "gang_condition_100002",
+          "description": "非流局时，需要结算杠钱。且只有胡牌玩家才可收取杠钱，非胡牌玩家不可收杠钱",
+          "properties": {},
+          "display": {
+            "x": -216,
+            "y": -228
+          }
+        },
+        "d4c7edc2-2789-4ef9-9958-d6a4454e3999": {
+          "id": "d4c7edc2-2789-4ef9-9958-d6a4454e3999",
+          "name": "NormalGangRelation",
+          "title": "NormalGangRelation",
+          "description": "每有1碰杠，向其他三家收取杠钱【通用节点】",
+          "properties": {
+            "opCodeKey": "PengGang"
+          },
+          "display": {
+            "x": -228,
+            "y": -156
+          }
+        },
+        "7aa18219-8d44-4b91-ad76-8d2ebc9da053": {
+          "id": "7aa18219-8d44-4b91-ad76-8d2ebc9da053",
+          "name": "NormalGangRelation",
+          "title": "NormalGangRelation",
+          "description": "每有1补杠，向其他三家收取杠钱【通用节点】",
+          "properties": {
+            "opCodeKey": "BuGang"
+          },
+          "display": {
+            "x": -228,
+            "y": -84
+          }
+        },
+        "c0ee911a-576e-4312-9724-09b51598c3aa": {
+          "id": "c0ee911a-576e-4312-9724-09b51598c3aa",
+          "name": "NormalGangRelation",
+          "title": "NormalGangRelation",
+          "description": "每有1暗杠，向其他三家收取杠钱【通用节点】",
+          "properties": {
+            "opCodeKey": "AnGang"
+          },
+          "display": {
+            "x": -228,
+            "y": -12
+          }
+        },
+        "ae32c652-21fe-4032-8891-73e9b17de7b8": {
+          "id": "ae32c652-21fe-4032-8891-73e9b17de7b8",
+          "name": "NormalGangCalculation",
+          "title": "NormalGangCalculation",
+          "description": "杠钱结算【通用节点】\n碰杠",
+          "properties": {
+            "multiple": 2,
+            "opCodeKey": "PengGang"
+          },
+          "display": {
+            "x": -216,
+            "y": 72
+          }
+        },
+        "0cde9154-9c7b-4d16-8c50-a19780bfaf82": {
+          "id": "0cde9154-9c7b-4d16-8c50-a19780bfaf82",
+          "name": "NormalGangCalculation",
+          "title": "NormalGangCalculation",
+          "description": "杠钱结算【通用节点】\n补杠",
+          "properties": {
+            "multiple": 2,
+            "opCodeKey": "BuGang"
+          },
+          "display": {
+            "x": -216,
+            "y": 144
+          }
+        },
+        "373db16d-ee94-452d-8090-e2fdee3974b5": {
+          "id": "373db16d-ee94-452d-8090-e2fdee3974b5",
+          "name": "NormalGangCalculation",
+          "title": "NormalGangCalculation",
+          "description": "杠钱结算【通用节点】\n暗杠",
+          "properties": {
+            "multiple": 4,
+            "opCodeKey": "AnGang"
+          },
+          "display": {
+            "x": -216,
+            "y": 216
+          }
+        }
+      },
+      "display": {
+        "camera_x": 960,
+        "camera_y": 478.5,
+        "camera_z": 1,
+        "x": -588,
+        "y": -24
+      }
+    }
+  ]
+}

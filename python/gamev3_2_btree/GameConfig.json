@@ -1,0 +1,1300 @@
+{
+        "playerNumber" : [
+                {
+                    "id" : "MJ_renshu_4411_1",
+                    "args" : [
+                        "4"
+                    ]
+                }
+        ],
+        "totalCards" : [
+                {
+                    "id" : "MJ_yongpai_4412_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_yongpai_4418_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_yongpai_4419_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_yongpai_4420_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "zhuapai" : [
+                {
+                    "id" : "MJ_zhuapai_4459_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "chupai" : [
+                {
+                    "id" : "MJ_chupai_4463_2",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_chupai_4464_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_chupai_4461_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "chipai" : [
+                {
+                    "id" : "MJ_chipai_4470_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_chipai_4471_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_chipai_4472_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_chipai_4466_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "pengpai" : [
+                {
+                    "id" : "MJ_pengpai_4478_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_pengpai_4479_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_pengpai_4480_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_pengpai_4474_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "gangpai" : [
+                {
+                    "id" : "MJ_gangpai_4554_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4486_2",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4487_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4489_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4489_2",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4490_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4491_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_gangpai_4492_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "baoting" : [
+                {
+                    "id" : "MJ_baoting_4496_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_baoting_4494_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_baoting_4496_2",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_baoting_4493_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "hupai" : [
+                {
+                    "id" : "MJ_hupai_4524_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hupai_4543_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hupai_4502_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "jichupaixing" : [
+                {
+                    "id" : "MJ_jichupaixing_4500_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "tihuanpaizhang" : [
+                {
+                    "id" : "MJ_tihuanpaizhang_4541_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "hutinggonggongjiance" : [
+                {
+                    "id" : "MJ_hutinggonggongjiance_4519_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hutinggonggongjiance_4520_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hutinggonggongjiance_4521_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hutinggonggongjiance_4522_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_hutinggonggongjiance_4523_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "fenzhang" : [
+                {
+                    "id" : "MJ_fenzhang_4528_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "liuju" : [
+                {
+                    "id" : "MJ_liuju_4531_1",
+                    "args" : [
+                        "14"
+                    ]
+                }
+        ],
+        "huanbao" : [
+                {
+                    "id" : "MJ_huanbao_4549_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_huanbao_4553_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "kanbao" : [
+                {
+                    "id" : "MJ_kanbao_4544_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_kanbao_4548_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "caozuojianguolv" : [
+                {
+                    "id" : "MJ_caozuojianguolv_4560_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_caozuojianguolv_4560_2",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_caozuojianguolv_4561_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "initTeam" : [
+        ],
+        "yixiaoboda" : [
+        ],
+        "changzhu" : [
+        ],
+        "fenpai" : [
+        ],
+        "initLaiZi" : [
+        ],
+        "hushuMap" : [
+        ],
+        "stages" : [
+                "kaishiyouxi",
+                "dingzhuang",
+                "zhitou",
+                "fapai",
+                "dapai",
+                "jiesuan",
+                "xinjiesuan",
+                "jieshuyouxi"
+        ],
+        "rules" : [
+                {
+                    "id" : "MJ_kaishiyouxi_4449_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_zhitou_4439_1",
+                    "args" : [
+                    ]
+                },
+                {
+                    "id" : "MJ_fapai_4447_1",
+                    "args" : [
+                    ]
+                }
+        ],
+        "ai" : {
+        "robot" : [
+        ],
+        "tuoguan" : [
+        ],
+        "tishi" : [
+        ],
+        "timeout" : [
+        ]
+        },
+        "process":{
+            "dingzhuang" : [
+                {
+                    "id" : 2948,
+                    "" :[
+                    ],
+                    "" :[
+                    ],
+                    "" :[
+                    ]
+                }
+            ],
+            "dapai" : [
+                {
+                    "id" : 2949,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_1",
+                                "args" : [
+                                        "抓牌"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "抓牌",
+                                        2952
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2950,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_1",
+                                "args" : [
+                                        "抓牌"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "抓牌",
+                                        2952
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2951,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_3",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_1",
+                                "args" : [
+                                        "抓牌"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "抓牌",
+                                        2952
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2952,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_2",
+                                "args" : [
+                                        "出牌",
+                                        "补杠",
+                                        "暗杠",
+                                        "自摸",
+                                        "听牌",
+                                        "夹听",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4562_2",
+                                "priority" :248
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_2",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_3",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_4",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_5",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_6",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_7",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "夹听",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "出牌",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "补杠",
+                                        2953
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "暗杠",
+                                        2950
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "自摸",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "听牌",
+                                        2957
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2953,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_4",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_3",
+                                "args" : [
+                                        "抢杠胡",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4564_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_9",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_8",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "过",
+                                        2950
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "抢杠胡",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_3",
+                                "args" : [
+                                        2950
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2954,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_4",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_4",
+                                "args" : [
+                                        "吃牌",
+                                        "碰牌",
+                                        "直杠",
+                                        "点炮胡",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4563_1",
+                                "priority" :249
+                            },
+                            {
+                                "id" : "MJ_dapai_4564_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_9",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_10",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_11",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_12",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_13",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "直杠",
+                                        2950
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "点炮胡",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "碰牌",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "直杠",
+                                        2950
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_4",
+                                "args" : [
+                                        2956
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_5",
+                                "args" : [
+                                        2951
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_7",
+                                "args" : [
+                                        2951
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_6",
+                                "args" : [
+                                        2956
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2955,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_5",
+                                "args" : [
+                                        "出牌",
+                                        "补杠",
+                                        "暗杠",
+                                        "听牌",
+                                        "夹听",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4562_2",
+                                "priority" :248
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_2",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_4",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_3",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_6",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_7",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "夹听",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "出牌",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "补杠",
+                                        2953
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "暗杠",
+                                        2950
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "听牌",
+                                        2957
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2956,
+                    "onStart" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4532_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_5",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_6",
+                                "args" : [
+                                        "自摸",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4564_3",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_5",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_9",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "过",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "自摸",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_3",
+                                "args" : [
+                                        2960
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2957,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_1",
+                                "args" : [
+                                        "换宝"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_14",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "看宝",
+                                        2954
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "出牌",
+                                        2954
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "吃牌",
+                                        2955
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "碰牌",
+                                        2955
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "听牌",
+                                        2958
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_1",
+                                "args" : [
+                                        "夹听",
+                                        2958
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "换宝",
+                                        2959
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2958,
+                    "onStart" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4532_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_2",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_1",
+                                "args" : [
+                                        "看宝"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_15",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "看宝",
+                                        2959
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2959,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4533_6",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opInfo" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4534_7",
+                                "args" : [
+                                        "自摸",
+                                        "过"
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opCheck" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4562_1",
+                                "priority" :248
+                            },
+                            {
+                                "id" : "MJ_dapai_4564_4",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opResult" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4536_5",
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4536_9",
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "opNext" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "过",
+                                        2957
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_2",
+                                "args" : [
+                                        "自摸",
+                                        2960
+                                    ],
+                                "priority" :253
+                            },
+                            {
+                                "id" : "MJ_dapai_4537_3",
+                                "args" : [
+                                        2957
+                                    ],
+                                "priority" :253
+                            }
+                        ]
+                    ],
+                    "onEnd" :[
+                    ]
+                },
+                {
+                    "id" : 2960,
+                    "onStart" :[
+                    ],
+                    "opUsers" :[
+                    ],
+                    "opInfo" :[
+                    ],
+                    "opCheck" :[
+                    ],
+                    "opResult" :[
+                    ],
+                    "opNext" :[
+                    ],
+                    "onEnd" :[
+                        [
+                            {
+                                "id" : "MJ_dapai_4539_1",
+                                "priority" :253
+                            }
+                        ]
+                    ]
+                }
+            ]
+        },
+        "baserules" :[
+        ]
+}
