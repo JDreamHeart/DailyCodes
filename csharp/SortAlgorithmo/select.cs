@@ -12,21 +12,21 @@ namespace SortAlgorithmo
 	{
 		public double[] sort(double[] arr)
 		{
-			int maxIdx = 0;
+			int minIdx = 0;
 			int n = arr.Length;
 			for (int i = 0; i < n; i++)
 			{
-				maxIdx = i;
+				minIdx = i;
 				for (int j = i+1; j < n; j++)
 				{
-					if (arr[j] < arr[maxIdx])
+					if (arr[j] < arr[minIdx])
 					{
-						maxIdx = j;
+						minIdx = j;
 					}
 				}
 				double temp = arr[i];
-				arr[i] = arr[maxIdx];
-				arr[maxIdx] = temp;
+				arr[i] = arr[minIdx];
+				arr[minIdx] = temp;
 			}
 			return arr;
 		}
