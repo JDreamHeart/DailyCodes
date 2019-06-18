@@ -1,15 +1,9 @@
-/*
-* @Author: JimDreamHeart
-* @Date:   2018-03-18 12:11:31
-* @Last Modified by:   JimDreamHeart
-* @Last Modified time: 2018-03-18 16:59:52
-*/
-using System;
+﻿using System;
 
-namespace Algorithmo
+namespace SortAlgorithmo
 {
-	class MainCS
-	{
+    class Program
+    {
 		//初始化随机数组
 		public double[] initRandomArr(int m, int n)
 		{
@@ -42,16 +36,28 @@ namespace Algorithmo
 		static void Main(string[] args)
 		{
 			//初始化随机数组
-			MainCS mainCs = new MainCS();
-			double[] arr = mainCs.initRandomArr(100,20);
+			Program program = new Program();
+			double[] arr = program.initRandomArr(100,20);
 
-			//实例化排序对象，并进行排序
-			// SortAlgorithmoClass sa = new SortAlgorithmoClass();
-			// sa.sort(arr);
+			// //冒泡排序
+			// Bubble bbe = new Bubble();
+			// bbe.sort(arr);
+            
+			// //插入排序
+			// Insert ist = new Insert();
+			// ist.sort(arr);
+
+            // //选择排序
+			// Select slt = new Select();
+			// slt.sort(arr);
+
+            //希尔排序
+			Shell sl = new Shell();
+			sl.sort(arr);
 
 			//打印排序后的数组
-			mainCs.dumpArr(arr, 1);
+			program.dumpArr(arr, 1);
 			Console.ReadLine();
 		}
-	}
+    }
 }

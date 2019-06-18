@@ -1,0 +1,11 @@
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.csprojAssemblyReference.cache
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.csproj.CoreCompileInputs.cache
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.AssemblyInfoInputs.cache
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.AssemblyInfo.cs
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\bin\Debug\netcoreapp2.2\SortAlgorithmo.deps.json
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\bin\Debug\netcoreapp2.2\SortAlgorithmo.runtimeconfig.json
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\bin\Debug\netcoreapp2.2\SortAlgorithmo.runtimeconfig.dev.json
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\bin\Debug\netcoreapp2.2\SortAlgorithmo.dll
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\bin\Debug\netcoreapp2.2\SortAlgorithmo.pdb
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.dll
+E:\MyOthers\Private\DailyCoding\csharp\SortAlgorithmo\obj\Debug\netcoreapp2.2\SortAlgorithmo.pdb
