@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2018-11-27 13:07:09
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-06-20 15:31:58
+# @Last Modified time: 2019-06-20 15:18:10
 
 import os;
 import re;
@@ -18,14 +18,16 @@ class ConfigExtraction(object):
 		self.m_params_ = {
 			"ExportFileName" : "AudioConfig", # 导出的文件名
 			"suffixNames" : None, # [] 查找文件的后缀名列表
-			"keyDepth" : 0, # 生成配置key值的连接字符
+			"keyDepth" : 0, # 生成配置key值的深度
 			"joinKeysStr" : "_", # 生成配置key值的连接字符
 			"isMergeSameToTable" : False, # 是否合并相同的语音到table中
 			"isSaveFilePath" : False, # 是否保存文件路径【包括文件后缀名】
 			"joinValuesStr" : "/", # 生成配置value值的连接字符
 			"rootPath" : "", # 相对于包加载的根路径
-			"configCallback" : None, # 每生成一个config时的回调函数
-			"isOutputStr" : True, # 是否输出单个config为字符串
+			"isOutputStr" : True, # 是否输出单个config的value为字符串
+			"cfgKeyCallback" : None, # 每生成一个config的key时的回调函数
+			"cfgValCallback" : None, # 每生成一个config的value时的回调函数
+			"extractCallback" : None, # 导出配置后且输出文件前的回调函数
 		};
 		for k,v in params.items():
 			self.m_params_[k] = v;
@@ -89,8 +91,8 @@ class ConfigExtraction(object):
 				value += self.getFileName(filePath, True);
 			else:
 				value += fileName;
-			if self.m_params_["configCallback"]:
-				value = self.m_params_["configCallback"](self.m_params_["rootPath"], value, self.m_params_["joinValuesStr"]);
+			if self.m_params_["cfgValCallback"]:
+				value = self.m_params_["cfgValCallback"](self.m_params_["rootPath"], value, self.m_params_["joinValuesStr"]);
 			if self.m_params_["isMergeSameToTable"]:
 				res = re.match("^(\w+)_(\d+)$", fileName);
 				if res:
@@ -114,6 +116,8 @@ class ConfigExtraction(object):
 					if len(newPathList) == 0:
 						break;
 					newPathList.pop(0);
+			if callable(self.m_params_["cfgKeyCallback"]):
+				return self.m_params_["cfgKeyCallback"](newPathList, fileName, self.m_params_["joinKeysStr"]);
 			if len(newPathList) == 0:
 				return fileName;
 			return self.m_params_["joinKeysStr"].join(newPathList) + self.m_params_["joinKeysStr"] + fileName;
@@ -171,61 +175,10 @@ class ConfigExtraction(object):
 
 	def extract(self, path, targetPath):
 		config = self.getConfigByPath(path);
+		if callable(self.m_params_["extractCallback"]):
+			self.m_params_["extractCallback"](config);
 		self.dumpConfigToFile(targetPath, config);
 		return config;
-
-
-def loadingConfigCallback(rootPath, value, joinValuesStr):
-	return "RES('" + rootPath + value + "')"
-
-def playingConfigCallback(rootPath, value, joinValuesStr):
-	values = value.split(joinValuesStr);
-	return joinValuesStr.join(values[1:])
-
-# 导出配置
-def ExportConfig(configPath = os.getcwd(), targetPath = os.getcwd(), pkgRelativePath = ""):
-	print("=== Extract start ===");
-
-	ExtMode = -1; # 导出模式：0->加载audio的配置；1->播放audio的配置；其他->导出所有配置
-
-	# 查找及导出路径
-	configPath = configPath.replace("\\", "/");
-	targetPath = targetPath.replace("\\", "/");
-	pkgRelativePath = pkgRelativePath.replace("\\", "/");
-	if len(pkgRelativePath) > 0 and pkgRelativePath[-1] != "/":
-		pkgRelativePath += "/"
-
-	# 导出配置类实例化
-	ConfigExt1 = ConfigExtraction(params = {
-		"ExportFileName": "soundsLoadingConfig",
-		"suffixNames" : ["mp3", "ogg"],
-		"isMergeSameToTable": False,
-		"isSaveFilePath": True,
-		"keyDepth" : 1,
-		"rootPath" : pkgRelativePath,
-		"configCallback" : loadingConfigCallback,
-		"isOutputStr" : False,
-	});
-	ConfigExt2 = ConfigExtraction(params = {
-		"ExportFileName": "soundsPlayingConfig",
-		"suffixNames" : ["mp3", "ogg"],
-		"isMergeSameToTable": True,
-		"isSaveFilePath": False,
-		"joinValuesStr" : "_",
-		"keyDepth" : 2,
-		"rootPath" : pkgRelativePath,
-		"configCallback" : playingConfigCallback,
-	});
-	# 根据导出模式导出配置
-	if ExtMode == 0:
-		ConfigExt1.extract(configPath, targetPath);
-	elif ExtMode == 1:
-		ConfigExt2.extract(configPath, targetPath);
-	else:
-		ConfigExt1.extract(configPath, targetPath);
-		ConfigExt2.extract(configPath, targetPath);
-	print("Extract success!");
-	print("The path of extraction is:", targetPath);
 
 
 # 重命名文件
@@ -240,25 +193,102 @@ def RenameFile(callback, relativePathList, cwd = os.getcwd()):
 				callback(checkPath + "/", file);
 	print("=== Rename end ===");
 
+# 配置key值的回调
+def cfgKeyCallback(pathList, fileName, joinKeysStr):
+	newPList = [];
+	for k in ["common", "man", "woman"]:
+		if k not in pathList:
+			continue;
+		newPList = pathList[pathList.index(k)+1:];
+		break;
+	newPList.append(fileName);
+	key = joinKeysStr.join(newPList);
+	if len(pathList) > 0 and pathList[0] == "music":
+		key = "music_" + key;
+	return key
+
+# 配置value值的回调
+def cfgValCallback(rootPath, value, joinValuesStr):
+	value = re.sub(".*music/", "", value);
+	value = re.sub(".*effect/", "", value);
+	value = re.sub(".*woman/", "?/", value);
+	value = re.sub(".*man/", "?/", value);
+	return value;
+
+# 导出配置后且输出文件前的回调
+def extractCallback(cfg):
+	for k,v in cfg.items():
+		if isinstance(v, list) and len(v) == 1:
+			cfg[k] = v[0]
+	pass;
+
+# 导出配置
+def ExportConfig(configPath = os.getcwd(), targetPath = os.getcwd(), pkgRelativePath = ""):
+	print("=== Extract start ===");
+
+	# 查找及导出路径
+	configPath = configPath.replace("\\", "/");
+	targetPath = targetPath.replace("\\", "/");
+	pkgRelativePath = pkgRelativePath.replace("\\", "/");
+	if len(pkgRelativePath) > 0 and pkgRelativePath[-1] != "/":
+		pkgRelativePath += "/"
+
+	# 导出配置类实例化
+	ConfigExt1 = ConfigExtraction(params = {
+		"suffixNames" : ["ogg"],
+		"isMergeSameToTable": True,
+		"keyDepth" : 0,
+		"rootPath" : pkgRelativePath,
+		"cfgKeyCallback" : cfgKeyCallback,
+		"cfgValCallback" : cfgValCallback,
+		"extractCallback" : extractCallback,
+	});
+	# 根据导出模式导出配置
+	ConfigExt1.extract(configPath, targetPath);
+
+	print("Extract success!");
+	print("The path of extraction is:", targetPath);
+
 
 if __name__ == '__main__':
 
 	CURRENT_PATH = os.getcwd()
 
-	# 导出配置的路径
-	path =  os.path.abspath(os.path.join(CURRENT_PATH, "../sounds")); # 音效包目录
-	exPath = "res" # 加载目录【相对于音效包的路径】
+	# 导出配置的路径【使用绝对路径】
+	targetPath =  os.path.abspath(os.path.join(CURRENT_PATH, "../sounds")); # 导出路径
+	exPath = "res" # 保存音效的目录【相对于导出路径】
 
 	# 合成路径
-	soundsPath = path + "/" + exPath
+	soundsPath = targetPath
+	if exPath:
+		soundsPath += "/" + exPath
 
-	# 重命名麻将配音文件
+
+	# ========== 麻将音效文件特殊处理 · 开始 ==========
+
+	# 重命名配音文件夹
+	print("=== Rename audio folder start ===")
 	# 重命名effects为effect
 	if os.path.exists(soundsPath + "/effects"):
 		os.rename(soundsPath + "/effects", soundsPath + "/effect");
 	# 重命名effect/mahjong为effect/common
 	if os.path.exists(soundsPath + "/effect/mahjong"):
 		os.rename(soundsPath + "/effect/mahjong", soundsPath + "/effect/common");
+	# 重命名effect/man/majiangzi为effect/man/card
+	if os.path.exists(soundsPath + "/effect/man/majiangzi"):
+		os.rename(soundsPath + "/effect/man/majiangzi", soundsPath + "/effect/man/card");
+	# 重命名effect/woman/majiangzi为effect/woman/card
+	if os.path.exists(soundsPath + "/effect/woman/majiangzi"):
+		os.rename(soundsPath + "/effect/woman/majiangzi", soundsPath + "/effect/woman/card");
+	print("=== Rename audio folder end ===")
+
+	# 重命名聊天文件
+	def callback(dirPath, fileName):
+		newFileName = fileName.replace("chat", "");
+		os.rename(dirPath + fileName, dirPath + newFileName);
+	# 调用函数
+	RenameFile(callback, ["/effect/man/chat", "/effect/woman/chat"], cwd = soundsPath);
+
 	# 重命名麻将子文件
 	def callback(dirPath, fileName):
 		keyList = fileName.split("_");
@@ -267,8 +297,11 @@ if __name__ == '__main__':
 			newFileName = "_".join(keyList);
 			os.rename(dirPath + fileName, dirPath + newFileName);
 	# 调用函数
-	RenameFile(callback, ["/effect/man/majiangzi", "/effect/woman/majiangzi"], cwd = soundsPath);
+	RenameFile(callback, ["/effect/man/card", "/effect/woman/card"], cwd = soundsPath);
+
+	# ========== 麻将音效文件特殊处理 · 结束 ==========
 	
 	
 	# 导出配置
-	ExportConfig(configPath = soundsPath, targetPath = path, pkgRelativePath = exPath);
+	ExportConfig(configPath = soundsPath, targetPath = targetPath, pkgRelativePath = exPath);
+
