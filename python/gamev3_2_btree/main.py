@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2019-04-24 10:11:53
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-04-26 10:41:43
+# @Last Modified time: 2019-06-18 17:37:09
 
 import json
 import hashlib
@@ -122,10 +122,10 @@ def getDaPaiData(cfg):
 		pptsp = ppts[str(i)]["properties"];
 		for k,v in nodeKeyMap.items():
 			if k in p:
-				pptsp[v] = {
-					"properties": {},
-				}
 				if len(p[k]) > 0:
+					pptsp[v] = {
+						"properties": {},
+					}
 					# 根据priority字段，排序数据
 					rl = sorted(p[k][0], key=lambda r:r["priority"]);
 					for j in range(len(rl)):
@@ -170,18 +170,20 @@ def formatPptsList(totalPptsList, keyMapList = []):
 					pro[k] = keyMap[v];
 					break;
 
-def insertBaseRuleTrees(projectCfg, cfg):
-	for k in baseKeyMap:
+def insertBaseRuleTrees(projectCfg, cfg, bKeyMap = None, rootName = "Sequence"):
+	if not bKeyMap:
+		bKeyMap = baseKeyMap;
+	for k in bKeyMap:
 		if k in cfg:
 			totalPptsList = []; # 所有参数列表
 			treeChildren = [];
 			tree = {
-				"title" : baseKeyMap[k],
+				"title" : bKeyMap[k],
 				"root" : "0",
 				"nodes": {
 					"0": {
-						"id" : getIdByName("Sequence"),
-						"name": "Sequence",
+						"id" : getIdByName(rootName),
+						"name": rootName,
 						"children": treeChildren,
 					},
 				},
@@ -201,21 +203,80 @@ def insertBaseRuleTrees(projectCfg, cfg):
 			formatPptsList(totalPptsList, [opCodeKeyMap]);
 			insertTree2Pcfg(projectCfg, tree);
 
+def insertRobotRuleTrees(projectCfg, robotCfg):
+	bKeyMap = {};
+	for k in robotCfg:
+		if k in ["RobotOperation"]:
+			insertRobotProcess(projectCfg, k, robotCfg[k]);
+		elif k.find("RobotCombination") != -1:
+			insertBaseRuleTrees(projectCfg, robotCfg, bKeyMap = {k:k}, rootName = "Priority");
+		else:
+			bKeyMap[k] = k;
+	insertBaseRuleTrees(projectCfg, robotCfg, bKeyMap = bKeyMap);
+
+def insertRobotProcess(projectCfg, key, cfg):
+	ppt = {
+		"id" : getIdByName("RobotProcess"),
+		"name": "RobotProcess",
+		"properties" : {},
+		"children" : [],
+	};
+	pptp = ppt["properties"];
+	for k,v in cfg.items():
+		if len(v) > 0:
+			pptp[k] = {
+				"properties": {},
+			}
+			# 根据priority字段，排序数据
+			rl = sorted(v, key=lambda r:r["priority"]);
+			for j in range(len(rl)):
+				r = rl[j];
+				name = r["id"].encode("utf-8");
+				rule = {
+					"id" : getIdByName(name),
+					"name" : name,
+					"properties" : getRuleArgs(r.get("args", [])),
+				};
+				pptp[k]["properties"][str(j)] = rule;
+	# 转换成字符串
+	for k1 in pptp:
+		for k2 in pptp[k1]["properties"]:
+			pptp[k1]["properties"][k2] = json.dumps(pptp[k1]["properties"][k2]);
+		pptp[k1] = json.dumps(pptp[k1]);
+	# 插入树到项目配置中
+	insertTree2Pcfg(projectCfg, {
+		"title" : key,
+		"root" : "0",
+		"nodes": {
+			"0": ppt,
+		},
+	});
+
 
 if __name__ == '__main__':
-	with open("GameConfig.json", "rb") as f:
-		cfg = json.load(f);
+	# 设置转换模式
+	mode = "r"; # "a"->转换所有配置； "n"->转换除机器人外的配置； "r"->只转换机器人配置；
+
 	# Game树
 	projectCfg = {
 		"trees" : [],
 	};
-	insertTree2Pcfg(projectCfg, getGameTree(cfg));
-	insertBaseRuleTrees(projectCfg, cfg);
-	# 合并旧配置【如结算】
-	with open("tree.json", "rb") as f:
-		treeCfg = json.load(f);
-	for tree in treeCfg.get("trees", []):
-		insertTree2Pcfg(projectCfg, tree);
+	# 转换GameConfig配置
+	if mode in ["a", "n"]:
+		with open("GameConfig.json", "rb") as f:
+			cfg = json.load(f);
+		insertTree2Pcfg(projectCfg, getGameTree(cfg));
+		insertBaseRuleTrees(projectCfg, cfg);
+		# 合并旧配置【如结算】
+		with open("tree.json", "rb") as f:
+			treeCfg = json.load(f);
+		for tree in treeCfg.get("trees", []):
+			insertTree2Pcfg(projectCfg, tree);
+	# 转换robot配置
+	if mode in ["a", "r"]:
+		with open("robot.json", "rb") as f:
+			robotCfg = json.load(f);
+		insertRobotRuleTrees(projectCfg, robotCfg.get("robot", {})); # 插入机器人规则
 	# 输出配置
 	with open("project.json", "wb") as f:
 		f.write(json.dumps(projectCfg, sort_keys = True, indent = 2, separators=(',', ':')).encode("utf-8"));

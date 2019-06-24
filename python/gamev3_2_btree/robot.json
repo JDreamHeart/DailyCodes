@@ -1,0 +1,284 @@
+{
+	"robot" : {
+		"RobotOperation" : {
+			"on_combine" : [
+				{
+					"id" : "MJ_robot_group_1",
+					"args" : [
+						"RobotCombination_001"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_group_2",
+					"priority" :253
+				}
+			],
+			"on_operate" : [
+				{
+					"id" : "MJ_robot_hupai_1",
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_tingpai_1",
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_gang_1",
+					"args" : [
+						"RobotOpCondition_001"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_peng_1",
+					"args" : [
+						"RobotOpCondition_002"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_chi_3",
+					"args" : [
+						"RobotOpCondition_003"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_chi_1",
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_7",
+					"args" : [
+						"RobotOpCondition_004"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_8",
+					"args" : [
+						"RobotOpCondition_005"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_9",
+					"args" : [
+						"RobotOpCondition_006"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_10",
+					"args" : [
+						"RobotOpCondition_007"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_11",
+					"args" : [
+						"RobotOpCondition_008"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_12",
+					"args" : [
+						"RobotOpCondition_009"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_13",
+					"args" : [
+						"RobotOpCondition_010"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_out_14",
+					"args" : [
+						"RobotOpCondition_011"
+					],
+					"priority" :253
+				},
+				{
+					"id" : "MJ_robot_pass_1",
+					"priority" :253
+				}
+			],
+			"on_delay" : [
+				{
+					"id" : "MJ_robot_delay_1",
+					"args" : [
+						2,
+						4
+					],
+					"priority" :253
+				}
+			]
+		},
+		"RobotCombination_001" : [
+			{
+				"id" : "MJ_robot_ke_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_shun_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_jiang_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_shun_2",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_shun_3",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_dan_1",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_001" : [
+			{
+				"id" : "MJ_robot_gang_2",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_002" : [
+			{
+				"id" : "MJ_robot_peng_2",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_003" : [
+			{
+				"id" : "MJ_robot_chi_2",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_004" : [
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_005" : [
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_006" : [
+			{
+				"id" : "MJ_robot_out_3",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_007" : [
+			{
+				"id" : "MJ_robot_out_3",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_008" : [
+			{
+				"id" : "MJ_robot_out_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_009" : [
+			{
+				"id" : "MJ_robot_out_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_010" : [
+			{
+				"id" : "MJ_robot_out_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		],
+		"RobotOpCondition_011" : [
+			{
+				"id" : "MJ_robot_out_1",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_2",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_3",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_4",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_5",
+				"priority" :253
+			},
+			{
+				"id" : "MJ_robot_out_6",
+				"priority" :253
+			}
+		]
+	}
+}
