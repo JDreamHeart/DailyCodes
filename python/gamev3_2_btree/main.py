@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2019-04-24 10:11:53
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-06-18 17:37:09
+# @Last Modified time: 2019-07-17 12:31:59
 
 import json
 import hashlib
@@ -130,7 +130,7 @@ def getDaPaiData(cfg):
 					rl = sorted(p[k][0], key=lambda r:r["priority"]);
 					for j in range(len(rl)):
 						r = rl[j];
-						name = r["id"].encode("utf-8");
+						name = r["id"];
 						rule = {
 							"id" : getIdByName(name),
 							"name" : name,
@@ -231,7 +231,7 @@ def insertRobotProcess(projectCfg, key, cfg):
 			rl = sorted(v, key=lambda r:r["priority"]);
 			for j in range(len(rl)):
 				r = rl[j];
-				name = r["id"].encode("utf-8");
+				name = r["id"];
 				rule = {
 					"id" : getIdByName(name),
 					"name" : name,
@@ -255,7 +255,7 @@ def insertRobotProcess(projectCfg, key, cfg):
 
 if __name__ == '__main__':
 	# 设置转换模式
-	mode = "r"; # "a"->转换所有配置； "n"->转换除机器人外的配置； "r"->只转换机器人配置；
+	mode = "n"; # "a"->转换所有配置； "n"->转换除机器人外的配置； "r"->只转换机器人配置；
 
 	# Game树
 	projectCfg = {
