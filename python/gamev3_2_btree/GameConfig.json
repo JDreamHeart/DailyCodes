@@ -301,7 +301,6 @@
                 "fapai",
                 "dapai",
                 "jiesuan",
-                "xinjiesuan",
                 "jieshuyouxi"
         ],
         "rules" : [
@@ -930,6 +929,9 @@
                         [
                             {
                                 "id" : "MJ_dapai_4532_1",
+                                "args" : [
+                                        "3"
+                                    ],
                                 "priority" :253
                             }
                         ]

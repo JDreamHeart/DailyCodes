@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2019-04-24 10:11:53
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-07-17 12:31:59
+# @Last Modified time: 2019-07-19 18:44:29
 
 import json
 import hashlib
@@ -24,6 +24,16 @@ nodeKeyMap = {
 	"opResult" : "set_op_result",
 	"opNext" : "get_next_node",
 	"onEnd" : "on_end",
+};
+
+nodeSeqKeyMap = {
+	"on_start" : "RuleSeq",
+	"get_next_op_user" : "RulePriority",
+	"set_op_info" : "RulePriority",
+	"wait_op_msg" : "RuleSeq",
+	"set_op_result" : "RuleSeq",
+	"get_next_node" : "RulePriority",
+	"on_end" : "RuleSeq",
 };
 
 opCodeKeyMap = {
@@ -80,75 +90,95 @@ def insertTree2Pcfg(pcfg, tree):
 	pcfg["trees"].append(tree);
 
 def getGameTree(cfg):
+	gid = getIdByName("Game");
 	tree = {
 		"title": "Game",
 		"description": "game",
-		"root": "0",
+		"root": gid,
 		"properties": {},
 		"nodes": {
-			"0" : {
-				"id" : getIdByName("Game"),
+			gid : {
+				"id" : gid,
 				"name" : "Game",
-				"children": cfg["stages"],
+				"title" : "Game",
+				"children": [],
 			},
 		},
 	};
 	for k in cfg["stages"]:
 		name = stageKeyMap.get(k, "Stage");
-		tree["nodes"][k] = {
-			"id" : getIdByName(name),
+		rid = getIdByName(k);
+		stage = {
+			"id" : rid,
 			"name" : name,
+			"title" : name,
 			"description" : k,
 			"properties": {},
+			"children": [],
 		};
 		if k == "dapai" and "dapai" in cfg["process"]:
-			tree["nodes"][k]["properties"] = getDaPaiData(cfg["process"]["dapai"]);
+			setDaPaiCfg(tree["nodes"], k, stage["children"], cfg["process"]["dapai"]);
 		if k == "jiesuan":
-			tree["nodes"][k]["properties"] = {"settleTypes" : "Fan;Gang;"}
+			stage["properties"]["settleTypes"] = "Fan;Gang;";
+		tree["nodes"][rid] = stage;
+		tree["nodes"][gid]["children"].append(rid);
 	return tree;
 
-def getDaPaiData(cfg):
+def setDaPaiCfg(nodes, dpKey, dpChildren, cfg):
 	pid2indexMap = {}; # 流程id对应位置信息
 	totalPptsList = []; # 所有参数列表
-	ppts = {};
+	cd = dpChildren;
 	for i in range(len(cfg)):
 		p = cfg[i];
 		pid2indexMap[p["id"]] = i;
-		ppts[str(i)] = {
-			"id" : getIdByName("Process"),
+		ikey = "-".join([dpKey+"_process", str(i)]);
+		rid = getIdByName(ikey);
+		cd.append(rid);
+		nodes[rid] = {
+			"id" : rid,
 			"name": "Process",
-			"properties" : {},
+			"title" : str(i),
+			"children" : [],
 		};
-		pptsp = ppts[str(i)]["properties"];
+		cdcd = nodes[rid]["children"];
 		for k,v in nodeKeyMap.items():
 			if k in p:
 				if len(p[k]) > 0:
-					pptsp[v] = {
-						"properties": {},
+					vkey = "-".join([ikey, v]);
+					rid1 = getIdByName(vkey);
+					cdcd.append(rid1);
+					nodes[rid1] = {
+						"id" : rid1,
+						"name": nodeSeqKeyMap[v],
+						"title" : v,
+						"children" : [],
 					}
 					# 根据priority字段，排序数据
 					rl = sorted(p[k][0], key=lambda r:r["priority"]);
 					for j in range(len(rl)):
 						r = rl[j];
 						name = r["id"];
+						rid2 = getIdByName(name);
 						rule = {
-							"id" : getIdByName(name),
+							"id" : rid2,
 							"name" : name,
+							"title" : name,
 							"properties" : getRuleArgs(r.get("args", [])),
 						};
 						totalPptsList.append(rule["properties"]);
-						pptsp[v]["properties"][str(j)] = rule;
+						nodes[rid1]["children"].append(rid2);
+						nodes[rid2] = rule;
 	# 转换格式
 	formatPptsList(totalPptsList, [pid2indexMap, opCodeKeyMap]);
 	# 转换成字符串
-	for k in ppts:
-		pptsp = ppts[k]["properties"];
-		for k1 in pptsp:
-			for k2 in pptsp[k1]["properties"]:
-				pptsp[k1]["properties"][k2] = json.dumps(pptsp[k1]["properties"][k2]);
-			pptsp[k1] = json.dumps(pptsp[k1]);
-		ppts[k] = json.dumps(ppts[k]);
-	return ppts;
+	# for k in ppts:
+	# 	pptsp = ppts[k]["properties"];
+	# 	for k1 in pptsp:
+	# 		for k2 in pptsp[k1]["properties"]:
+	# 			pptsp[k1]["properties"][k2] = json.dumps(pptsp[k1]["properties"][k2]);
+	# 		pptsp[k1] = json.dumps(pptsp[k1]);
+	# 	ppts[k] = json.dumps(ppts[k]);
+	# return ppts;
 
 # 获取规则参数
 def getRuleArgs(args):
@@ -177,22 +207,26 @@ def insertBaseRuleTrees(projectCfg, cfg, bKeyMap = None, rootName = "Sequence"):
 		if k in cfg:
 			totalPptsList = []; # 所有参数列表
 			treeChildren = [];
+			rootId = getIdByName(rootName)
 			tree = {
 				"title" : bKeyMap[k],
-				"root" : "0",
+				"root" : rootId,
 				"nodes": {
-					"0": {
-						"id" : getIdByName(rootName),
+					rootId: {
+						"id" : rootId,
 						"name": rootName,
+						"title" : rootName,
 						"children": treeChildren,
 					},
 				},
 			};
 			for r in cfg[k]:
-				rid = r["id"];
+				name = r["id"];
+				rid = getIdByName(name);
 				rule = {
-					"id" : getIdByName(rid),
-					"name": rid,
+					"id" : rid,
+					"name": name,
+					"title" : name,
 					"description": "",
 					"properties": getRuleArgs(r.get("args", [])),
 				};
@@ -215,9 +249,11 @@ def insertRobotRuleTrees(projectCfg, robotCfg):
 	insertBaseRuleTrees(projectCfg, robotCfg, bKeyMap = bKeyMap);
 
 def insertRobotProcess(projectCfg, key, cfg):
+	pptid = getIdByName("RobotProcess");
 	ppt = {
-		"id" : getIdByName("RobotProcess"),
+		"id" : pptid,
 		"name": "RobotProcess",
+		"title" : RobotProcess,
 		"properties" : {},
 		"children" : [],
 	};
@@ -232,9 +268,11 @@ def insertRobotProcess(projectCfg, key, cfg):
 			for j in range(len(rl)):
 				r = rl[j];
 				name = r["id"];
+				rid = getIdByName(name);
 				rule = {
-					"id" : getIdByName(name),
+					"id" : rid,
 					"name" : name,
+					"title" : name,
 					"properties" : getRuleArgs(r.get("args", [])),
 				};
 				pptp[k]["properties"][str(j)] = rule;
@@ -246,9 +284,9 @@ def insertRobotProcess(projectCfg, key, cfg):
 	# 插入树到项目配置中
 	insertTree2Pcfg(projectCfg, {
 		"title" : key,
-		"root" : "0",
+		"root" : pptid,
 		"nodes": {
-			"0": ppt,
+			pptid: ppt,
 		},
 	});
 
