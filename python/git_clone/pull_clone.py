@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2019-08-06 17:39:27
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-08-07 11:56:25
+# @Last Modified time: 2019-08-07 16:16:08
 import sys, os, re, json;
 
 CURRENT_PATH = os.getcwd();
@@ -45,8 +45,14 @@ defaultCfg = {
 			"file" : "hall_demo/assets/app/modules/notify/appNotifyCenter.lua",
 			"content" : [
 				["  elseif key == 293 then", " -- elseif key == 293 then"],
-				[" -- elseif key == 293 then --f4模拟旋转", "  elseif key == 293 then --f4模拟旋转"],
+				[" -- elseif key == 293 then --f4", "  elseif key == 293 then --f4"],
 			],
+		},
+		{
+			"file" : "hall_demo/run.bat",
+			"content" : [
+				[":: start babe.exe \"x=", "start babe.exe \"console=0;x="]
+			]
 		},
 	],
 };
@@ -106,7 +112,7 @@ def replaceFileContent(path, content = []):
 				if line.find(v[0]) != -1:
 					line = line.replace(v[0], v[1]);
 			data += line;
-	with open(path, "w") as f:
+	with open(path, "w", encoding = "utf-8") as f:
 		f.write(data);
 
 def replaceFiles(replaceList = []):
@@ -117,8 +123,63 @@ def replaceFiles(replaceList = []):
 			replaceFileContent(replaceInfo["file"], replaceInfo["content"]);
 	print("==== ReplaceFiles end ====");
 
-
-if __name__ == '__main__':
-	cfg = getCfg();
+# 拉取或克隆
+def pull_clone(cfg):
 	pullOrCloneGit(cfg.get("userInfo", "JZ:pwd"), cfg.get("gitList", []));
 	replaceFiles(cfg.get("replaceList", []));
+
+# 删除文件夹
+def removeFolder(path):
+	if not os.path.exists(path):
+		return;
+	for p in os.listdir(path):
+		f = os.path.join(path, p);
+		if os.path.isdir(f):
+			removeFolder(f);
+			os.removedirs(f);
+		elif os.path.isfile(f):
+			os.remove(f);
+		else:
+			raise Exception("Invalid file", f);
+
+# 删除hall_demo文件夹
+def tryRemoveHallDemo():
+	path = os.path.join(CURRENT_PATH, "hall_demo");
+	if not os.path.exists(path):
+		return;
+	# 移除hall_demo文件夹
+	if input("Warning! Should I remove folder 'hall_demo'? (y/n):") == "y":
+		try:
+			removeFolder(path);
+		except Exception as e:
+			print(e);
+			print("Warning! Removing folder 'hall_demo' failed. Please remove folder 'hall_demo' manually!");
+
+# 主函数
+def main():
+	# 获取配置
+	cfg = getCfg();
+	# 错误次数
+	errCount, maxErrCount = 0, cfg.get("maxErrCount", 3);
+	while errCount <= maxErrCount:
+		try:
+			pull_clone(cfg);
+			return; # 没报错则直接退出主函数
+		except Exception as e:
+			print(e);
+			errCount += 1;
+			while errCount <= maxErrCount:
+				ret = input("There is a error to pull or clone git! Should I try again? (y/n):");
+				if ret == "y":
+					if maxErrCount == errCount:
+						tryRemoveHallDemo(); # 尝试删除hall_demo文件夹
+					break; # 继续运行
+				elif ret == "n":
+					return; # 直接退出主函数
+
+
+if __name__ == '__main__':
+	# 运行主函数
+	main();
+	# 等待输入，便于查看日志
+	input("Press any key to continue...");

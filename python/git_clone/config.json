@@ -35,7 +35,13 @@
 			"file" : "hall_demo/assets/app/modules/notify/appNotifyCenter.lua",
 			"content" : [
 				["  elseif key == 293 then", " -- elseif key == 293 then"],
-				[" -- elseif key == 293 then --f4模拟旋转", "  elseif key == 293 then --f4模拟旋转"]
+				[" -- elseif key == 293 then --f4", "  elseif key == 293 then --f4"]
+			]
+		},
+		{
+			"file" : "hall_demo/run.bat",
+			"content" : [
+				[":: start babe.exe \"x=", "start babe.exe \"console=0;x="]
 			]
 		}
 	]
