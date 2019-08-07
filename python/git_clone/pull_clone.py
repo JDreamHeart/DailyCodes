@@ -2,12 +2,13 @@
 # @Author: JinZhang
 # @Date:   2019-08-06 17:39:27
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2019-08-07 11:51:46
+# @Last Modified time: 2019-08-07 11:56:25
 import sys, os, re, json;
 
 CURRENT_PATH = os.getcwd();
 
 defaultCfg = {
+	# "userInfo" : "name:password",
 	"gitList" : [
 		{
 			"git" : "https://code.266.com/266-hall-client/hall_demo.git",
@@ -58,13 +59,6 @@ def getCfg():
 			cfg = json.load(f);
 	return cfg;
 
-# 获取用户信息
-def getUinfo():
-	# if len(sys.argv) <= 2:
-	# 	raise Exception("参数错误，必须填入用户名和密码！");
-	# return ":".join([sys.argv[1], sys.argv[2]]);
-	return "ZJ:pwdXXX";
-
 # 切换分支
 def checkoutBranch(gitPath, branch):
 	if not branch:
@@ -78,7 +72,7 @@ def checkoutBranch(gitPath, branch):
 	os.system(gitPath+" checkout -b "+branch+" origin/"+branch);
 
 # 拉取或克隆
-def pullOrClone(gitUrl, tgPath, branch = ""):
+def pullOrClone(uinfo, gitUrl, tgPath, branch = ""):
 	gitPath = "git -C "+tgPath;
 	if os.path.exists(tgPath):
 		os.system(gitPath+" reset --hard HEAD^");
@@ -86,17 +80,17 @@ def pullOrClone(gitUrl, tgPath, branch = ""):
 		checkoutBranch(gitPath, "master");
 		os.system(gitPath+" pull");
 	else:
-		url = gitUrl.replace("://", "://"+getUinfo()+"@");
+		url = gitUrl.replace("://", "://"+uinfo+"@");
 		os.system("git clone " + url + " " + tgPath);
 	# 切换分支
 	checkoutBranch(gitPath, branch);
 	# 最后重新拉取
 	os.system(gitPath+" pull");
 
-def pullOrCloneGit(gitList = []):
+def pullOrCloneGit(uinfo, gitList = []):
 	for gitInfo in gitList:
 		if "git" in gitInfo and "path" in gitInfo:
-			pullOrClone(gitInfo["git"], gitInfo["path"], gitInfo.get("branch", ""));
+			pullOrClone(uinfo, gitInfo["git"], gitInfo["path"], gitInfo.get("branch", ""));
 
 # 替换文件内容
 def replaceFileContent(path, content = []):
@@ -126,5 +120,5 @@ def replaceFiles(replaceList = []):
 
 if __name__ == '__main__':
 	cfg = getCfg();
-	pullOrCloneGit(cfg.get("gitList", []));
+	pullOrCloneGit(cfg.get("userInfo", "JinZhang:pwdis%402456!"), cfg.get("gitList", []));
 	replaceFiles(cfg.get("replaceList", []));
