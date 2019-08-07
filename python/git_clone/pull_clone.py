@@ -120,5 +120,5 @@ def replaceFiles(replaceList = []):
 
 if __name__ == '__main__':
 	cfg = getCfg();
-	pullOrCloneGit(cfg.get("userInfo", "JinZhang:pwdis%402456!"), cfg.get("gitList", []));
+	pullOrCloneGit(cfg.get("userInfo", "JZ:pwd"), cfg.get("gitList", []));
 	replaceFiles(cfg.get("replaceList", []));
