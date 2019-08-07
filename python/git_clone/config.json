@@ -1,0 +1,42 @@
+{
+	"gitList" : [
+		{
+			"git" : "https://code.266.com/266-hall-client/hall_demo.git",
+			"path" : "hall_demo",
+			"branch" : "test"
+		},
+		{
+			"git" : "https://code.266.com/266-mahjong/client.git",
+			"path" : "hall_demo/assets/app/game/box/mahjong",
+			"branch" : "develop"
+		},
+		{
+			"git" : "https://code.266.com/266-hall-client/matchkit.git",
+			"path" : "hall_demo/assets/app/game/matchKit",
+			"branch" : ""
+		},
+		{
+			"git" : "https://code.266.com/266/roomkit.git",
+			"path" : "hall_demo/assets/app/game/roomKit",
+			"branch" : ""
+		}
+	],
+	"replaceList" : [
+		{
+			"file" : "hall_demo/assets/app/config/appConfig/win32/featureConfig.lua",
+			"content" : [
+				["IGNOREUPDATEHALL = false", "IGNOREUPDATEHALL = true"],
+				["IGNOREUPDATEGAME = false", "IGNOREUPDATEGAME = true"],
+				["IGNOREROOMKITUPDATE = false", "IGNOREROOMKITUPDATE = true"],
+				["IGNOREMATCHKITUPDATE = false", "IGNOREMATCHKITUPDATE = true"]
+			]
+		},
+		{
+			"file" : "hall_demo/assets/app/modules/notify/appNotifyCenter.lua",
+			"content" : [
+				["  elseif key == 293 then", " -- elseif key == 293 then"],
+				[" -- elseif key == 293 then --f4模拟旋转", "  elseif key == 293 then --f4模拟旋转"]
+			]
+		}
+	]
+}
