@@ -3,7 +3,7 @@
 # @Date:   2019-08-06 17:39:27
 # @Last Modified by:   JinZhang
 # @Last Modified time: 2019-08-07 16:16:08
-import sys, os, re, json;
+import os, json;
 
 CURRENT_PATH = os.getcwd();
 
@@ -65,6 +65,12 @@ def getCfg():
 			cfg = json.load(f);
 	return cfg;
 
+# 运行cmd命令
+def runCmd(cmd):
+	code = os.system(cmd);
+	if code != 0:
+		raise Exception(f"Run cmd failed! [code:{code}]");
+
 # 切换分支
 def checkoutBranch(gitPath, branch):
 	if not branch:
@@ -73,25 +79,25 @@ def checkoutBranch(gitPath, branch):
 	localBranchLines = localBranchReader.read();
 	for line in localBranchLines.splitlines():
 		if line.find(branch) != -1:
-			os.system(gitPath+" checkout "+branch);
+			runCmd(gitPath+" checkout "+branch);
 			return;
-	os.system(gitPath+" checkout -b "+branch+" origin/"+branch);
+	runCmd(gitPath+" checkout -b "+branch+" origin/"+branch);
 
 # 拉取或克隆
 def pullOrClone(uinfo, gitUrl, tgPath, branch = ""):
 	gitPath = "git -C "+tgPath;
 	if os.path.exists(tgPath):
-		os.system(gitPath+" reset --hard HEAD^");
+		runCmd(gitPath+" reset --hard HEAD^");
 		# 切到master分支后拉取
 		checkoutBranch(gitPath, "master");
-		os.system(gitPath+" pull");
+		runCmd(gitPath+" pull");
 	else:
 		url = gitUrl.replace("://", "://"+uinfo+"@");
-		os.system("git clone " + url + " " + tgPath);
+		runCmd("git clone " + url + " " + tgPath);
 	# 切换分支
 	checkoutBranch(gitPath, branch);
 	# 最后重新拉取
-	os.system(gitPath+" pull");
+	runCmd(gitPath+" pull");
 
 def pullOrCloneGit(uinfo, gitList = []):
 	for gitInfo in gitList:
@@ -128,39 +134,28 @@ def pull_clone(cfg):
 	pullOrCloneGit(cfg.get("userInfo", "JZ:pwd"), cfg.get("gitList", []));
 	replaceFiles(cfg.get("replaceList", []));
 
-# 删除文件夹
-def removeFolder(path):
-	if not os.path.exists(path):
-		return;
-	for p in os.listdir(path):
-		f = os.path.join(path, p);
-		if os.path.isdir(f):
-			removeFolder(f);
-			os.removedirs(f);
-		elif os.path.isfile(f):
-			os.remove(f);
-		else:
-			raise Exception("Invalid file", f);
-
-# 删除hall_demo文件夹
-def tryRemoveHallDemo():
-	path = os.path.join(CURRENT_PATH, "hall_demo");
-	if not os.path.exists(path):
-		return;
-	# 移除hall_demo文件夹
-	if input("Warning! Should I remove folder 'hall_demo'? (y/n):") == "y":
-		try:
-			removeFolder(path);
-		except Exception as e:
-			print(e);
-			print("Warning! Removing folder 'hall_demo' failed. Please remove folder 'hall_demo' manually!");
+# 删除已clone的文件夹
+def toRemoveProject(gitList = []):
+	if input("Warning! Should I remove all cloned folders? (y/n):") == "y":
+		for gitInfo in gitList:
+			path = gitInfo.get("path", "");
+			if not os.path.exists(path):
+				continue;
+			# 移除文件夹
+			try:
+				print(f"Removing folder '{path}'...");
+				runCmd("rmdir /s/q "+path);
+				print(f"Removing folder '{path}' successful.");
+			except Exception as e:
+				print(e);
+				print(f"Error! Removing folder '{path}' failed! Please remove it manually!");
 
 # 主函数
 def main():
 	# 获取配置
 	cfg = getCfg();
 	# 错误次数
-	errCount, maxErrCount = 0, cfg.get("maxErrCount", 3);
+	errCount, maxErrCount = 0, cfg.get("maxErrCount", 2);
 	while errCount <= maxErrCount:
 		try:
 			pull_clone(cfg);
@@ -171,8 +166,8 @@ def main():
 			while errCount <= maxErrCount:
 				ret = input("There is a error to pull or clone git! Should I try again? (y/n):");
 				if ret == "y":
-					if maxErrCount == errCount:
-						tryRemoveHallDemo(); # 尝试删除hall_demo文件夹
+					if errCount % 2 == 0:
+						toRemoveProject(cfg.get("gitList", [])); # 尝试删除已clone的文件夹
 					break; # 继续运行
 				elif ret == "n":
 					return; # 直接退出主函数
