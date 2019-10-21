@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace LeetCode{
     public class Solution {
@@ -55,6 +57,36 @@ namespace LeetCode{
                 return true;
             }
             return false;
+        }
+
+        // 新匹配方式
+        public bool isMatchS(string s, string p) {
+            // 分离模式
+            List<int> newP;
+            Hashtable ht;
+            newP = splitPattern(p, out ht);
+            // 开始匹配模式
+            int startIdx = 0;
+            int endIdx = 0;
+            foreach (char c in s) {
+                for (int i = startIdx; i < newP.Count; i ++) {
+                    
+                }
+            }
+            return matchSubStr(s, p, 0, 0);
+        }
+
+        private List<int> splitPattern(string p, out Hashtable ht) {
+            List<int> newP = new List<int>{};
+            ht = new Hashtable();
+            for (int i = 0; i < p.Length; i ++) {
+                if (p[i] != '*') {
+                    newP.Add(p[i]);
+                } else if (i - 1 >= 0) {
+                    ht.Add(newP.Count - 1, true);
+                }
+            }
+            return newP;
         }
     }
 }
