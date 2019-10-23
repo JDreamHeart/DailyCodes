@@ -41,7 +41,7 @@ namespace SortAlgorithmo
 			{
 				temp = arr[i];
 				int j = i-1;
-				for (; j >= 0; j=floor(j/2))
+				for (; j >= 0; j=(int)Math.Floor((double)j/2))
 				{
 					if (arr[j] <= temp)
 					{

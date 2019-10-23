@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\MyOthers\\Private\\DailyCoding\\csharp\\SortAlgorithmo\\SortAlgorithmo.csproj",
+      "projectUniqueName": "e:\\MyOthers\\Private\\DailyCodes\\csharp\\SortAlgorithmo\\SortAlgorithmo.csproj",
       "projectName": "SortAlgorithmo",
-      "projectPath": "E:\\MyOthers\\Private\\DailyCoding\\csharp\\SortAlgorithmo\\SortAlgorithmo.csproj",
+      "projectPath": "e:\\MyOthers\\Private\\DailyCodes\\csharp\\SortAlgorithmo\\SortAlgorithmo.csproj",
       "packagesPath": "C:\\Users\\JinZhang\\.nuget\\packages\\",
-      "outputPath": "E:\\MyOthers\\Private\\DailyCoding\\csharp\\SortAlgorithmo\\obj\\",
+      "outputPath": "e:\\MyOthers\\Private\\DailyCodes\\csharp\\SortAlgorithmo\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

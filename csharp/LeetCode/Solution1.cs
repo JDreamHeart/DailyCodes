@@ -62,31 +62,57 @@ namespace LeetCode{
         // 新匹配方式
         public bool isMatchS(string s, string p) {
             // 分离模式
-            List<int> newP;
+            List<int> np;
             Hashtable ht;
-            newP = splitPattern(p, out ht);
+            np = splitPattern(p, out ht);
             // 开始匹配模式
             int startIdx = 0;
             int endIdx = 0;
+            char lastC = ' ';
             foreach (char c in s) {
-                for (int i = startIdx; i < newP.Count; i ++) {
-                    
+                if (c == lastC && !ht.Contains(endIdx)) {
+                    startIdx++;
                 }
+                endIdx = getNextEndIdx(np, ht, endIdx, c);
+                bool isMeet = false;
+                for (int i = startIdx; i < Math.Min(endIdx+1, np.Count); i ++) {
+                    if (isMatchChar(c, (char)np[i])) {
+                        startIdx = i;
+                        isMeet = true;
+                    }
+                }
+                if (!isMeet) {
+                    return false;
+                }
+                lastC = c;
             }
             return matchSubStr(s, p, 0, 0);
         }
 
         private List<int> splitPattern(string p, out Hashtable ht) {
-            List<int> newP = new List<int>{};
+            List<int> np = new List<int>{};
             ht = new Hashtable();
             for (int i = 0; i < p.Length; i ++) {
                 if (p[i] != '*') {
-                    newP.Add(p[i]);
+                    np.Add(p[i]);
                 } else if (i - 1 >= 0) {
-                    ht.Add(newP.Count - 1, true);
+                    ht.Add(np.Count - 1, true);
                 }
             }
-            return newP;
+            return np;
+        }
+
+        private int getNextEndIdx(List<int> np, Hashtable ht, int endIdx, char c) {
+            for (int i=endIdx+1; i < np.Count; i++) {
+                if (ht.Contains(i)) {
+                    continue;
+                }
+                if (np[i] == c) {
+                    return i;
+                }
+                return i-1;
+            }
+            return endIdx;
         }
     }
 }
