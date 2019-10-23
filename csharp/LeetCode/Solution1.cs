@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace LeetCode{
-    public class Solution {
+    public class Solution1 {
         public bool IsMatch(string s, string p) {
             return matchSubStr(s, p, 0, 0);
         }

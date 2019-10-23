@@ -6,9 +6,9 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            Solution s = new Solution();
+            Solution2 s = new Solution2();
             DateTime startTime = DateTime.Now;
-            bool ret = s.IsMatch("", "c*");
+            string ret = s.IntToRoman(1994);
             TimeSpan diffTime = DateTime.Now - startTime;
             Console.WriteLine("Result: [{0}];\nCoast Time: [{1}].", ret, diffTime.Milliseconds);
             Console.ReadLine();

@@ -9,3 +9,14 @@ E:\project\DailyCoding\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.dll
 E:\project\DailyCoding\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.pdb
 E:\project\DailyCoding\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.dll
 E:\project\DailyCoding\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.pdb
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.exe
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.deps.json
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.runtimeconfig.json
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.runtimeconfig.dev.json
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.dll
+E:\project\DailyCodes\csharp\LeetCode\bin\Debug\netcoreapp3.0\LeetCode.pdb
+E:\project\DailyCodes\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.csprojAssemblyReference.cache
+E:\project\DailyCodes\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.AssemblyInfoInputs.cache
+E:\project\DailyCodes\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.AssemblyInfo.cs
+E:\project\DailyCodes\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.dll
+E:\project\DailyCodes\csharp\LeetCode\obj\Debug\netcoreapp3.0\LeetCode.pdb
