@@ -9,7 +9,7 @@ namespace LeetCode{
         private string[] strList = {"M", "C", "X", "I"};
         private string[] extStrList = {"", "D", "L", "V"};
         private Hashtable ht = new Hashtable();
-        public Solution() {
+        public Solution2() {
             // 初始化ht
             ht.Add(4, "IV");
             ht.Add(9, "IX");
