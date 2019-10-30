@@ -26,24 +26,11 @@ namespace LeetCode{
                     if (nums[i] + nums[j] > 0) {
                         break;
                     }
-                    for (int k = nums.Length - 1; k > j; k --) {
-                        if (lastList.Count > 0 && lastList[0] == nums[i] && lastList[1] == nums[j] && lastList[2] == nums[k]) {
-                            continue;
-                        }
-                        int sum = nums[i] + nums[j] + nums[k];
-                        if (sum < 0) {
-                            break;
-                        }
-                        if (sum == 0) {
-                            if (lastList.Count == 0) {
-                                lastList = new List<int>(){nums[i], nums[j], nums[k]};
-                            }else {
-                                lastList[0] = nums[i];
-                                lastList[1] = nums[j];
-                                lastList[2] = nums[k];
-                            }
-                            ret.Add(lastList);
-                        }
+                    // 查找对应的值
+                    int k = Array.LastIndexOf(nums, - nums[i] - nums[j]);
+                    if (k > j) {
+                        lastList = new List<int>(){nums[i], nums[j], nums[k]};
+                        ret.Add(lastList);
                     }
                 }
             }
