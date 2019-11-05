@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="PyToolsIP[Python工具集成平台]">
+		<meta name="author" content="JimDreamHeart">
+		<title>PyToolsIP</title>
+		<link rel="stylesheet" href="http://jimdreamheart.club/resource/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+	</head>
+	<body>
+		<div class="container">
+            {% block content %}
+                <p>测试。。。</p>
+            {% endblock %}
+		</div>
+		<script src="http://jimdreamheart.club/resource/jquery/jquery-3.4.0.min.js"></script>
+		<script src="http://jimdreamheart.club/resource/jquery/jquery.cookie.js"></script>
+		<script src="http://jimdreamheart.club/resource/jquery/jquerysession.js"></script>
+		<script src="http://jimdreamheart.club/resource/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script src="http://jimdreamheart.club/resource/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+        <script src="http://jimdreamheart.club/resource/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+		<script src="http://jimdreamheart.club/resource/jsencrypt/jsencrypt.min.js"></script>
+        {% block js %}
+        {% endblock %}
+	</body>
+</html>

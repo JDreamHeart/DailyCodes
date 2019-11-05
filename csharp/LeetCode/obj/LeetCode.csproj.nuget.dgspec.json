@@ -1,27 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "E:\\project\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj": {}
+    "E:\\MyOthers\\Private\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj": {}
   },
   "projects": {
-    "E:\\project\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj": {
+    "E:\\MyOthers\\Private\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\project\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj",
+        "projectUniqueName": "E:\\MyOthers\\Private\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj",
         "projectName": "LeetCode",
-        "projectPath": "E:\\project\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "E:\\project\\DailyCodes\\csharp\\LeetCode\\obj\\",
+        "projectPath": "E:\\MyOthers\\Private\\DailyCodes\\csharp\\LeetCode\\LeetCode.csproj",
+        "packagesPath": "C:\\Users\\JinZhang\\.nuget\\packages\\",
+        "outputPath": "E:\\MyOthers\\Private\\DailyCodes\\csharp\\LeetCode\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\JinZhang\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
         ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {}
