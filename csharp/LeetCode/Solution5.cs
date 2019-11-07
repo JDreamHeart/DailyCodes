@@ -22,28 +22,30 @@ using System.Collections.Generic;
 namespace LeetCode {
     public class Solution5 {
         public ListNode RemoveNthFromEnd(ListNode head, int n) {
-        ListNode preNode;
-        int idx = 0;
-        ListNode node = head;
-        do {
-            idx++;
-            if (idx == n - 1) {
-                preNode = node;
-            } else if (idx >= n) {
-                preNode = preNode.next;
+            ListNode preNode = null;
+            int idx = 0;
+            ListNode node = head;
+            while (node != null) {
+                idx++;
+                if (idx == n + 1) {
+                    preNode = head;
+                } else if (idx > n + 1) {
+                    preNode = preNode.next;
+                }
+                node = node.next;
             }
-            node = node.next;
-        } while (node.next != null);
-        if (preNode != null) {
-            ListNode tgNode = preNode.next;
-            preNode.next = tgNode.next;
-            tgNode.next = null;
-        } else if (idx == n) {
-            ListNode tgNode = head;
-            head = head.next;
-            tgNode.next = null;
+            if (preNode != null) {
+                ListNode tgNode = preNode.next;
+                preNode.next = tgNode.next;
+                tgNode.next = null;
+            } else if (idx == n) {
+                ListNode tgNode = head;
+                head = head.next;
+                tgNode.next = null;
+            } else {
+                return null;
+            }
+            return head;
         }
-        return head;
-    }
     }
 }
