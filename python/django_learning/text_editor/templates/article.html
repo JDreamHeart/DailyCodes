@@ -5,6 +5,8 @@
     <form id="releaseForm" role="form" enctype="multipart/form-data">
         {{ form.media }}
         {{ form.as_p }}
+        {{ content_form.media }}
+        {{ content_form.as_p }}
         <button class="btn btn-success" type="submit" style="border: forestgreen 2px solid;"><span class="glyphicon glyphicon-send"></span>点击发布</button>
     </form>
     <div id = "mainContent">
