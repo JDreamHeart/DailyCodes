@@ -134,11 +134,25 @@ CKEDITOR_IMAGE_BACKEND='pillow'
 
 CKEDITOR_CONFIGS = {
     'default' : {
-        'language':'zh-cn',
-        'toolbar' : 'full',
-        'width': 'auto',
-        'height': 360,
-        'tabSpaces': 4,
+        "skin": "moono",
+        "language" : "zh-cn",
+        "toolbar" : "Custom",
+        "toolbar_Custom" : [
+            ["Undo", "Redo"],
+            ["TextColor", "BGColor"],
+            ["Bold", "Italic", "Underline", "Strike", "-", "Subscript", "Superscript", "-", "RemoveFormat"],
+            ["Image", "Link", "Unlink", "Table", "SpecialChar", "-", "CodeSnippet"],
+            ["JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock"],
+            ["NumberedList", "BulletedList", "-", "Outdent", "Indent", "Blockquote"],
+            ["Styles", "Format", "Font", "FontSize"],
+        ],
+        "extraPlugins": ",".join(["codesnippet"]),
+        "tabSpaces": 4,
+        "width" : "100%",
+        "uiColor" : '#E1E1E1',
+        'image_previewText' : ' ',
+        'removeDialogTabs' : 'image:Link;image:advanced;link:target;link:advanced',
+        "forcePasteAsPlainText" : True,
     }
 }
 

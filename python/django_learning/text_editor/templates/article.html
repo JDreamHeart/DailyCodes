@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-center" style="padding: 4px;margin: 20px 0px;border-bottom: 1px gray solid">发布文章</h2>
+    <form id="releaseForm" role="form" enctype="multipart/form-data">
+        {{ form.media }}
+        {{ form.as_p }}
+        <button class="btn btn-success" type="submit" style="border: forestgreen 2px solid;"><span class="glyphicon glyphicon-send"></span>点击发布</button>
+    </form>
+    <div id = "mainContent">
+
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    var addInputToForm = function(item, name, value, type){
+        var $input = item.find("input[name='" + name + "']");
+        if ($input.length > 0) {
+            $input.val(value);
+            if ($input.attr("type") != type) {
+                $input.attr("type", type)
+            }
+        } else {
+            item.append("<input name='" + name + "' class='hidden' type='" + type + "' value='" + value + "' />");
+        }
+    }
+    var addInputsToForm = function(item, exIpts){
+        // 添加扩展输入
+        if (exIpts instanceof Array && exIpts.length > 0) {
+            for (var i = 0; i < exIpts.length; i++) {
+                var ipt = exIpts[i];
+                addInputToForm(item, ipt.key, ipt.val, ipt.type);
+            }
+        }
+    }
+    $(function(){
+        $("#id_content").before('<div class="clearfix">\
+            <button id="saveContent" type="button" class="btn-sm btn-default"><span class="glyphicon glyphicon-floppy-disk"></span>保存到本地</button>\
+            <a id="useLocalContent" class="btn" style="margin-left:10px;font-size:10px;"><span class="glyphicon glyphicon-map-marker"></span>使用本地数据</a>\
+            <a id="clearContent" class="btn pull-right"><span class="glyphicon glyphicon-trash"></span>清空内容</a>\
+        </div>');
+        var checkUseLocalContent = function() {
+            let articleContent = $.cookie("article_content");
+            if (articleContent != undefined && articleContent != "") {
+                $("#useLocalContent").attr("disabled", false);
+            }else{
+                $("#useLocalContent").attr("disabled", true);
+            }
+        };
+        checkUseLocalContent();
+        $("#saveContent").on("click", function() {
+            $.cookie("article_content", CKEDITOR.instances.id_content.getData(), {path: "/"});
+            checkUseLocalContent();
+        });
+        $("#useLocalContent").on("click", function() {
+            let articleContent = $.cookie("article_content");
+            if (articleContent != undefined && articleContent != "") {
+                CKEDITOR.instances.id_content.setData(articleContent);
+            }
+        });
+        $("#clearContent").on("click", function() {
+            CKEDITOR.instances.id_content.setData("");
+        });
+        $("#releaseForm").validate({
+            rules: {
+                title: "required",
+                content: "required",
+            },
+            messages: {
+                title: "请输入标题",
+                content: "请输入内容",
+            },
+            submitHandler: function() {
+                // 更新富文本元素
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+                var item = $("#releaseForm");
+                let text = CKEDITOR.instances.id_content.document.getBody().getText();
+                console.log("提交表单:", text.slice(0, 3));
+                addInputsToForm(item, [{"key" : "brief", "hidden" : "text", "val" : text.slice(0, 255)}]);
+                $.ajax({
+                    url : window.location.href,
+                    type : "post",
+                    data : new FormData(item[0]),
+                    processData : false,
+                    contentType : false,
+                    success : function(data){
+                        console.log("提交表单成功。");
+                        $("#mainContent").html(data);
+                    },
+                    error: function(e) {
+                        console.log(e);
+                        alert("提交表单失败！");
+                    }
+                })
+            }
+        });
+    })
+</script>
+{% endblock %}

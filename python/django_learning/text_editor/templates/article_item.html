@@ -1,0 +1,13 @@
+<div>
+    <div style="margin: 20px 0px; border: 1px #000 solid;"></div>
+    <h3>{{ article.title }}</h3>
+    <h5>{{ article.sub_title }}</h3>
+    <div>
+        {{ article.brief | safe }}
+    </div>
+    <div style="margin: 20px 0px;border: 1px #000 solid;"></div>
+    <form>
+        {{ form.media }}
+        {{ form.as_p }}
+    </form>
+</div>
