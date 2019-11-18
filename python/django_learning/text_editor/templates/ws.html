@@ -4,6 +4,8 @@
   <textarea class="form-control" id="chat-log" disabled rows="20"></textarea><br/>
   <input class="form-control" id="chat-message-input" type="text"/><br/>
   <input class="btn btn-success btn-block" id="chat-message-submit" type="button" value="Send"/>
+  <button id="updateQrCode">更新二维码</button>
+  <img id="qrCode" alt="二维码" />
 {% endblock %}
 
 {% block js %}
@@ -15,10 +17,20 @@
     var data = JSON.parse(e.data);
     var message = data['message'];
     document.querySelector('#chat-log').value += (message + '\n');
+    if (data.hasOwnProperty("header") && data["header"] == "qrcode") {
+      document.querySelector('#qrCode').src = "data:image/png;base64," + data["resp"];
+    }
   };
 
   chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
+  };
+
+  chatSocket.onopen = function(e) {
+    chatSocket.send(JSON.stringify({
+        'header': 'qrcode',
+        'message': $.cookie("uuid"),
+    }));
   };
 
   document.querySelector('#chat-message-input').focus();
@@ -36,6 +48,18 @@
     }));
 
     messageInputDom.value = '';
+
+    if (message == ":close()") {
+      chatSocket.close();
+    }
   };
+
+  document.querySelector('#updateQrCode').onclick = function(e) {
+    chatSocket.send(JSON.stringify({
+        'header': 'qrcode',
+        'message': $.cookie("uuid"),
+    }));
+  };
+  
 </script>
 {% endblock %}

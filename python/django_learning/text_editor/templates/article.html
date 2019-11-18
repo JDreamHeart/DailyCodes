@@ -37,30 +37,36 @@
         }
     }
     $(function(){
-        $("#id_content").before('<div class="clearfix">\
-            <button id="saveContent" type="button" class="btn-sm btn-default"><span class="glyphicon glyphicon-floppy-disk"></span>保存到本地</button>\
-            <a id="useLocalContent" class="btn" style="margin-left:10px;font-size:10px;"><span class="glyphicon glyphicon-map-marker"></span>使用本地数据</a>\
-            <a id="clearContent" class="btn pull-right"><span class="glyphicon glyphicon-trash"></span>清空内容</a>\
-        </div>');
-        var checkUseLocalContent = function() {
-            let articleContent = $.cookie("article_content");
-            if (articleContent != undefined && articleContent != "") {
-                $("#useLocalContent").attr("disabled", false);
-            }else{
-                $("#useLocalContent").attr("disabled", true);
-            }
-        };
-        checkUseLocalContent();
-        $("#saveContent").on("click", function() {
-            $.cookie("article_content", CKEDITOR.instances.id_content.getData(), {path: "/"});
+        if(typeof(Storage)!=="undefined") {
+            $("#id_content").before('<div class="clearfix">\
+                <button id="saveContent" type="button" class="btn-sm btn-default"><span class="glyphicon glyphicon-floppy-disk"></span>保存到本地</button>\
+                <a id="useLocalContent" class="btn" style="margin-left:10px;font-size:10px;"><span class="glyphicon glyphicon-map-marker"></span>使用本地数据</a>\
+                <a id="clearContent" class="btn pull-right"><span class="glyphicon glyphicon-trash"></span>清空内容</a>\
+            </div>');
+            var checkUseLocalContent = function() {
+                let articleContent = localStorage.articleContent;
+                if (articleContent != undefined && articleContent != null && articleContent != "") {
+                    $("#useLocalContent").attr("disabled", false);
+                }else{
+                    $("#useLocalContent").attr("disabled", true);
+                }
+            };
             checkUseLocalContent();
-        });
-        $("#useLocalContent").on("click", function() {
-            let articleContent = $.cookie("article_content");
-            if (articleContent != undefined && articleContent != "") {
-                CKEDITOR.instances.id_content.setData(articleContent);
-            }
-        });
+            $("#saveContent").on("click", function() {
+                localStorage.articleContent = CKEDITOR.instances.id_content.getData();
+                checkUseLocalContent();
+            });
+            $("#useLocalContent").on("click", function() {
+                let articleContent = localStorage.articleContent;
+                if (articleContent != undefined && articleContent != null && articleContent != "") {
+                    CKEDITOR.instances.id_content.setData(articleContent);
+                }
+            });
+        } else {
+            $("#id_content").before('<div class="clearfix">\
+                <a id="clearContent" class="btn pull-right"><span class="glyphicon glyphicon-trash"></span>清空内容</a>\
+            </div>');
+        }
         $("#clearContent").on("click", function() {
             CKEDITOR.instances.id_content.setData("");
         });
