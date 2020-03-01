@@ -1,0 +1,11 @@
+E:\project\DailyCodes\csharp\DesignPatterns\obj\Debug\netcoreapp3.0\DesignPatterns.csprojAssemblyReference.cache
+E:\project\DailyCodes\csharp\DesignPatterns\obj\Debug\netcoreapp3.0\DesignPatterns.AssemblyInfoInputs.cache
+E:\project\DailyCodes\csharp\DesignPatterns\obj\Debug\netcoreapp3.0\DesignPatterns.AssemblyInfo.cs
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.exe
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.deps.json
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.runtimeconfig.json
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.runtimeconfig.dev.json
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.dll
+E:\project\DailyCodes\csharp\DesignPatterns\bin\Debug\netcoreapp3.0\DesignPatterns.pdb
+E:\project\DailyCodes\csharp\DesignPatterns\obj\Debug\netcoreapp3.0\DesignPatterns.dll
+E:\project\DailyCodes\csharp\DesignPatterns\obj\Debug\netcoreapp3.0\DesignPatterns.pdb
