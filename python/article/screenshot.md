@@ -2,14 +2,50 @@
 
 ----
 
-## 基本思路
+## 整体思路
 
-## 选择截图尺寸
-在平面上，只需要两个点位置，就能确定出以这两点为对角的矩形。
+  * **对当前屏幕进行截图**；
+  * **点击选择截图尺寸（用于对上面获得的截图进行裁剪）**；
+  * **允许调整截图尺寸和位置**；
+  * **鼠标右键响应（取消或显示操作菜单**）
+  * **选择所要保存的图片格式**。
+
+
+## 1. 截图当前屏幕
+
+以下展示了两种方式的截屏逻辑：  
+
+```py
+import wx;
+from PIL import ImageGrab;
+​
+# 第一种：通过ImageGrab截屏
+def getScreenBmp1():
+  ds = wx.DisplaySize();
+  im = ImageGrab.grab((0, 0, ds.x, ds.y));
+  # 转成wxPython的Bitmap对象
+  img = wx.Image(ds[0], ds[1], im.tobytes());
+  return img.ConvertToBitmap();
+  
+# 第二种：直接通过wxPython进行截屏
+def getScreenBmp2():
+    ds = wx.GetDisplaySize();
+    bmp = wx.Bitmap(ds.x, ds.y);
+    mdc = wx.MemoryDC();
+    mdc.SelectObject(bmp);
+    mdc.Blit(0, 0, ds.x, ds.y, wx.ScreenDC(), 0, 0);
+    mdc.SelectObject(wx.NullBitmap);
+    return bmp;
+
+```
+
+## 2. 选择截图尺寸
+在一个平面上，只需要两个点位置，就能确定出以这两点为对角的矩形。
 而这所确定的矩形，就是想要的截图区域。  
 
-因此，可以在鼠标按下和抬起的时候，分别记录第一和第二个点位置，然后根据这两个点，即可在界面上绘制出选中区。  
-为了能实时显示截图选中区，以下代码还监听了鼠标的移动事件，每次移动（在已按下鼠标的前提下）都记录第二点位置。  
+因此，可以在鼠标按下和抬起的时候，分别记录第一和第二个点位置，然后根据这两个点，在界面上绘制出选中区。  
+
+同时，为了能实时显示截图选中区，还需监听鼠标的移动事件，在每次移动（在已按下鼠标的前提下）时记录第二点位置。
 ```py
 
 class ScreenshotDialog(wx.Dialog):
@@ -130,6 +166,7 @@ class ScreenshotDialog(wx.Dialog):
 ```
 
 ## 选中后调整截图尺寸
+
 该部分内容，主要分为以下几个步骤：
   * 首先在点击抬起时，确定当前处于允许调整状态；
   * 然后在鼠标移动到特定的调整点后，改变相应的鼠标的状态图标；
@@ -321,17 +358,19 @@ class ScreenshotDialog(wx.Dialog):
 
 ## 选择保存格式
 在以上的**取消或显示菜单项**的代码中，出现创建文件保存弹窗的逻辑（`onSave`函数中创建的`wx.FileDialog`对象）。  
+
 这里只允许选择`wildcard`中所包含的格式，包括PNG、JPEG、BMP、TIF。
 
 ## 完整代码
 Github链接：[https://github.com/JDreamHeart/DailyCodes/python/article/screenshot.py](https://github.com/JDreamHeart/DailyCodes/blob/master/python/article/screenshot.py)  
 
 以上截屏功能基于`Python 3.7`版本开发（如若遇到编码等错误，先确保是否因您所使用的`Python`版本太老）。  
+
 由于截屏的显示界面基于`wxPython`模块进行实现，因此，得确保电脑已安装`wxPython`模块。  
 ```sh
 // 通过 pip 安装 wxPython 模块
 pip install wxPython
 
 // 或 使用阿里云镜像安装 wxPython 模块
-// pip install wxPython -i https://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
+pip install wxPython -i https://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
 ```
