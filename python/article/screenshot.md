@@ -374,3 +374,6 @@ pip install wxPython
 // 或 使用阿里云镜像安装 wxPython 模块
 pip install wxPython -i https://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
 ```
+
+## 运行演示
+![演示](./screenshot.gif)
