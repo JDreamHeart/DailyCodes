@@ -5,12 +5,19 @@
 
 @echo off && setlocal enabledelayedexpansion
 
-set WorkDir=%~dp1
-set WorkDir=%WorkDir:~,-1%
+REM set WorkDir=%~dp1
+REM set WorkDir=%WorkDir:~,-1%
 
-echo %WorkDir%
+REM echo %WorkDir%
 
-echo %cd%
+REM echo %cd%
 
-echo %~dp0
-echo %~dp1
+REM echo %~dp0
+REM echo %~dp1
+
+set pyexe=python
+
+for /f "tokens=1,2 delims==" %%i in (tst.env) do (
+    if "%%i"=="pyexe" set pyexe=%%j
+)
+echo !pyexe!
