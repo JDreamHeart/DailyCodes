@@ -2,7 +2,7 @@
 # @Author: JinZhang
 # @Date:   2020-03-05 17:10:47
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2020-03-06 17:53:01
+# @Last Modified time: 2020-03-11 15:10:21
 
 import wx;
 
@@ -12,10 +12,15 @@ import numpy as np
 
 import cv2
 
+from GrabDialog import GrabDialog;
+
 # import imageio
 
-def recordScreen():
-	p = ImageGrab.grab()#获得当前屏幕
+def recordScreen(bbox = []):
+	if bbox:
+		p = ImageGrab.grab(bbox)
+	else:
+		p = ImageGrab.grab()#获得当前屏幕
 
 	k=np.zeros((200,200),np.uint8)
 
@@ -60,8 +65,8 @@ class Frame1(wx.Frame):
 		pass;
 
 	def onTrans(self, event):
-		self.SetTransparent(200) #设置透明
-		recordScreen();
+		self.SetTransparent(1) #设置透明
+		# recordScreen();
 
 	def onClose(self, event):
 		self.Destroy();
@@ -104,9 +109,47 @@ class Frame1(wx.Frame):
 		return bmp
 
 
+# 键盘值映射表
+KeyCodeMap = {
+	314 : "LEFT",
+	315 : "UP",
+	316 : "RIGHT",
+	317 : "DOWN",
+};
+
+# Unicode值映射表
+UnicodeKeyMap = {
+	27 : "ESC",
+	32 : "SPACE",
+};
+
+# 根据事件获取热键值
+def getHotKeyByEvent(event):
+	key = [];
+	if event.ControlDown():
+		key.append("CTRL");
+	if event.AltDown():
+		key.append("ALT");
+	if event.ShiftDown():
+		key.append("SHIFT");
+	if event.GetKeyCode() >= 340 and event.GetKeyCode() <= 351:
+		key.append("F" + str(event.GetKeyCode() - 339)); # F1 ~ F12
+	elif event.GetKeyCode() in KeyCodeMap:
+		key.append(KeyCodeMap[event.GetKeyCode()]);
+	elif event.GetUnicodeKey() in UnicodeKeyMap:
+		key.append(UnicodeKeyMap[event.GetUnicodeKey()]);
+	else:
+		key.append(chr(event.GetUnicodeKey()).upper());
+	return "_".join(key);
+
+def onKeyDown(event):
+	event.DoAllowNextEvent();
+	print(getHotKeyByEvent(event))
+
 
 if __name__ == "__main__":
 	app = wx.App();
+	app.Bind(wx.EVT_CHAR_HOOK, onKeyDown);
 	frame1 = Frame1();
 	frame1.Show();
 	app.MainLoop()
