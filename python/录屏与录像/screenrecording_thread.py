@@ -2,11 +2,13 @@
 # @Author: JinZhang
 # @Date:   2020-03-11 14:37:58
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2020-03-12 16:30:11
-import os;
+# @Last Modified time: 2020-03-12 14:33:12
+
 import wx;
 import math;
-from datetime import datetime;
+from datetime import datetime, timedelta;
+import threading;
+from threadEx import stopThread;
 
 from PIL import ImageGrab
 
@@ -17,36 +19,30 @@ import cv2
 from GrabDialog import GrabDialog;
 
 class SRControler(wx.Dialog):
-	def __init__(self, countdown = 0, videoName = "screenvideo", videoPath = "", frame = 11, bbox = None):
-		wx.Dialog.__init__(self, None, title="录屏中", style=wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP); # wx.NO_BORDER
-		self.__countdown = countdown;
-		self.__videoName = videoName;
-		self.__videoPath = videoPath;
+	def __init__(self, countdown = 0, frame = 30, bbox = None):
+		wx.Dialog.__init__(self, None, style=wx.NO_BORDER|wx.STAY_ON_TOP);
 		self.__frame = frame;
 		self.__bbox = bbox;
 		self.createVideo();
+		self.__countdown = countdown;
 		self.__startTime = None;
 		self.__pauseTime = None;
+		# self.__lastRecordTime = None;
 		self.__isPlaying = True;
-		self.__startPause = wx.Button(self, label = "暂停", size = (80, 30));
-		self.__startPause.Bind(wx.EVT_BUTTON, self.onStartPause);
+		btn = self.createBtnPanel();
 		self.__label = wx.StaticText(self, label = f"--:--:--");
 		box = wx.BoxSizer(wx.VERTICAL);
-		box.Add(self.__startPause, flag = wx.ALIGN_CENTER);
+		box.Add(btn, flag = wx.ALIGN_CENTER);
 		box.Add(self.__label, flag = wx.ALIGN_CENTER);
 		self.SetSizerAndFit(box);
 		# 设置定时器
 		self.__timer = wx.Timer(self);
 		self.Bind(wx.EVT_TIMER, self.onTimer, self.__timer);
 		wx.CallAfter(self.onStart);
-		# 设置定时器
-		self.__recordTimer = wx.Timer(self);
-		self.Bind(wx.EVT_TIMER, self.onRecordVideo, self.__recordTimer);
-		# 关闭事件
-		self.Bind(wx.EVT_CLOSE, self.onClose); # 绑定关闭事件
-
-	def onClose(self, event):
-		self.onStop(event);
+		# # 设置定时器
+		# self.__recordTimer = wx.Timer(self);
+		# self.Bind(wx.EVT_TIMER, self.onRecordVideo, self.__recordTimer);
+		self.recordThread = None;
 
 	def createBtnPanel(self):
 		btnPanel = wx.Panel(self);
@@ -82,20 +78,7 @@ class SRControler(wx.Dialog):
 					self.__label.SetLabel(f"{days}D " + ":".join(["%02d"%hours, "%02d"%minutes, "%02d"%seconds]));
 				else:
 					self.__label.SetLabel(":".join(["%02d"%hours, "%02d"%minutes, "%02d"%seconds]));
-		# 更新透明度
-		if self.isPointInSelfRect():
-			self.SetTransparent(250);
-		else:
-			self.SetTransparent(100);
 		pass;
-
-	def isPointInSelfRect(self):
-		# 转换位置
-		convertPos = self.ScreenToClient(wx.GetMousePosition());
-		# 判断位置
-		if convertPos[0] >= 0 and convertPos[0] <= self.GetSize()[0] and convertPos[1] >= 0 and convertPos[1] <= self.GetSize()[1]:
-			return True;
-		return False;
 
 	def onStartPause(self, event):
 		if self.__isPlaying:
@@ -107,7 +90,6 @@ class SRControler(wx.Dialog):
 	def onStop(self, event):
 		self.onPause();
 		self.__video.release();
-		self.showVideoInfo();
 		self.EndModal(wx.ID_OK);
 		pass;
 
@@ -128,10 +110,12 @@ class SRControler(wx.Dialog):
 		self.__startPause.SetLabel("继续");
 		if self.__timer.IsRunning():
 			self.__timer.Stop();
-		if self.__recordTimer.IsRunning():
-			self.__recordTimer.Stop();
+		# if self.__recordTimer.IsRunning():
+		# 	self.__recordTimer.Stop();
 		self.__pauseTime = datetime.now();
 		self.__isPlaying = False;
+		if self.recordThread:
+			stopThread(self.recordThread);
 		pass;
 
 	def createVideo(self):
@@ -140,37 +124,37 @@ class SRControler(wx.Dialog):
 		else:
 			ig = ImageGrab.grab();
 		fourcc = cv2.VideoWriter_fourcc(*'MJPG'); #编码格式
-		self.__video = cv2.VideoWriter(os.path.join(self.__videoPath, f"{self.__videoName}.avi"), fourcc, self.__frame, ig.size); #输出文件命名为test.avi,帧率为self.__frame
+		self.__video = cv2.VideoWriter('test.avi', fourcc, self.__frame, ig.size); #输出文件命名为test.avi,帧率为self.__frame
 
 	def recordVideo(self):
-		self.onRecordVideo();
-		if not self.__recordTimer.IsRunning():
-			self.__recordTimer.Start(int(1000/self.__frame));
+		# if not self.__lastRecordTime:
+		# 	self.__lastRecordTime = datetime.now();
+		# elif self.__pauseTime:
+		# 	self.__lastRecordTime += datetime.now() - self.__pauseTime;
+		if self.recordThread:
+			stopThread(self.recordThread);
+		self.recordThread = threading.Thread(target = self.onRecordVideo);
+		self.recordThread.start();
+		# if not self.__recordTimer.IsRunning():
+		# 	self.__recordTimer.Start(int(1000/self.__frame));
 		pass;
 
 	def onRecordVideo(self, event = None):
-		if self.__isPlaying:
+		while self.__isPlaying:
+			# diffTime = datetime.now() - self.__lastRecordTime;
+			# if diffTime.microseconds < 1000000/self.__frame:
+			# 	wx.CallLater(1,self.onRecordVideo);
+			# 	return;
 			if self.__bbox:
 				ig = ImageGrab.grab(self.__bbox);
 			else:
 				ig = ImageGrab.grab();
 			im=cv2.cvtColor(np.array(ig), cv2.COLOR_RGB2BGR); # 转为opencv的BGR格式
 			self.__video.write(im);
+			self.__video.write(im);
+			# wx.CallLater(1,self.onRecordVideo);
+			# self.__lastRecordTime = self.__lastRecordTime + timedelta(microseconds = int(1000000/self.__frame));
 		pass;
-
-	def showVideoInfo(self):
-		video = cv2.VideoCapture(os.path.join(self.__videoPath, f"{self.__videoName}.avi"));
-		fps = video.get(cv2.CAP_PROP_FPS);
-		count = video.get(cv2.CAP_PROP_FRAME_COUNT);
-		size = (int(video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)));
-		video.release();
-		print('帧率=%.1f'%fps);
-		print('帧数=%.1f'%count);
-		print('分辨率',size);
-		print('视频时间=%.3f秒'%(int(count)/fps));
-		diffTime = datetime.now() - self.__startTime;
-		print('录制时间=%.3f秒'%(diffTime.seconds));
-		print('推荐帧率=%.2f'%(fps*((int(count)/fps)/(diffTime.seconds))));
 
 
 
@@ -188,7 +172,6 @@ class Frame1(wx.Frame):
 		self.Hide();
 		src = SRControler();
 		src.ShowModal();
-		src.Destroy();
 		self.Show();
 
 	def rsRect(self, event):
@@ -200,7 +183,6 @@ class Frame1(wx.Frame):
 		if ret == wx.ID_OK:
 			src = SRControler(bbox = (rect.x, rect.y, rect.width, rect.height));
 			src.ShowModal();
-			src.Destroy();
 		self.Show();
 
 
