@@ -13,6 +13,15 @@ def runCmd(cmd, cwd=os.getcwd(), funcName="call", argDict = {}):
     return getattr(subprocess, funcName)(cmd, cwd = cwd, startupinfo = startupinfo, **argDict);
 
 
+def updateTestEnv():
+	with open("test.env", "w", encoding = "utf-8") as f:
+		f.write("\n".join([
+			"pyexe="+"xxx.python.exe",
+			"mainfile=" + "main.p",
+			"buildfile=" + "build.y",
+		]));
+
+
 if __name__ == '__main__':
 	# 生成桌面快捷方式
 	# runCmd("E:\\MyOthers\\Private\\ptip\\PyToolsIP\\run\\makelnk.bat E:\\MyOthers\\Private\\ptip\\PyToolsIP\\pytoolsip.exe PyToolsIP Python工具集成平台")
@@ -22,3 +31,7 @@ if __name__ == '__main__':
 	# runCmd("cmd /c explorer E:\\MyOthers\\Private\\ptip\\PyToolsIP");
 	# os.system("explorer E:\\MyOthers\\Private\\ptip\\PyToolsIP");
 	pass;
+	# updateTestEnv();
+	tips = "dhjsfkasdjh";
+	rate = 3.976
+	print(f"{tips}[%.2f%%]" % (rate * 100))
