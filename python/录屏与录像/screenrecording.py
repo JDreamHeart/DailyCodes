@@ -2,13 +2,13 @@
 # @Author: JinZhang
 # @Date:   2020-03-11 14:37:58
 # @Last Modified by:   JinZhang
-# @Last Modified time: 2020-03-12 16:30:11
+# @Last Modified time: 2020-03-12 17:46:52
 import os;
 import wx;
 import math;
 from datetime import datetime;
 
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 
 import numpy as np
 
@@ -184,6 +184,15 @@ class Frame1(wx.Frame):
 		btn2 = wx.Button(self,label=u"选择区域录制",pos=(430, 400),size=(100,45))
 		self.Bind(wx.EVT_BUTTON,self.rsRect,btn2);
 
+		self.__bm = None;
+		bm = self.getCoverBitmapByVideo();
+		if bm:
+			self.__bm = wx.StaticBitmap(self, bitmap = bm);
+			print("成功创建Bitmap。");
+		self.__timer = wx.Timer(self);
+		self.Bind(wx.EVT_TIMER, self.onTimer, self.__timer);
+		self.__timer.Start(int(1000/self.__video.get(cv2.CAP_PROP_FPS)));
+
 	def rsFull(self, event):
 		self.Hide();
 		src = SRControler();
@@ -202,6 +211,30 @@ class Frame1(wx.Frame):
 			src.ShowModal();
 			src.Destroy();
 		self.Show();
+
+	def getCoverBitmapByVideo(self, video = None):
+		if not os.path.exists("screenvideo.avi"):
+			return None;
+		if not video:
+			video = cv2.VideoCapture("screenvideo.avi"); # "screenvideo.avi"
+			self.__video = video;
+		size = (int(video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)));
+		ret, frame = video.read();
+		if ret:
+			img = Image.fromarray(frame); # .resize((500, 500), Image.ANTIALIAS);
+			return wx.Image(size[0], size[1], img.tobytes()).ConvertToBitmap();
+		print("get cover bitmap", ret);
+		return None;
+
+	def onTimer(self, event):
+		if self.__bm:
+			bm = self.getCoverBitmapByVideo(video = self.__video);
+			if bm:
+				self.__bm.SetBitmap(bm);
+			else:
+				self.__timer.Stop();
+		pass;
+
 
 
 
