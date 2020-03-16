@@ -62,9 +62,9 @@ mt.__mul = function(m1, m2)
                 for j = 1, m2.n_ do
                     local val = 0;
                     for k = 1, m1.n_ do
-                        val = val + m1.data_[(i - 1) * m1.n_ + k] * m1.data_[(k - 1) * m2.n_ + j];
+                        val = val + m1.data_[(i - 1) * m1.n_ + k] * m2.data_[(k - 1) * m2.n_ + j];
                     end
-                    data[(i - 1) * m1.m_ + j] = val;
+                    data[(i - 1) * m2.n_ + j] = val;
                 end
             end
             return m1.new(data, m1.m_, m2.n_);
