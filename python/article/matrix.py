@@ -118,6 +118,7 @@ class Matrix(object):
         fullArrange();
         return groups, ionList;
     
+    # get value of matrix determinant by params
     def __getDetVal__(self, groups, ionList, excludeRow = -1, excludeCol = -1):
         det = 0;
         for i, group in enumerate(groups):
@@ -133,6 +134,7 @@ class Matrix(object):
                 det += math.pow(-1, ion) * val;
         return det;
 
+    # adjust inverse ordinal mumber
     def __adjustIon__(self, ion, group, idx):
         for v in group[:idx]:
             if v > group[idx]:
@@ -142,6 +144,7 @@ class Matrix(object):
                 ion -= 1;
         return ion;
     
+    # copy matrix
     def copy(self):
         return Matrix(self.__data, self.__row, self.__col);
     
@@ -169,7 +172,9 @@ class Matrix(object):
         return [d for d in self.__data];
     
     # update data
-    def update(self, data = [], row = 0, col = 0):
+    def update(self, data = [], row = -1, col = -1):
+        if row <= 0:
+            row = self.__row;
         self.__data, self.__row, self.__col = self.verify(data, row, col);
         self.__trans, self.__det, self.__inv = None, None, None;
         pass;
@@ -202,7 +207,6 @@ class Matrix(object):
     def det(self):
         if self.__det == None:
             groups, ionList = self.__getDetParams__();
-            # print(self.__row, self.__col, groups, ionList)
             if groups and ionList:
                 self.__det = self.__getDetVal__(groups, ionList);
         return self.__det;
@@ -227,5 +231,6 @@ class Matrix(object):
 
 # test func
 if __name__ == "__main__":
-    mt = Matrix([5,6,7,8], 2);
-    print(mt.inv);
+    mt = Matrix([5,6,7,8]);
+    mt.update([1,2,3,4]);
+    print(mt);
