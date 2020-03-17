@@ -8,15 +8,18 @@ namespace LeetCode
     {
         static void Main(string[] args)
         {
-            Solution4 s = new Solution4();
+            Solution6 s = new Solution6();
             DateTime startTime = DateTime.Now;
-            IList<string> ret = s.LetterCombinations("23");
+            IList<IList<int>> ret = s.ThreeSum(new int[]{-2, 0, 0, 2, 2});
             TimeSpan diffTime = DateTime.Now - startTime;
             Console.WriteLine("Result: [{0}];\nCoast Time: [{1}].", ret, diffTime.Milliseconds);
             StringBuilder str = new StringBuilder();
-            str.AppendJoin(',', ret);
+            for (int i = 0; i < ret.Count; i ++) {
+                str.AppendJoin(',', ret[i]);
+                str.Append("|");
+            }
             Console.WriteLine("Result: [{0}].", str.ToString());
-            Console.ReadLine();
+            // Console.ReadLine();
         }
     }
 }
