@@ -10,15 +10,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-
-// Definition for singly-linked list.
- public class ListNode {
-    public int val;
-    public ListNode next;
-    public ListNode(int x) { val = x; }
- }
-
-
 namespace LeetCode {
     public class Solution5 {
         public ListNode RemoveNthFromEnd(ListNode head, int n) {
