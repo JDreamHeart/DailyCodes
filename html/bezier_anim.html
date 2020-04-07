@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="贝塞尔曲线动画">
+		<meta name="author" content="JDreamHeart">
+        <title>贝塞尔曲线动画</title>
+        <link rel="stylesheet" href="https://jdreamheart.com/resource/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            ul,li {
+                list-style-type: none;
+            }
+            a:link{
+                text-decoration: none;
+            }
+            a:visited{
+                text-decoration: none;
+            }
+            a:hover{
+                text-decoration: none;
+            }
+            a:active{
+                text-decoration: none;
+            }
+            header {
+                padding-top: 20px;
+                padding-bottom: 50px;
+            }
+            footer{
+                clear: both;
+                width: 100%;
+                color: #A0A0A0;
+                text-align: center;
+                margin-top: 60px;
+                margin-bottom: 10px;
+            }
+            footer span{
+                font-size: 12px;
+            }
+            footer a{
+                font-size: 8px;
+            }
+            .bezier-list > li {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px #BCBCBC solid;
+                border-radius: 4px;
+            }
+            .bezier-list > li:hover {
+                background-color: #F1F1F1;
+            }
+            .bezier-list > li > p {
+                text-align: left;
+                font-size: 16px;
+                font-weight: bolder;
+                border-bottom: 1px #E1E1E1 dotted;
+            }
+            .bezier-list > li > p > span {
+                padding-left: 10px;
+                font-size: 14px;
+                font-weight: normal;
+            }
+            .bezier-list > li > .bezier-block {
+                width: 100px;
+                height: 100px;
+                padding: 10px;
+                font-size: 14px;
+                background-color: cadetblue;
+                border: 1px #868686 solid;
+                border-radius: 4px;
+            }
+            /* .bezier-list > li:hover > .bezier-block {
+                -webkit-transform:  translateX(400px);
+                    -ms-transform:  translateX(400px);
+                     -o-transform:  translateX(400px);
+                        transform:  translateX(400px);
+            } */
+        </style>
+	</head>
+	<body>
+        <header>
+            <div class="container text-center">
+                <h1>贝塞尔曲线动画效果</h1>
+                <p>（鼠标悬停在对应行，会展示相应贝塞尔曲线的运动效果）</p>
+                <div>动画时长：<input id="animDuration" type="number" value="1" />&nbsp;秒</div>
+            </div>
+        </header>
+        <div class="container text-center">
+            <ul class="bezier-list col-md-12">
+                <li>
+                    <p>linear<span class="bezier-value">(0,0,1,1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>ease<span class="bezier-value">(0.25,0.1,0.25,1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>ease-in<span class="bezier-value">(0.42,0,1,1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>ease-out<span class="bezier-value">(0,0,0.58,1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>ease-in-out<span class="bezier-value">(0.42,0,0.58,1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInSine<span class="bezier-value">(0.47, 0, 0.745, 0.715)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutSine<span class="bezier-value">(0.39, 0.575, 0.565, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutSine<span class="bezier-value">(0.445, 0.05, 0.55, 0.95)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInQuad<span class="bezier-value">(0.55, 0.085, 0.68, 0.53)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutQuad<span class="bezier-value">(0.25, 0.46, 0.45, 0.94)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutQuad<span class="bezier-value">(0.455, 0.03, 0.515, 0.955)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInCubic<span class="bezier-value">(0.55, 0.055, 0.675, 0.19)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutCubic<span class="bezier-value">(0.215, 0.61, 0.355, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutCubic<span class="bezier-value">(0.645, 0.045, 0.355, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInQuart<span class="bezier-value">(0.895, 0.03, 0.685, 0.22)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutQuart<span class="bezier-value">(0.165, 0.84, 0.44, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutQuart<span class="bezier-value">(0.77, 0, 0.175, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInQuint<span class="bezier-value">(0.755, 0.05, 0.855, 0.06)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutQuint<span class="bezier-value">(0.23, 1, 0.32, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutQuint<span class="bezier-value">(0.86, 0, 0.07, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInExpo<span class="bezier-value">(0.95, 0.05, 0.795, 0.035)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutExpo<span class="bezier-value">(0.19, 1, 0.22, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutExpo<span class="bezier-value">(1, 0, 0, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInCirc<span class="bezier-value">(0.6, 0.04, 0.98, 0.335)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutCirc<span class="bezier-value">(0.075, 0.82, 0.165, 1)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutCirc<span class="bezier-value">(0.785, 0.135, 0.15, 0.86)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInBack<span class="bezier-value">(0.6, -0.28, 0.735, 0.045)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeOutBack<span class="bezier-value">(0.175, 0.885, 0.32, 1.275)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+                <li>
+                    <p>easeInOutBack<span class="bezier-value">(0.68, -0.55, 0.265, 1.55)</span></p>
+                    <div class="bezier-block"></div>
+                </li>
+            </ul>
+        </div>
+        <footer>
+			<div class="container">
+				<span>&copy;&nbsp;2019-2020&nbsp;</span>
+				<a id="aboutDzjH" href="javascript:void(0);" title="关于JDreamHeart">梦心DH</a>
+			</div>
+        </footer>
+        <script src="https://jdreamheart.com/resource/jquery/jquery-3.4.0.min.js"></script>
+		<script src="https://jdreamheart.com/resource/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script language="JavaScript">
+            $(function(){
+                // 监听hover事件，并进行相应处理
+                $(".bezier-list > li").hover(function() {
+                    let $block = $(this).children(".bezier-block");
+                    let transWidth = "translateX(" + ($(this).width() - $block.outerWidth()) + "px)";
+                    $block.css("-webkit-transform", transWidth);
+                    $block.css("-ms-transform", transWidth);
+                    $block.css("-o-transform", transWidth);
+                    $block.css("transform", transWidth);
+                },function(){
+                    let $block = $(this).children(".bezier-block");
+                    $block.css("-webkit-transform", "");
+                    $block.css("-ms-transform", "");
+                    $block.css("-o-transform", "");
+                    $block.css("transform", "");
+                });
+                // 更新贝塞尔曲线动画参数
+                var updateBezierAnim = function() {
+                    var animDuration = $("#animDuration").val();
+                    $(".bezier-list > li").each(function() {
+                        let valStr = $(this).find(".bezier-value").text();
+                        valStr = valStr.replace("(", ""); // 替换左括号
+                        valStr = valStr.replace(")", ""); // 替换右括号
+                        valStr = valStr.replace(" ", ""); // 替换空格
+                        valStr = valStr.replace("，", ","); // 替换中文逗号
+                        let bezierVal = "all "+ animDuration +"s cubic-bezier("+ valStr +")";
+                        let $block = $(this).children(".bezier-block");
+                        $block.css("-webkit-transition", bezierVal);
+                        $block.css("-ms-transition", bezierVal);
+                        $block.css("-o-transition", bezierVal);
+                        $block.css("transition", bezierVal);
+                        $block.css("background-color", "rgb(" + Math.random() * 255 + "," + Math.random() * 255+ "," + Math.random() * 255 + ")");
+                    });
+                }
+                // 监听贝塞尔曲线动画的改变时长
+                $("#animDuration").bind("input propertychange", function() {
+                    updateBezierAnim();
+                });
+                updateBezierAnim();
+            })
+        </script>
+    </body>
+</html>
