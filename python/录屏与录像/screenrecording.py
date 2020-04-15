@@ -184,14 +184,14 @@ class Frame1(wx.Frame):
 		btn2 = wx.Button(self,label=u"选择区域录制",pos=(430, 400),size=(100,45))
 		self.Bind(wx.EVT_BUTTON,self.rsRect,btn2);
 
-		self.__bm = None;
-		bm = self.getCoverBitmapByVideo();
-		if bm:
-			self.__bm = wx.StaticBitmap(self, bitmap = bm);
-			print("成功创建Bitmap。");
-		self.__timer = wx.Timer(self);
-		self.Bind(wx.EVT_TIMER, self.onTimer, self.__timer);
-		self.__timer.Start(int(1000/self.__video.get(cv2.CAP_PROP_FPS)));
+		# self.__bm = None;
+		# bm = self.getCoverBitmapByVideo();
+		# if bm:
+		# 	self.__bm = wx.StaticBitmap(self, bitmap = bm);
+		# 	print("成功创建Bitmap。");
+		# self.__timer = wx.Timer(self);
+		# self.Bind(wx.EVT_TIMER, self.onTimer, self.__timer);
+		# self.__timer.Start(int(1000/self.__video.get(cv2.CAP_PROP_FPS)));
 
 	def rsFull(self, event):
 		self.Hide();
@@ -207,7 +207,7 @@ class Frame1(wx.Frame):
 		rect = gd.getScreenshotRect();
 		gd.Destroy();
 		if ret == wx.ID_OK:
-			src = SRControler(bbox = (rect.x, rect.y, rect.width, rect.height));
+			src = SRControler(bbox = (rect.x, rect.y, rect.width, rect.height), frame = 10);
 			src.ShowModal();
 			src.Destroy();
 		self.Show();
