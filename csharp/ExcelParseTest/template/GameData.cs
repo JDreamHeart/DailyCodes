@@ -1,22 +1,19 @@
+using System.Reflection;
 using System.Collections.Generic;
 
 class GameData {
-    Dictionary<string, TableData> m_dataDict = new Dictionary<string, TableData>();
+    Dictionary<string, TableData<TableRowData>> m_dataDict = new Dictionary<string, TableData<TableRowData>>();
 
-    GameData m_instance;
+    TableDataCreater m_dataCreater = new TableDataCreater();
 
-    public static GameData Instance() {
-        if (m_instance != null) {
-            return m_instance;
-        }
-        m_instance = new GameData();
-        return m_instance;
-    }
-
-    public TableData<T> this[string name] {
+    public TableData<TableRowData> this[string name] {
         get {
             if (!this.m_dataDict.ContainsKey(name)) {
-                this.m_dataDict.Add(name, new TableData<T>());
+                System.Type dataType = m_dataCreater.GetTypeByName(name);
+                if (dataType == null) {
+                    return null;
+                }
+                this.m_dataDict.Add(name, new TableData<dataType>());
             }
             return this.m_dataDict[name];
         }

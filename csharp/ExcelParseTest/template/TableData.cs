@@ -28,9 +28,9 @@ public class TableData<T> where T:TableRowData {
 
     List<T> m_data = new List<T>();
 
-    public TableData(params object[,] args) {
-        foreach (object[] arg in args) {
-            m_data.Add(new T(arg));
+    public TableData(params object[] args) {
+        foreach (object arg in args) {
+            m_data.Add(Activator.CreateInstance(T, arg));
         }
     }
 

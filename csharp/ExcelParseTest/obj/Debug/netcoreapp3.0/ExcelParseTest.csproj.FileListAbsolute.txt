@@ -1,0 +1,11 @@
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.exe
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.deps.json
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.runtimeconfig.json
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.runtimeconfig.dev.json
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.dll
+E:\project\DailyCodes\csharp\ExcelParseTest\bin\Debug\netcoreapp3.0\ExcelParseTest.pdb
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.csprojAssemblyReference.cache
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.AssemblyInfoInputs.cache
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.AssemblyInfo.cs
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.dll
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.pdb
