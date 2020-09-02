@@ -49,6 +49,9 @@ class SheetDataParser(object):
             return row;
         else:
             raise StopIteration;
+        
+    def values(self):
+        return iter(self);
     
     def initKeyIndex(self):
         startIdx = -1;
@@ -88,6 +91,18 @@ class SheetDataParser(object):
             for key in self.__keyDict.values():
                 self.__typeDict[key] = self.DEFAULT_DATA_TYPE;
         self.__keyIndex = startIdx;
+    
+    def convertKeyDict(self):
+        newKeyDict = {};
+        for i, key in self.__keyDict.items():
+            ret = re.search(r"^([_a-zA-Z]+)\+\d*$", key);
+            if ret:
+                if key not in newKeyDict:
+                    newKeyDict[key] = [];
+                newKeyDict[key].append(i);
+            else:
+                newKeyDict[key] = i;
+        return newKeyDict;
 
     def checkIsAnnotated(row):
         if re.search(r"^#.*", row[0]):
@@ -132,3 +147,5 @@ class TableDataParser(object):
         else:
             raise StopIteration;
 
+    def sheets(self):
+        return iter(self);
