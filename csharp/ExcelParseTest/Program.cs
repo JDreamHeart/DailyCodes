@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ExcelParseTest
 {
@@ -7,13 +8,15 @@ namespace ExcelParseTest
         static void Main(string[] args)
         {
             Console.WriteLine("========= Start ========");
-            this.Run();
+            Run();
             Console.WriteLine("========= End ========");
         }
 
         static void Run() {
             GameData gd = new GameData();
             Console.WriteLine(gd);
+            var ret = gd.Find<TemplateRow>(233, "Id");
+            Console.WriteLine("========= Ret ======== {0}", ret);
         }
     }
 }

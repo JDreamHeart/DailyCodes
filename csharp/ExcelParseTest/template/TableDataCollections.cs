@@ -5,13 +5,16 @@ public class TemplateRow : TableRowData {
     // public TemplateType TemplateArg {
     //     get{ return m_TemplateArg; }
     // }
-}
 
-public class TableDataCollectionsCreater : TableDataCreater {
-    public TableDataCollectionsCreater() {
-        m_typeDict.Add("TemplateName", TemplateRow,GetType());
-        m_argsDict.Add("TemplateName", new object[,]{
-            {},
-        });
+    public System.Int64 Id;
+
+    static TableData<TemplateRow> m_data;
+
+    public static TableData<TemplateRow> TableData() {
+        if (m_data == null) {
+            m_data = new TableData<TemplateRow>("[{\"Id\":233}]");
+        }
+        return m_data;
     }
+
 }

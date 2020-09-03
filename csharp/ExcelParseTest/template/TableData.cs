@@ -3,39 +3,45 @@ using System.Reflection;
 using System.Collections.Generic;
 
 public class TableRowData {
-    public TableRowData(params object[] args) {
-        PropertyInfo[] properties = this.GetType().GetProperties();
-        for (int i = 0; i < properties.Length; i++) {
-            if (args.Length <= i) {
-                break;
+    public void Init(Dictionary<string, object> arg) {
+        FieldInfo[] fields = GetType().GetFields();
+        for (int i = 0; i < fields.Length; i++) {
+            string name = fields[i].Name;
+            if (!arg.ContainsKey(name)) {
+                continue;
             }
-            properties[i].SetValue(this, args[i]);
+            fields[i].SetValue(this, arg[name]);
         }
     }
 
-    public string this[string name]{
+    public object this[string name]{
         get{
-			return GetType().GetProperty(name).GetValue(this).ToString();
+			return GetType().GetField(name).GetValue(this);
 		}
 		set{
 			// GetType().GetProperty(name).SetValue(this, value);
 		}
     }
+    
 }
 
 public class TableData<T> where T:TableRowData {
-    Dictionary<string, Dictionary<string, int[]>> m_dataMap = new Dictionary<string, Dictionary<string, int[]>>();
+    Dictionary<string, Dictionary<object, int[]>> m_dataMap = new Dictionary<string, Dictionary<object, int[]>>();
 
     List<T> m_data = new List<T>();
 
-    public TableData(params object[] args) {
-        foreach (object arg in args) {
-            m_data.Add(Activator.CreateInstance(T, arg));
+    public TableData(string jsonData) {
+        List<object> args = MiniJSON.Json.Deserialize(jsonData) as List<object>;
+        // Dictionary<string, object> args = MiniJSON.Json.Deserialize(jsonData) as Dictionary<string, object>;
+        foreach (Dictionary<string, object> arg in args) {
+            T data = Activator.CreateInstance<T>();
+            data.Init(arg);
+            m_data.Add(data);
         }
     }
 
     // 根据导出的Key值获取【速度较快】
-    public T Get(string val, string key) {
+    public T Get(object val, string key) {
         if (m_dataMap.ContainsKey(key)) {
             if (m_dataMap[key].ContainsKey(val)) {
                 int[] indexList = m_dataMap[key][val];
@@ -44,9 +50,9 @@ public class TableData<T> where T:TableRowData {
                 }
             }
         }
-        return null;
+        return default(T);
     }
-    public T[] GetAll(string val, string key) {
+    public T[] GetAll(object val, string key) {
         List<T> rowList = new List<T>();
         if (m_dataMap.ContainsKey(key)) {
             if (m_dataMap[key].ContainsKey(val)) {
@@ -63,26 +69,27 @@ public class TableData<T> where T:TableRowData {
     }
     
     // 在整个表的数据中查找【速度缓慢】
-    public T Find(string val, string key) {
+    public T Find(object val, string key) {
         T rowData = this.Get(val, key);
-        if (rowData != null) {
+        if (rowData != default(T)) {
             return rowData;
         }
         for (int i = 0; i < m_data.Count; i++) {
-            if ((string)m_data[i][key] == val) {
+            Console.WriteLine("========= Find ======== {0}, {1}, {2}", m_data[i][key], val,  m_data[i][key].ToString() == val.ToString());
+            if (m_data[i][key].Equals(val)) {
                 return m_data[i];
             }
         }
         return null;
     }
-    public T[] FindAll(string val, string key) {
-        T[] rowArray = this.Get(val, key);
+    public T[] FindAll(object val, string key) {
+        T rowArray = this.Get(val, key);
         if (rowArray != null) {
-            return rowArray;
+            return new T[]{rowArray};
         }
         List<T> rowList = new List<T>();
         for (int i = 0; i < m_data.Count; i++) {
-            if ((string)m_data[i][key] == val) {
+            if (m_data[i][key].Equals(val)) {
                 rowList.Add(m_data[i]);
             }
         }
@@ -90,35 +97,5 @@ public class TableData<T> where T:TableRowData {
             return rowList.ToArray();
         }
         return null;
-    }
-
-    // 查找int类型
-    public T Get(int id, string index) {
-        return this.Get(id.ToString(), index);
-    }
-    public T[] GetAll(int id, string index) {
-        return this.GetAll(id.ToString(), index);
-    }
-
-    public T Find(int id, string index) {
-        return this.Find(id.ToString(), index);
-    }
-    public T[] FindAll(int id, string index) {
-        return this.FindAll(id.ToString(), index);
-    }
-    
-    // 查找bool类型
-    public T Get(bool flag, string index) {
-        return this.Get(flag.ToString(), index);
-    }
-    public T[] GetAll(bool flag, string index) {
-        return this.GetAll(flag.ToString(), index);
-    }
-
-    public T Find(bool flag, string index) {
-        return this.Find(flag.ToString(), index);
-    }
-    public T[] FindAll(bool flag, string index) {
-        return this.FindAll(flag.ToString(), index);
     }
 }
