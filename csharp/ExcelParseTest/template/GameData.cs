@@ -44,32 +44,34 @@ class GameData {
         return true;
     }
 
-    T single<T>(string method, params object[] args) {
+    // 获取TableData
+    object getTableData<T>(ref object[] args) {
         Type dataType = typeof(T);
         MethodInfo methodInfo = dataType.GetMethod("TableData");
         if (methodInfo == null) {
-            return default(T);
+            return null;
         }
         var obj = methodInfo.Invoke(null, null);
         if (!verifyArgs(obj, ref args)) {
+            return null;
+        }
+        return obj;
+    }
+
+    T single<T>(string method, params object[] args) {
+        var obj = getTableData<T>(ref args);
+        if (obj == null) {
             return default(T);
         }
-        T ret = (T) obj.GetType().GetMethod(method).Invoke(obj, args);
-        return ret;
+        return (T) obj.GetType().GetMethod(method).Invoke(obj, args);
     }
     
     T[] multiple<T>(string method, params object[] args) {
-        Type dataType = typeof(T);
-        MethodInfo methodInfo = dataType.GetMethod("TableData");
-        if (methodInfo == null) {
+        var obj = getTableData<T>(ref args);
+        if (obj == null) {
             return new T[0];
         }
-        var obj = methodInfo.Invoke(null, null);
-        if (!verifyArgs(obj, ref args)) {
-            return new T[0];
-        }
-        T[] ret = (T[]) obj.GetType().GetMethod(method).Invoke(obj, args);
-        return ret;
+        return (T[]) obj.GetType().GetMethod(method).Invoke(obj, args);
     }
     
 }

@@ -19,11 +19,11 @@ namespace ExcelParseTest
         static void Run() {
             GameData gd = new GameData();
             Console.WriteLine(gd);
-            var ret = gd.Find<TemplateRow>(233);
-            var ret1 = gd.Find<TemplateRow>(233, "id");
-            var ret2 = gd.Find<TemplateRowX>(2333);
-            var ret3 = gd.FindAll<TemplateRow>(233);
-            var ret4 = gd.FindAll<TemplateRow>(233, "key");
+            var ret = gd.Get<TemplateRow>("1001");
+            var ret1 = gd.Find<TemplateRow>(1001, "key");
+            var ret2 = gd.Find<TemplateRowX>(10011);
+            var ret3 = gd.GetAll<TemplateRow>(1001);
+            var ret4 = gd.FindAll<TemplateRow>("1001");
             Console.WriteLine("========= Ret ======== {0}, {1}, {2}, {3}, {4}", ret, ret1, ret2==null, ret3.Length, ret4.Length);
         }
     }

@@ -7,8 +7,10 @@ public class TemplateRow : TableRowData {
     static TableData<TemplateRow> m_data;
     public static TableData<TemplateRow> TableData() {
         if (m_data == null) {
-            m_data = new TableData<TemplateRow>();
-            m_data.Init("[{\"id\":233}]");
+            string keyJson = "[\"id\"]";
+            string exportKeyJson = "[\"id\"]";
+            string valJson = "[[1001]]";
+            m_data = new TableData<TemplateRow>(keyJson, exportKeyJson, valJson);
         }
         return m_data;
     }

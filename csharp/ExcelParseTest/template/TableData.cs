@@ -3,14 +3,17 @@ using System.Reflection;
 using System.Collections.Generic;
 
 public class TableRowData {
-    public void Init(Dictionary<string, object> arg) {
-        FieldInfo[] fields = GetType().GetFields();
-        for (int i = 0; i < fields.Length; i++) {
-            string name = fields[i].Name;
-            if (!arg.ContainsKey(name)) {
+    public void Init(object[] args, string[] keyList) {
+        for (int i = 0; i < keyList.Length; i++) {
+            if (i >= args.Length) {
+                break;
+            }
+            string key = keyList[i];
+            FieldInfo field = GetType().GetField(key);
+            if (field == null) {
                 continue;
             }
-            fields[i].SetValue(this, arg[name]);
+            field.SetValue(this, args[i]);
         }
     }
 
@@ -22,35 +25,74 @@ public class TableRowData {
             }
 			return fieldInfo.GetValue(this);
 		}
-		set{
-			// GetType().GetProperty(name).SetValue(this, value);
-		}
     }
     
 }
 
 public class TableData<T> where T:TableRowData {
-    Dictionary<string, Dictionary<object, int[]>> m_dataMap = new Dictionary<string, Dictionary<object, int[]>>();
+    Dictionary<string, Dictionary<object, List<int>>> m_dataMap = new Dictionary<string, Dictionary<object, List<int>>>();
 
     List<T> m_data = new List<T>();
 
-    string m_defaultKey;
-
-    public TableData(string defaultKey="id") {
-        m_defaultKey = defaultKey;
-    }
-
-    public void Init(string jsonData) {
-        List<object> args = MiniJSON.Json.Deserialize(jsonData) as List<object>;
-        foreach (Dictionary<string, object> arg in args) {
-            T data = Activator.CreateInstance<T>();
-            data.Init(arg);
-            m_data.Add(data);
-        }
-    }
+    string m_defaultKey = "id";
+    string[] m_keyList = new string[0];
+    string[] m_exportKeyList = new string[0];
 
     public string DefaultKey {
         get { return m_defaultKey; }
+    }
+
+    public TableData(string keyJson, string exportKeyJson, string valJson) {
+        initKey(keyJson, exportKeyJson);
+        initVal(valJson);
+    }
+
+    void initKey(string keyJson, string exportKeyJson) {
+        // 解析key列表
+        List<object> keyList = MiniJSON.Json.Deserialize(keyJson) as List<object>;
+        if (keyList != null) {
+            m_keyList = new string[keyList.Count];
+            keyList.CopyTo(m_keyList);
+        }
+        // 解析导出的key列表
+        List<object> exportKeyList = MiniJSON.Json.Deserialize(exportKeyJson) as List<object>;
+        if (exportKeyList != null) {
+            m_exportKeyList = new string[exportKeyList.Count];
+            exportKeyList.CopyTo(m_exportKeyList);
+        }
+        // 设置默认key值
+        if (m_exportKeyList.Length > 0) {
+            m_defaultKey = m_exportKeyList[0];
+        } else if (m_keyList.Length > 0) {
+            m_defaultKey = m_keyList[0];
+        }
+    }
+
+    void initVal(string valJson) {
+        List<object> valList = MiniJSON.Json.Deserialize(valJson) as List<object>;
+        foreach (List<object> val in valList) {
+            T data = Activator.CreateInstance<T>();
+            data.Init(val.ToArray(), m_keyList);
+            m_data.Add(data);
+            // 加入到dataMap
+            addToDataMap(data, m_data.Count - 1);
+        }
+    }
+
+    void addToDataMap(T data, int index) {
+        foreach (string exportKey in m_exportKeyList) {
+            if (!m_dataMap.ContainsKey(exportKey)) {
+                m_dataMap[exportKey] = new Dictionary<object, List<int>>();
+            }
+            object val = data[exportKey];
+            if (val == null) {
+                continue;
+            }
+            if (!m_dataMap[exportKey].ContainsKey(val)) {
+                m_dataMap[exportKey][val] = new List<int>();
+            }
+            m_dataMap[exportKey][val].Add(index);
+        }
     }
 
     object verifyType(object val) {
@@ -66,8 +108,8 @@ public class TableData<T> where T:TableRowData {
         if (m_dataMap.ContainsKey(key)) {
             val = verifyType(val);  // 校验类型
             if (m_dataMap[key].ContainsKey(val)) {
-                int[] indexList = m_dataMap[key][val];
-                if (indexList.Length > 0) {
+                List<int> indexList = m_dataMap[key][val];
+                if (indexList.Count > 0) {
                     return m_data[indexList[0]];
                 }
             }
@@ -79,8 +121,8 @@ public class TableData<T> where T:TableRowData {
         if (m_dataMap.ContainsKey(key)) {
             val = verifyType(val);  // 校验类型
             if (m_dataMap[key].ContainsKey(val)) {
-                int[] indexList = m_dataMap[key][val];
-                if (indexList.Length > 0) {
+                List<int> indexList = m_dataMap[key][val];
+                if (indexList.Count > 0) {
                     foreach (int i in indexList) {
                         rowList.Add(m_data[indexList[i]]);
                     }
@@ -101,7 +143,7 @@ public class TableData<T> where T:TableRowData {
             if (m_data[i][key] == null) {
                 break;
             }
-            if (m_data[i][key].Equals(val)) {
+            if (m_data[i][key] == val) {
                 return m_data[i];
             }
         }
@@ -118,7 +160,7 @@ public class TableData<T> where T:TableRowData {
             if (m_data[i][key] == null) {
                 break;
             }
-            if (m_data[i][key].Equals(val)) {
+            if (m_data[i][key] == val) {
                 rowList.Add(m_data[i]);
             }
         }
