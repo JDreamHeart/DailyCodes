@@ -345,7 +345,7 @@ namespace MiniJSON {
                                                         }
                                                         ((Array)obj).SetValue(obj4, j);
                                                     }
-                                                    catch (Exception var_29_560)
+                                                    catch (Exception)
                                                     {
                                                     }
                                                 }

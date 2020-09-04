@@ -1,29 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "E:\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj": {}
+    "E:\\private\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj": {}
   },
   "projects": {
-    "E:\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj": {
+    "E:\\private\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj",
+        "projectUniqueName": "E:\\private\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj",
         "projectName": "ExcelParseTest",
-        "projectPath": "E:\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "E:\\project\\DailyCodes\\csharp\\ExcelParseTest\\obj\\",
+        "projectPath": "E:\\private\\project\\DailyCodes\\csharp\\ExcelParseTest\\ExcelParseTest.csproj",
+        "packagesPath": "C:\\Users\\zhangjin09\\.nuget\\packages\\",
+        "outputPath": "E:\\private\\project\\DailyCodes\\csharp\\ExcelParseTest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\zhangjin09\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.0"
+          "netcoreapp3.1"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.0": {
+          "netcoreapp3.1": {
             "projectReferences": {}
           }
         },
@@ -34,7 +34,7 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.0": {
+        "netcoreapp3.1": {
           "imports": [
             "net461",
             "net462",
@@ -50,7 +50,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
