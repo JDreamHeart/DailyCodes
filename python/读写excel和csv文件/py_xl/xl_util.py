@@ -2,6 +2,7 @@ import os;
 import re;
 import json;
 import shutil;
+import hashlib;
 import xlrd;
 
 class SheetDataParser(object):
@@ -200,6 +201,8 @@ class TableDataParser(object):
         return iter(self);
 
 class GameDataParser(object):
+    MD5_MAP_FILE_NAME = "_excel_file_md5_map_";
+
     def __init__(self, dirPath, outputPath, templatePath):
         super(GameDataParser, self).__init__();
         self.__dirPath = dirPath;
@@ -221,16 +224,43 @@ class GameDataParser(object):
             elif os.path.isfile(fullPath):
                 shutil.copy(fullPath, self.__outputPath);
 
+    def getFileMd5Map(self):
+        md5MapPath = os.path.join(self.__outputPath, self.MD5_MAP_FILE_NAME+".json");
+        if os.path.exists(md5MapPath):
+            with open(md5MapPath, "r") as f:
+                return json.loads(f.read());
+        return {};
+        
+    def setFileMd5Map(self, md5Map={}):
+        md5MapPath = os.path.join(self.__outputPath, self.MD5_MAP_FILE_NAME+".json");
+        with open(md5MapPath, "w") as f:
+            f.write(json.dumps(md5Map));
+
+    def getMd5ByFilePath(self, filePath):
+        if not os.path.exists(filePath):
+            return "";
+        with open(filePath, "rb") as f:
+            return hashlib.md5(f.read()).hexdigest();
+        return "";
+
     def parse(self):
         self.copyTemplate();
         if not os.path.exists(self.__dirPath):
             return;
+        md5Map = self.getFileMd5Map();
+        dirPath = self.__dirPath.replace("\\", "/");
+        print(dirPath)
         for root, _, files in os.walk(self.__dirPath):
             for fileName in files:
                 fullPath = os.path.join(root, fileName);
-                dataParser = TableDataParser(fullPath);
-                if dataParser.isValid:
-                    self.onParse(dataParser);
+                fileMd5 = self.getMd5ByFilePath(fullPath);
+                relativePath = fullPath.replace("\\", "/").replace(dirPath, "");
+                if md5Map.get(relativePath, "") != fileMd5:
+                    dataParser = TableDataParser(fullPath);
+                    if dataParser.isValid:
+                        self.onParse(dataParser);
+                    md5Map[relativePath] = fileMd5;
+        self.setFileMd5Map(md5Map);
 
     def onParse(self, dataParser):
         pass;
