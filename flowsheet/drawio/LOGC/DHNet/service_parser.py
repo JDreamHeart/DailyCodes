@@ -30,13 +30,13 @@ class ServiceParser(object):
         funcContent = f"""
             if (NET_{func} != null) {{
                 NET_{func}({arg});
-            }}"""
+            }}""";
         if ret != "void":
             funcContent = f"""
             if (NET_{func} != null) {{
                 return NET_{func}({arg});
             }}
-            return default({ret});"""
+            return default({ret});""";
 
         return f"""
         public delegate {ret} TYPE_{func}({argType} {arg});
