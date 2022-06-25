@@ -11,3 +11,5 @@ E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTe
 E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.pdb
 E:\private\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.dll
 E:\private\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.pdb
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.csproj.CoreCompileInputs.cache
+E:\project\DailyCodes\csharp\ExcelParseTest\obj\Debug\netcoreapp3.0\ExcelParseTest.genruntimeconfig.cache

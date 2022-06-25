@@ -1,0 +1,13 @@
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.csprojAssemblyReference.cache
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.AssemblyInfoInputs.cache
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.AssemblyInfo.cs
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.csproj.CoreCompileInputs.cache
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.exe
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.deps.json
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.runtimeconfig.json
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.runtimeconfig.dev.json
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.dll
+E:\project\DailyCodes\csharp\JsonParse\bin\Debug\netcoreapp3.1\JsonParse.pdb
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.dll
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.pdb
+E:\project\DailyCodes\csharp\JsonParse\obj\Debug\netcoreapp3.1\JsonParse.genruntimeconfig.cache
